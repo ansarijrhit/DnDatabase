@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import ClassTypes.CharacterSpells;
+import ClassTypes.Character;
 
 public class TestingFunctionsDraft {
 	private DatabaseConnectionService dbService = null;
@@ -40,6 +41,29 @@ public class TestingFunctionsDraft {
 		}
 		
 		return characterSpells;
+	}
+	
+	public ArrayList<ArrayList<Object>> readCharacter(String pusername, String charname) {
+		ArrayList<ArrayList<Object>> character = new ArrayList<ArrayList<Object>>();
+		ResultSet set = null;
+		Connection con = this.dbService.getConnection();
+		CallableStatement cs = null;
+		try {
+			Statement statement = this.dbService.getConnection().createStatement();
+			String sql = "SELECT * FROM read_player_character('" + pusername + "', '" + charname + "')";
+			set = statement.executeQuery(sql);
+			while (set.next()) {
+				character.add(new Character(set.getString("CharName"), set.getString("Class_ClassName"),
+						set.getInt("HasClass_Level"), set.getInt("Hitpoints"), set.getString("Alignment"), 
+						set.getString("BackGround")).getItems());
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return character;
 	}
 	
 	

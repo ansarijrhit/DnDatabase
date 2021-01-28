@@ -16,10 +16,17 @@ public class Main {
 //		System.out.println(test.getFunction());
 //		test.deleteFunction(9);
 //		System.out.println(test.getFunction());
-		
+		System.out.println("Character can Cast");
 		ArrayList<ArrayList<String>> characterSpells = test.readCharacterSpells("Wizard", 10, "Tiefling");
 		for(int i = 0; i < characterSpells.size(); i++) {
 			System.out.println(characterSpells.get(i));
+		}
+		System.out.println();
+		
+		System.out.println("Character");
+		ArrayList<ArrayList<Object>> character = test.readCharacter("parkhurca", "Dalkhaust");
+		for(int i = 0; i < character.size(); i++) {
+			System.out.println(character.get(i));
 		}
 	}
 	
