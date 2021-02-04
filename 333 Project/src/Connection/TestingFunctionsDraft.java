@@ -4,6 +4,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,37 +23,45 @@ public class TestingFunctionsDraft {
 	
 	public ArrayList<ArrayList<String>> readCharacterSpells(String characterID, String username, String password, String campaignID) {
 		ArrayList<ArrayList<String>> characterSpells = new ArrayList<ArrayList<String>>();
-		ResultSet set = null;
+		ResultSet rs = null;
 		Connection con = this.dbService.getConnection();
-		CallableStatement cs = null;
+		PreparedStatement ps = null;
 		try {
-			Statement statement = con.createStatement();
-			String sql = "EXEC read_character_spells @characterid = " + Integer.parseInt(characterID) + ", @username = '" + username + 
-							"', @campaignid = " + Integer.parseInt(campaignID) + ", @password = '" + password + "'";
-			set = statement.executeQuery(sql);
-			while (set.next()) {
-				characterSpells.add(new CharacterSpells(set.getString("ClassName"), set.getString("RaceName"),
-						set.getString("Name"), set.getString("Description"), set.getString("Cast Level")).getItems());
+			ps = con.prepareStatement("EXEC read_character_spells @characterid = ?, @username = ?,"
+					+ "@campaignid = ?, @password = ?");
+			
+			ps.setString(1, characterID);
+			ps.setString(2, username);
+			ps.setString(3, campaignID);
+			ps.setString(4, password);
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				characterSpells.add(new CharacterSpells(rs.getString("ClassName"), rs.getString("RaceName"),
+						rs.getString("Name"), rs.getString("Description"), rs.getString("Cast Level")).getItems());
 			}
-			set.close();
-			statement.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("oops :(");
+//			e.printStackTrace();
 		}
 		
 		return characterSpells;
 	}
 	
-	public ArrayList<ArrayList<Object>> readCharacter(String pusername, String charname) {
+	public ArrayList<ArrayList<Object>> readCharacter(String characterID, String username, String password, String campaignID) {
 		ArrayList<ArrayList<Object>> character = new ArrayList<ArrayList<Object>>();
-		ResultSet set = null;
+		ResultSet rs = null;
 		Connection con = this.dbService.getConnection();
-		CallableStatement cs = null;
+		PreparedStatement ps = null;
 		try {
-			Statement statement = this.dbService.getConnection().createStatement();
-			String sql = "SELECT * FROM read_player_character('" + pusername + "', '" + charname + "')";
-			set = statement.executeQuery(sql);
-			while (set.next()) {
+			ps = con.prepareStatement("EXEC read_player_character @characterid = ?, @username = ?,"
+					+ "@password = ?, @campaignid = ?");
+			
+			
+//			Statement statement = this.dbService.getConnection().createStatement();
+//			String sql = "SELECT * FROM read_player_character('" + pusername + "', '" + charname + "')";
+//			set = statement.executeQuery(sql);
+			while (rs.next()) {
 				character.add(new Character(set.getString("CharName"), set.getString("Class_ClassName"),
 						set.getInt("HasClass_Level"), set.getInt("Hitpoints"), set.getString("Alignment"), 
 						set.getString("BackGround")).getItems());
