@@ -39,6 +39,10 @@ class UIMain{
 		return new String[] {"", "Campaign 1", "Campaign 2", "Campaign 3"};
  	}
 	
+	static String[] getCampaignIdsForDM() {
+		return new String[] {"", "Campaign 1", "Campaign 2", "Campaign 3"};
+ 	}
+	
 	static String[] getLocationIdsForDM() {
 		return new String[] {"", "Location 1", "Location 2", "Location 3"};
  	}
@@ -61,4 +65,12 @@ class UIMain{
 	static String[] getPossibleClasses() {
 		return new String[] {"", "Wizard", "Warrior", "Ranger", "Bard"};
  	}
+
+	public static String[] getNPCIdsForDM() {
+		return new String[] {"", "NPC 1", "NPC 2", "NPC 3"};
+	}
+
+	public static String[] getNotesForDM() {
+		return new String[] {"", "Note 1", "Note 2", "Note 3"};
+	}
 }

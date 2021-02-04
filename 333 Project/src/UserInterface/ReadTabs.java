@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -133,7 +132,7 @@ public class ReadTabs {
 	private void initilizeCampaignNotesView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForPlayer());
+		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForDM());
 		c.insets = new Insets(0,0,0,5);
 		c.gridx = 0;
 		c.gridy = 0;
@@ -176,7 +175,7 @@ public class ReadTabs {
 	private void initilizeCampaignCharacterView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForPlayer());
+		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForDM());
 		c.insets = new Insets(0,0,0,5);
 		c.gridx = 0;
 		c.gridy = 0;
@@ -209,7 +208,7 @@ public class ReadTabs {
 	private void initilizeCampaignLocationsView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForPlayer());
+		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForDM());
 		JComboBox<String> locationIds = new JComboBox<String>(UIMain.getLocationIdsForDM());
 		JCheckBox checkBox = new JCheckBox();
 		c.insets = new Insets(0,0,0,5);
