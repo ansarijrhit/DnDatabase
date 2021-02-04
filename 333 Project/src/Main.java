@@ -17,7 +17,7 @@ public class Main {
 //		test.deleteFunction(9);
 //		System.out.println(test.getFunction());
 		System.out.println("Character can Cast");
-		ArrayList<ArrayList<String>> characterSpells = test.readCharacterSpells("Wizard", 10, "Tiefling");
+		ArrayList<ArrayList<String>> characterSpells = test.readCharacterSpells("2", "ansarij", "abcd", "1");
 		for(int i = 0; i < characterSpells.size(); i++) {
 			System.out.println(characterSpells.get(i));
 		}

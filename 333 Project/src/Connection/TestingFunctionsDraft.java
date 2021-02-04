@@ -20,15 +20,15 @@ public class TestingFunctionsDraft {
 	
 	//There is no error checking, just to make sure the connection works
 	
-	public ArrayList<ArrayList<String>> readCharacterSpells(String characterClass, int classLevel, String race) {
+	public ArrayList<ArrayList<String>> readCharacterSpells(String characterID, String username, String password, String campaignID) {
 		ArrayList<ArrayList<String>> characterSpells = new ArrayList<ArrayList<String>>();
 		ResultSet set = null;
 		Connection con = this.dbService.getConnection();
 		CallableStatement cs = null;
 		try {
-			Statement statement = this.dbService.getConnection().createStatement();
-			String sql = "SELECT * FROM read_character_spells('" + characterClass + "', " + classLevel + 
-							", '" + race + "')";
+			Statement statement = con.createStatement();
+			String sql = "EXEC read_character_spells @characterid = " + Integer.parseInt(characterID) + ", @username = '" + username + 
+							"', @campaignid = " + Integer.parseInt(campaignID) + ", @password = '" + password + "'";
 			set = statement.executeQuery(sql);
 			while (set.next()) {
 				characterSpells.add(new CharacterSpells(set.getString("ClassName"), set.getString("RaceName"),
