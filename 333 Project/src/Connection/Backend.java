@@ -68,6 +68,7 @@ public class Backend {
 			System.out.println("Check login information, access level, and existence of character");
 			System.out.println();
 			e.printStackTrace();
+			
 		}
 		
 		if (set == null) {
