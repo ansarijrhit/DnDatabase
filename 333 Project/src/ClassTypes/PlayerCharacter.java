@@ -2,12 +2,12 @@ package ClassTypes;
 
 import java.util.ArrayList;
 
-public class Character {
+public class PlayerCharacter {
 
 	private String charName, class_ClassName, alignment, background = null;
 	private int hasClass_Level, hitpoints = 0;
 	
-	public Character(String charName, String class_ClassName, int hasClass_Level, int hitpoints, 
+	public PlayerCharacter(String charName, String class_ClassName, int hasClass_Level, int hitpoints, 
 			String alignment, String background) {
 		this.charName = charName;
 		this.class_ClassName = class_ClassName;
