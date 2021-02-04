@@ -36,13 +36,22 @@ public class TestingFunctionsDraft {
 			ps.setString(4, password);
 			rs = ps.executeQuery();
 			
+//			if(Integer.parseInt(rs.getString("Cast Level")) < 0) {
+//				System.out.println("OH NO");
+//				return null;
+//			}
+			
 			while (rs.next()) {
+				if(rs.getInt("Cast Level") < 0) {
+					System.out.println("OH NO");
+					return characterSpells;
+				}
 				characterSpells.add(new CharacterSpells(rs.getString("ClassName"), rs.getString("RaceName"),
 						rs.getString("Name"), rs.getString("Description"), rs.getString("Cast Level")).getItems());
 			}
 		} catch (SQLException e) {
-			System.out.println("oops :(");
-//			e.printStackTrace();
+//			System.out.println("oops :(");
+			e.printStackTrace();
 		}
 		
 		return characterSpells;
