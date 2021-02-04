@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import ClassTypes.CharacterSpells;
-import ClassTypes.Character;
+import ClassTypes.PlayerCharacter;
 
 public class TestingFunctionsDraft {
 	private DatabaseConnectionService dbService = null;
@@ -53,7 +53,7 @@ public class TestingFunctionsDraft {
 			String sql = "SELECT * FROM read_player_character('" + pusername + "', '" + charname + "')";
 			set = statement.executeQuery(sql);
 			while (set.next()) {
-				character.add(new Character(set.getString("CharName"), set.getString("Class_ClassName"),
+				character.add(new PlayerCharacter(set.getString("CharName"), set.getString("Class_ClassName"),
 						set.getInt("HasClass_Level"), set.getInt("Hitpoints"), set.getString("Alignment"), 
 						set.getString("BackGround")).getItems());
 			}

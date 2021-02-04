@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+import Connection.Backend;
 import Connection.DatabaseConnectionService;
 import Connection.TestingFunctionsDraft;
 
@@ -11,6 +12,7 @@ public class Main {
 		db.connect("jurgenkr", "MyNewPassword13");
 		
 		TestingFunctionsDraft test = new TestingFunctionsDraft(db);
+		Backend back = new Backend(db);
 //		System.out.println(test.getFunction());
 //		test.addFunction(9, "Remi", "Tiefling");
 //		System.out.println(test.getFunction());
@@ -24,10 +26,15 @@ public class Main {
 		System.out.println();
 		
 		System.out.println("Character");
-		ArrayList<ArrayList<Object>> character = test.readCharacter("parkhurca", "Dalkhaust");
-		for(int i = 0; i < character.size(); i++) {
-			System.out.println(character.get(i));
-		}
+//		ArrayList<ArrayList<Object>> character = test.readCharacter("parkhurca", "Dalkhaust");
+//		for(int i = 0; i < character.size(); i++) {
+//			System.out.println(character.get(i));
+//		}
+		ArrayList<ArrayList<Object>> character = back.readPlayerCharacter("parkhurca", "1234", 2);
+		System.out.println(character);
+//		for(int i = 0; i < character.size(); i++) {
+//			System.out.println(character.get(i));
+//		}
 	}
 	
 	
