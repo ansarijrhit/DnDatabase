@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+import Connection.Backend;
 import Connection.DatabaseConnectionService;
 import Connection.TestingFunctionsDraft;
 
@@ -11,23 +12,34 @@ public class Main {
 		db.connect("jurgenkr", "MyNewPassword13");
 		
 		TestingFunctionsDraft test = new TestingFunctionsDraft(db);
+		Backend back = new Backend(db);
 //		System.out.println(test.getFunction());
 //		test.addFunction(9, "Remi", "Tiefling");
 //		System.out.println(test.getFunction());
 //		test.deleteFunction(9);
 //		System.out.println(test.getFunction());
 		System.out.println("Character can Cast");
-		ArrayList<ArrayList<String>> characterSpells = test.readCharacterSpells("Wizard", 10, "Tiefling");
+		ArrayList<ArrayList<String>> characterSpells = test.readCharacterSpells("2", "ansarij", "abcd", "1");
 		for(int i = 0; i < characterSpells.size(); i++) {
 			System.out.println(characterSpells.get(i));
 		}
 		System.out.println();
 		
 		System.out.println("Character");
-		ArrayList<ArrayList<Object>> character = test.readCharacter("parkhurca", "Dalkhaust");
-		for(int i = 0; i < character.size(); i++) {
-			System.out.println(character.get(i));
-		}
+//		ArrayList<ArrayList<Object>> character = test.readCharacter("parkhurca", "Dalkhaust");
+//		for(int i = 0; i < character.size(); i++) {
+//			System.out.println(character.get(i));
+//		}
+//		ArrayList<ArrayList<Object>> character = back.readPlayerCharacter("parkhurca", "1234", null);
+//		System.out.println(character);
+//		
+		System.out.println();
+		System.out.println("Checking for character in campaign");
+		ArrayList<ArrayList<Object>> checkCharacter = back.readPlayerCharacterInformation("quicks", "zyxw", 6, -1);
+		System.out.println(checkCharacter);
+//		for(int i = 0; i < character.size(); i++) {
+//			System.out.println(character.get(i));
+//		}
 	}
 	
 	

@@ -4,12 +4,13 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import ClassTypes.CharacterSpells;
-import ClassTypes.Character;
+import ClassTypes.PlayerCharacter;
 
 public class TestingFunctionsDraft {
 	private DatabaseConnectionService dbService = null;
@@ -20,45 +21,65 @@ public class TestingFunctionsDraft {
 	
 	//There is no error checking, just to make sure the connection works
 	
-	public ArrayList<ArrayList<String>> readCharacterSpells(String characterClass, int classLevel, String race) {
+	public ArrayList<ArrayList<String>> readCharacterSpells(String characterID, String username, String password, String campaignID) {
 		ArrayList<ArrayList<String>> characterSpells = new ArrayList<ArrayList<String>>();
-		ResultSet set = null;
+		ResultSet rs = null;
 		Connection con = this.dbService.getConnection();
-		CallableStatement cs = null;
+		PreparedStatement ps = null;
 		try {
-			Statement statement = this.dbService.getConnection().createStatement();
-			String sql = "SELECT * FROM read_character_spells('" + characterClass + "', " + classLevel + 
-							", '" + race + "')";
-			set = statement.executeQuery(sql);
-			while (set.next()) {
-				characterSpells.add(new CharacterSpells(set.getString("ClassName"), set.getString("RaceName"),
-						set.getString("Name"), set.getString("Description"), set.getString("Cast Level")).getItems());
+			ps = con.prepareStatement("EXEC read_character_spells @characterid = ?, @username = ?,"
+					+ "@campaignid = ?, @password = ?");
+			
+			ps.setString(1, characterID);
+			ps.setString(2, username);
+			ps.setString(3, campaignID);
+			ps.setString(4, password);
+			rs = ps.executeQuery();
+			
+//			if(Integer.parseInt(rs.getString("Cast Level")) < 0) {
+//				System.out.println("OH NO");
+//				return null;
+//			}
+			
+			while (rs.next()) {
+				if(rs.getInt("Cast Level") < 0) {
+					System.out.println("OH NO");
+					return characterSpells;
+				}
+				characterSpells.add(new CharacterSpells(rs.getString("ClassName"), rs.getString("RaceName"),
+						rs.getString("Name"), rs.getString("Description"), rs.getString("Cast Level")).getItems());
 			}
-			set.close();
-			statement.close();
 		} catch (SQLException e) {
+//			System.out.println("oops :(");
 			e.printStackTrace();
 		}
 		
 		return characterSpells;
 	}
 	
-	public ArrayList<ArrayList<Object>> readCharacter(String pusername, String charname) {
+	public ArrayList<ArrayList<Object>> readCharacter(String characterID, String username, String password, String campaignID) {
 		ArrayList<ArrayList<Object>> character = new ArrayList<ArrayList<Object>>();
-		ResultSet set = null;
+		ResultSet rs = null;
 		Connection con = this.dbService.getConnection();
-		CallableStatement cs = null;
+		PreparedStatement ps = null;
 		try {
-			Statement statement = this.dbService.getConnection().createStatement();
-			String sql = "SELECT * FROM read_player_character('" + pusername + "', '" + charname + "')";
-			set = statement.executeQuery(sql);
-			while (set.next()) {
-				character.add(new Character(set.getString("CharName"), set.getString("Class_ClassName"),
-						set.getInt("HasClass_Level"), set.getInt("Hitpoints"), set.getString("Alignment"), 
-						set.getString("BackGround")).getItems());
+			ps = con.prepareStatement("EXEC read_player_character @characterid = ?, @username = ?,"
+					+ "@password = ?, @campaignid = ?");
+			
+			ps.setInt(1, Integer.parseInt(characterID));
+			ps.setString(2, username);
+			ps.setString(3, password);
+			ps.setInt(4, Integer.parseInt(campaignID));
+			rs = ps.executeQuery();
+			
+//			System.out.println(rs.getInt("error"));
+//			if()
+			
+			while (rs.next()) {
+				character.add(new PlayerCharacter(rs.getString("CharName"), rs.getString("Class_ClassName"), 
+						Integer.parseInt(rs.getString("HasClass_Level")), Integer.parseInt(rs.getString("Hitpoints")), 
+						rs.getString("Alignment"), rs.getString("Background")).getItems());
 			}
-			set.close();
-			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
