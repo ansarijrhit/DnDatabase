@@ -44,6 +44,21 @@ class UIMain{
  	}
 	
 	static String[] getCampaignLocationViewHeaders() {
-		return new String[] {"LocationID", "LocationName", "Description", "NPCName", "NPC Job"};
+		return new String[] {"", "LocationID", "LocationName", "Description", "NPCName", "NPC Job"};
+ 	}
+	
+	static String[] getPossibleAlignments() {
+		return new String[] {"",
+							 "Lawful Good", "Lawful Neutral", "Lawful Evil",
+							 "Neutral Good", "True Neutral", "Neutral Evil",
+							 "Chaotic Good", "Chaotic Neutral", "Chaotic Evil"};
+ 	}
+	
+	static String[] getPossibleRaces() {
+		return new String[] {"", "Half-Elf", "Human", "Orc", "Dwarf"};
+ 	}
+	
+	static String[] getPossibleClasses() {
+		return new String[] {"", "Wizard", "Warrior", "Ranger", "Bard"};
  	}
 }
