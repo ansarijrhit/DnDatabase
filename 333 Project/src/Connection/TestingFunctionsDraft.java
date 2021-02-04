@@ -57,23 +57,20 @@ public class TestingFunctionsDraft {
 			ps = con.prepareStatement("EXEC read_player_character @characterid = ?, @username = ?,"
 					+ "@password = ?, @campaignid = ?");
 			
+			ps.setInt(1, Integer.parseInt(characterID));
+			ps.setString(2, username);
+			ps.setString(3, password);
+			ps.setInt(4, Integer.parseInt(campaignID));
+			rs = ps.executeQuery();
 			
-//			Statement statement = this.dbService.getConnection().createStatement();
-//			String sql = "SELECT * FROM read_player_character('" + pusername + "', '" + charname + "')";
-//			set = statement.executeQuery(sql);
+//			System.out.println(rs.getInt("error"));
+//			if()
+			
 			while (rs.next()) {
-				character.add(new Character(set.getString("CharName"), set.getString("Class_ClassName"),
+				character.add(new PlayerCharacter(rs.getString("CharName"), rs.getString("Class_ClassName"), 
+						Integer.parseInt(rs.getString("HasClass_Level")), Integer.parseInt(rs.getString("Hitpoints")), 
+						rs.getString("Alignment"), rs.getString("Background")).getItems());
 			}
-			Statement statement = this.dbService.getConnection().createStatement();
-			String sql = "SELECT * FROM read_player_character('" + pusername + "', '" + charname + "')";
-			set = statement.executeQuery(sql);
-			while (set.next()) {
-				character.add(new PlayerCharacter(set.getString("CharName"), set.getString("Class_ClassName"),
-						set.getInt("HasClass_Level"), set.getInt("Hitpoints"), set.getString("Alignment"), 
-						set.getString("BackGround")).getItems());
-			}
-			set.close();
-			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
