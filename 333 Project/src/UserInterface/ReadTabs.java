@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -31,22 +30,22 @@ public class ReadTabs {
 		
 		JPanel spells = new JPanel(new GridBagLayout());
 		initilizeSpellsView(spells, new GridBagConstraints());
-		spells.setVisible(false);
+		spells.setVisible(true);
 		tabs.addTab("Spells", spells);
 		
 		JPanel campaignNotes = new JPanel(new GridBagLayout());
 		initilizeCampaignNotesView(campaignNotes, new GridBagConstraints());
-		campaignNotes.setVisible(false);
+		campaignNotes.setVisible(true);
 		tabs.addTab("Campaign Notes", campaignNotes);
 		
 		JPanel campaignCharacter = new JPanel(new GridBagLayout());
 		initilizeCampaignCharacterView(campaignCharacter, new GridBagConstraints());
-		campaignCharacter.setVisible(false);
+		campaignCharacter.setVisible(true);
 		tabs.addTab("Campaign Characters", campaignCharacter);
 		
 		JPanel campaignLocations = new JPanel(new GridBagLayout());
 		initilizeCampaignLocationsView(campaignLocations, new GridBagConstraints());
-		campaignCharacter.setVisible(false);
+		campaignCharacter.setVisible(true);
 		tabs.addTab("Campaign Locations/NPCs", campaignLocations);
 	}
 
@@ -73,6 +72,7 @@ public class ReadTabs {
 		search.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO: Update table to selected info
 				initilizeCharacterView(panel, new GridBagConstraints());	
 			}
 		});
@@ -92,19 +92,25 @@ public class ReadTabs {
 	private void initilizeSpellsView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
+		JComboBox<String> characters = new JComboBox<String>(UIMain.getCharacterIdsForPlayer());
 		JCheckBox checkBox = new JCheckBox();
-		c.insets = new Insets(0,0,0,5);
+		c.insets = new Insets(0,5,0,5);
 		c.gridx = 0;
 		c.gridy = 0;
-		panel.add(new JLabel("Filter to currently available spells"), c);
+		panel.add(new JLabel("Select a Character: "));
 		c.gridx = 1;
+		panel.add(characters);
+		c.gridx = 2;
+		panel.add(new JLabel("Filter to currently available spells"), c);
+		c.gridx = 3;
 		panel.add(checkBox, c);
-		c.insets = new Insets(0,100,0,0);
+		c.insets = new Insets(0,25,0,0);
 		c.gridx = 4;
 		JButton search = new JButton("Search");
 		search.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO: Update table to selected info
 				initilizeSpellsView(panel, new GridBagConstraints());	
 			}
 		});
@@ -147,10 +153,12 @@ public class ReadTabs {
 		search.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO: Update table to selected info
 				initilizeCampaignNotesView(panel, new GridBagConstraints());	
 			}
 		});
 		panel.add(search, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 10;
@@ -168,8 +176,9 @@ public class ReadTabs {
 		results.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
 		JScrollPane scroll = new JScrollPane(results);
-		Dimension d = results.getPreferredSize();
-		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+3)));
+		results.setPreferredScrollableViewportSize(scroll.getPreferredSize());
+//		Dimension d = results.getPreferredSize();
+//		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+3)));
 		panel.add(scroll, c);
 	}
 	
@@ -190,6 +199,7 @@ public class ReadTabs {
 		search.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO: Update table to selected info
 				initilizeCampaignCharacterView(panel, new GridBagConstraints());	
 			}
 		});
@@ -232,6 +242,7 @@ public class ReadTabs {
 		search.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO: Update table to selected info
 				initilizeCampaignLocationsView(panel, new GridBagConstraints());	
 			}
 		});
@@ -241,7 +252,7 @@ public class ReadTabs {
 		c.gridy = 1;
 		c.gridwidth= 7;
 		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getCampaignLocationViewData(), UIMain.getCampaignLocationViewHeaders());
+		JTable results = new JTable(getCampaignLocationViewData(), UIMain.getCampaignLocationViewHeaders(checkBox.isCursorSet()));
 		JScrollPane scroll = new JScrollPane(results);
 		Dimension d = results.getPreferredSize();
 		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
@@ -249,23 +260,27 @@ public class ReadTabs {
 	}
 
 	private Object[][] getCampaignNotesData() {
+		// TODO: call read procedure
 		return new String[][] {{"Campaign ID", "Name", "This is a descripiton field"}};
 	}
 
 	private String[][] getSpellsViewData() {
+		// TODO: call read procedure
 		return new String[][] {{"Name", "fact", "fact","fact","fact"}};
 	}
 	
 	private String[][] getCampaignLocationViewData() {
-		return new String[][] 
-			  {{"Name", "fact", "fact","fact","fact"}};
+		// TODO: call read procedure
+		return new String[][] {{"Name", "fact", "fact","fact","fact"}};
 	}
 
 	private String[][] getCharacterViewData() {
+		// TODO: call read procedure
 		return new String[][] {{"Name", "fact", "fact","fact"}};
 	}
 	
 	private String[][] getCampaignCharacterViewData() {
+		// TODO: call read procedure
 		return new String[][] {{"Name", "fact", "fact","fact"}};
 	}
 }

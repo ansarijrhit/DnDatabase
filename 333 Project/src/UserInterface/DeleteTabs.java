@@ -74,7 +74,7 @@ public DeleteTabs(JTabbedPane tabs) {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
 					int result = JOptionPane.showConfirmDialog(panel, "Are you sure you want to delete: " + toDelete, "Confirm Deletion", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// Call deletion method
+						// TODO: Call deletion method
 						JOptionPane.showMessageDialog(panel, toDelete + " was removed from database.");
 					}
 				}
@@ -109,7 +109,7 @@ public DeleteTabs(JTabbedPane tabs) {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
 					int result = JOptionPane.showConfirmDialog(panel, "Are you sure you want to delete: " + toDelete, "Confirm Deletion", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// Call deletion method
+						// TODO: Call deletion method
 						JOptionPane.showMessageDialog(panel, toDelete + " was removed from database.");
 					}
 				}
@@ -144,7 +144,7 @@ public DeleteTabs(JTabbedPane tabs) {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
 					int result = JOptionPane.showConfirmDialog(panel, "Are you sure you want to delete: " + toDelete, "Confirm Deletion", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// Call deletion method
+						// TODO: Call deletion method
 						JOptionPane.showMessageDialog(panel, toDelete + " was removed from database.");
 					}
 				}
@@ -179,7 +179,7 @@ public DeleteTabs(JTabbedPane tabs) {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
 					int result = JOptionPane.showConfirmDialog(panel, "Are you sure you want to delete: " + toDelete, "Confirm Deletion", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// Call deletion method
+						// TODO: Call deletion method
 						JOptionPane.showMessageDialog(panel, toDelete + " was removed from database.");
 					}
 				}
@@ -214,7 +214,7 @@ public DeleteTabs(JTabbedPane tabs) {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
 					int result = JOptionPane.showConfirmDialog(panel, "Are you sure you want to delete: " + toDelete, "Confirm Deletion", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// Call deletion method
+						// TODO: Call deletion method
 						JOptionPane.showMessageDialog(panel, toDelete + " was removed from database.");
 					}
 				}

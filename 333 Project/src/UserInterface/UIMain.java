@@ -2,9 +2,13 @@ package UserInterface;
 
 import javax.swing.*;
 
-class UIMain{
+import Connection.Backend;
+
+public class UIMain{
+	Backend backEnd;
 	
-	public UIMain() {
+	public UIMain(Backend b) {
+	   this.backEnd = b;	
        JFrame frame = new JFrame("DnDatabase");
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        frame.setSize(1000,600);
@@ -32,23 +36,31 @@ class UIMain{
      }
      
 	static String[] getCharacterIdsForPlayer() {
+		// TODO: Call procedure
 		return new String[] {"", "Character 1", "Character 2", "Character 3"};
  	}
 	
 	static String[] getCampaignIdsForPlayer() {
+		// TODO: Call procedure
 		return new String[] {"", "Campaign 1", "Campaign 2", "Campaign 3"};
  	}
 	
 	static String[] getCampaignIdsForDM() {
+		// TODO: Call procedure
 		return new String[] {"", "Campaign 1", "Campaign 2", "Campaign 3"};
  	}
 	
 	static String[] getLocationIdsForDM() {
+		// TODO: Call procedure
 		return new String[] {"", "Location 1", "Location 2", "Location 3"};
  	}
 	
-	static String[] getCampaignLocationViewHeaders() {
-		return new String[] {"", "LocationID", "LocationName", "Description", "NPCName", "NPC Job"};
+	static String[] getCampaignLocationViewHeaders(boolean showPCs) {
+		// TODO: column names
+		if (showPCs) {
+			return new String[] {"LocationID", "LocationName", "Description", "NPCName", "NPC Job"};
+		}
+		return new String[] {"LocationID", "LocationName", "Description", "NPCName", "NPC Job"};
  	}
 	
 	static String[] getPossibleAlignments() {
@@ -59,18 +71,22 @@ class UIMain{
  	}
 	
 	static String[] getPossibleRaces() {
+		// TODO: Call procedure
 		return new String[] {"", "Half-Elf", "Human", "Orc", "Dwarf"};
  	}
 	
 	static String[] getPossibleClasses() {
+		// TODO: Call procedure
 		return new String[] {"", "Wizard", "Warrior", "Ranger", "Bard"};
  	}
 
 	public static String[] getNPCIdsForDM() {
+		// TODO: Call procedure
 		return new String[] {"", "NPC 1", "NPC 2", "NPC 3"};
 	}
 
 	public static String[] getNotesForDM() {
+		// TODO: Call procedure
 		return new String[] {"", "Note 1", "Note 2", "Note 3"};
 	}
 }

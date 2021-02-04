@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 public class UpdateTabs {
 
 	public UpdateTabs(JTabbedPane tabs) {
-		// Player Password
+		// TODO: Player Password????
 		
 		JPanel location = new JPanel(new GridBagLayout());
 		initilizeLocationView(location, new GridBagConstraints());
@@ -25,7 +25,7 @@ public class UpdateTabs {
 		tabs.addTab("Location", location);
 		
 		JPanel majorCharacter = new JPanel(new GridBagLayout());
-		initilizeCharacterView(majorCharacter, new GridBagConstraints());
+		initilizeMajorCharacterView(majorCharacter, new GridBagConstraints());
 		majorCharacter.setVisible(false);
 		tabs.addTab("Major Character", majorCharacter);
 		
@@ -38,35 +38,27 @@ public class UpdateTabs {
 		initilizeNPCView(npc, new GridBagConstraints());
 		npc.setVisible(false);
 		tabs.addTab("NPC", npc);
-		
-		JPanel campaign = new JPanel(new GridBagLayout());
-		initilizeCampaignView(campaign, new GridBagConstraints());
-		campaign.setVisible(false);
-		tabs.addTab("Campaign", campaign);
-	}
 
-	private void initilizeCampaignView(JPanel campaign, GridBagConstraints gridBagConstraints) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	private void initilizeNPCView(JPanel npc, GridBagConstraints gridBagConstraints) {
 		// TODO Auto-generated method stub
-		// characterID, ocupation, locationID
-		
+		// location tied-to, occupation
 	}
 
 	private void initilizeNoteView(JPanel panel, GridBagConstraints c) {
 		// TODO Auto-generated method stub
+		// Description
 	}
 
-	private void initilizeCharacterView(JPanel majorCharacter, GridBagConstraints gridBagConstraints) {
+	private void initilizeMajorCharacterView(JPanel majorCharacter, GridBagConstraints gridBagConstraints) {
 		// TODO Auto-generated method stub
+		// hitpoints, levelUp, alignment
 		
 	}
 
 	private void initilizeLocationView(JPanel location, GridBagConstraints gridBagConstraints) {
 		// TODO Auto-generated method stub
-		
+		// Name description campaign
 	}
 }
