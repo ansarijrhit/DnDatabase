@@ -25,16 +25,7 @@ public class Main {
 		}
 		System.out.println();
 		
-		System.out.println("Character");
-//		ArrayList<ArrayList<Object>> character = test.readCharacter("parkhurca", "Dalkhaust");
-//		for(int i = 0; i < character.size(); i++) {
-//			System.out.println(character.get(i));
-//		}
-//		ArrayList<ArrayList<Object>> character = back.readPlayerCharacter("parkhurca", "1234", null);
-//		System.out.println(character);
-//		
-		System.out.println();
-		System.out.println("Checking for character in campaign");
+		System.out.println("Getting Character Information");
 		ArrayList<ArrayList<Object>> checkCharacter = back.readPlayerCharacterInformation("quicks", "zyxw", 6, -1);
 		System.out.println(checkCharacter);
 //		for(int i = 0; i < character.size(); i++) {
