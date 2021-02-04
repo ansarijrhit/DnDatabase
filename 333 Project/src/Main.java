@@ -15,6 +15,8 @@ public class Main {
 		TestingFunctionsDraft test = new TestingFunctionsDraft(db);
 		Backend back = new Backend(db);
 		UIMain ui = new UIMain(back);
+		
+		
 //		System.out.println(test.getFunction());
 //		test.addFunction(9, "Remi", "Tiefling");
 //		System.out.println(test.getFunction());
@@ -27,9 +29,15 @@ public class Main {
 //		}
 //		System.out.println();
 //		
-//		System.out.println("Getting Character Information");
-//		ArrayList<ArrayList<Object>> checkCharacter = back.readPlayerCharacterInformation("quicks", "zyxw", 6, -1);
-//		System.out.println(checkCharacter);
+		System.out.println("Getting Character Information");
+		ArrayList<ArrayList<String>> checkCharacter = back.readFunctions().readPlayerCharacterInformation("quicks", -1, -1);
+		System.out.println(checkCharacter);
+		System.out.println();
+		
+		System.out.println("Getting Character Spells");
+		ArrayList<ArrayList<String>> characterSpells = back.readFunctions().readCharacterSpells("quicks", 6);
+		System.out.println(characterSpells);
+		System.out.println();
 //		for(int i = 0; i < character.size(); i++) {
 //			System.out.println(character.get(i));
 //		}

@@ -17,12 +17,12 @@ public class PlayerCharacter {
 		this.background = background;
 	}
 	
-	public ArrayList<Object> getItems() {
-		ArrayList<Object> list = new ArrayList<Object>();
+	public ArrayList<String> getItems() {
+		ArrayList<String> list = new ArrayList<String>();
 		list.add(this.charName);
 		list.add(this.class_ClassName);
-		list.add(this.hasClass_Level);
-		list.add(this.hitpoints);
+		list.add(String.valueOf(this.hasClass_Level));
+		list.add(String.valueOf(this.hitpoints));
 		list.add(this.alignment);
 		list.add(this.background);
 		return list;

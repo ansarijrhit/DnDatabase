@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 public class CharacterSpells {
 
-	private String className, raceName, name, description, castLevel = null;
+	private String className, raceName, name, description = null;
+	private int castLevel = -1;
 	
 	
-	public CharacterSpells(String className, String raceName, String name, String description, String castLevel) {
+	public CharacterSpells(String className, String raceName, String name, String description, int castLevel) {
 		this.className = className;
 		this.raceName = raceName;
 		this.name = name;
@@ -21,7 +22,7 @@ public class CharacterSpells {
 		list.add(this.raceName);
 		list.add(this.name);
 		list.add(this.description);
-		list.add(this.castLevel);
+		list.add(String.valueOf(this.castLevel));
 		return list;
 	}
 	
