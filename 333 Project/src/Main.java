@@ -30,8 +30,13 @@ public class Main {
 //		for(int i = 0; i < character.size(); i++) {
 //			System.out.println(character.get(i));
 //		}
-		ArrayList<ArrayList<Object>> character = back.readPlayerCharacter("parkhurca", "1234", 2);
-		System.out.println(character);
+//		ArrayList<ArrayList<Object>> character = back.readPlayerCharacter("parkhurca", "1234", null);
+//		System.out.println(character);
+//		
+		System.out.println();
+		System.out.println("Checking for character in campaign");
+		ArrayList<ArrayList<Object>> checkCharacter = back.readPlayerCharacterInformation("quicks", "zyxw", 6, -1);
+		System.out.println(checkCharacter);
 //		for(int i = 0; i < character.size(); i++) {
 //			System.out.println(character.get(i));
 //		}
