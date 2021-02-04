@@ -24,8 +24,8 @@ public class Backend {
 	public ArrayList<ArrayList<Object>> readPlayerCharacterInformation(String pusername, String password, 
 			int id, int campaignID) {
 		ArrayList<ArrayList<Object>> character = new ArrayList<ArrayList<Object>>();
-		
-		
+		ResultSet set = null;
+		ArrayList<ArrayList<Object>> error = null;
 		try {
 			String sql = "EXEC read_player_character @username = ?, @password = ?";
 			PreparedStatement statement = this.con.prepareStatement(sql);
@@ -53,7 +53,7 @@ public class Backend {
 				statement.setInt(3, id);
 				statement.setInt(4, campaignID);
 			}
-			ResultSet set = statement.executeQuery();
+			set = statement.executeQuery();
 			while (set.next()) {
 				character.add(new PlayerCharacter(set.getString("CharName"), set.getString("Class_ClassName"),
 						set.getInt("HasClass_Level"), set.getInt("Hitpoints"), set.getString("Alignment"), 
@@ -67,9 +67,13 @@ public class Backend {
 			System.out.println("Read Player Function");
 			System.out.println("Check login information, access level, and existence of character");
 			System.out.println();
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 		
+		if (set == null) {
+			return error;
+		}
 		return character;
 	}
+	
 }
