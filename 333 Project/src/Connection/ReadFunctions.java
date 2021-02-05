@@ -6,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import ClassTypes.CampaignCharacter;
+import ClassTypes.CampaignLocation;
+import ClassTypes.CampaignLocationWithNPCs;
+import ClassTypes.CampaignNotes;
 import ClassTypes.CharacterSpells;
 import ClassTypes.PlayerCharacter;
 
@@ -65,7 +69,7 @@ public class ReadFunctions{
 	}
 	
 	public ArrayList<ArrayList<String>> readCharacterSpells(String pusername, int id) {
-		ArrayList<ArrayList<String>> character = new ArrayList<ArrayList<String>>();
+		ArrayList<ArrayList<String>> spells = new ArrayList<ArrayList<String>>();
 		ResultSet set = null;
 		try {
 			String sql = "EXEC read_character_spells @username = ?, @characterid = ?";
@@ -74,7 +78,7 @@ public class ReadFunctions{
 			statement.setInt(2, id);
 			set = statement.executeQuery();
 			while (set.next()) {
-				character.add(new CharacterSpells(set.getString("ClassName"), set.getString("RaceName"),
+				spells.add(new CharacterSpells(set.getString("ClassName"), set.getString("RaceName"),
 						set.getString("Name"), set.getString("Description"), set.getInt("Cast Level")).getItems());
 			}
 			set.close();
@@ -88,6 +92,149 @@ public class ReadFunctions{
 			e.printStackTrace();
 			
 		}
+		return spells;
+	}
+	
+	public ArrayList<ArrayList<String>> readCampaignCharacterInformation(String dmUsername, int campaignID) {
+		ArrayList<ArrayList<String>> character = new ArrayList<ArrayList<String>>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC read_campaign_characters @DM_Username = ?";
+			PreparedStatement statement = this.con.prepareStatement(sql);
+			if (campaignID < 0) {
+				statement = this.con.prepareStatement(sql);
+				statement.setString(1, dmUsername);
+			} else {
+				sql += ", @CampaignID = ?";
+				statement = this.con.prepareStatement(sql);
+				statement.setString(1, dmUsername);
+				statement.setInt(2, campaignID);
+			} 
+			set = statement.executeQuery();
+			while (set.next()) {
+				character.add(new CampaignCharacter(set.getInt("CampaignID"), set.getString("PlayerUsername"), set.getString("CharacterName"), 
+						set.getString("RaceName"), set.getString("Alignment"), set.getInt("Hitpoints"), set.getString("BackGround")).getItems());
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Read Campaign Character Function");
+			System.out.println("Check login information, access level, and existence of character");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
 		return character;
+	}
+	
+	public ArrayList<ArrayList<String>> readCampaignLocations(String dmUsername, int campaignID, int locationID, int viewNPCs) {
+		ArrayList<ArrayList<String>> locations = new ArrayList<ArrayList<String>>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC read_campaign_locations_npcs @DM_Username = ?";
+			PreparedStatement statement = this.con.prepareStatement(sql);
+			if (campaignID < 0 && locationID < 0 && viewNPCs == 0) {
+				statement = this.con.prepareStatement(sql);
+				statement.setString(1, dmUsername);
+			} else if (campaignID < 0 && locationID < 0 && viewNPCs == 1) {
+				sql += ", @viewNPCs = ?";
+				statement = this.con.prepareStatement(sql);
+				statement.setString(1, dmUsername);
+				statement.setInt(2, viewNPCs);
+			} else if (campaignID < 0 && viewNPCs == 0) {
+				sql += ", @LocationID = ?";
+				statement = this.con.prepareStatement(sql);
+				statement.setString(1, dmUsername);
+				statement.setInt(2, locationID);
+			} else if (campaignID < 0 && viewNPCs == 1) {
+				sql += ", @viewNPCs = ?, @LocationID = ?";
+				statement = this.con.prepareStatement(sql);
+				statement.setString(1, dmUsername);
+				statement.setInt(2, viewNPCs);
+				statement.setInt(3, locationID);
+			} else if (locationID < 0 && viewNPCs == 0) {
+				sql += ", @CampaignID = ?";
+				statement = this.con.prepareStatement(sql);
+				statement.setString(1, dmUsername);
+				statement.setInt(2, campaignID);
+			} else if (locationID < 0 && viewNPCs == 1) {
+				sql += ", @viewNPCs = ?, @CampaignID = ?";
+				statement = this.con.prepareStatement(sql);
+				statement.setString(1, dmUsername);
+				statement.setInt(2, viewNPCs);
+				statement.setInt(3, campaignID);
+			} else if (viewNPCs == 0) {
+				sql += ", @CampaignID = ?, @LocationID = ?";
+				statement = this.con.prepareStatement(sql);
+				statement.setString(1, dmUsername);
+				statement.setInt(2, campaignID);
+			} else {
+				sql += ", @viewNPCs = ?, @CampaignID = ?, @LocationID = ?";
+				statement = this.con.prepareStatement(sql);
+				statement.setString(1, dmUsername);
+				statement.setInt(2, viewNPCs);
+				statement.setInt(3, campaignID);
+				statement.setInt(4, locationID);
+			}
+			set = statement.executeQuery();
+			
+			if (viewNPCs == 0) {
+				while (set.next()) {
+					locations.add(new CampaignLocation(set.getString("LocationName"), set.getString("Description")).getItems());
+				}
+			} else {
+				while (set.next()) {
+					locations.add(new CampaignLocationWithNPCs(set.getString("LocationName"), set.getString("Description"), set.getString("NPCName"),
+							set.getString("RaceName"), set.getString("Occupation")).getItems());
+				}
+			}
+			
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Read Campaign Character Function");
+			System.out.println("Check login information, access level, and existence of character");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
+		return locations;
+	}
+	
+	public ArrayList<ArrayList<String>> readCampaignNotes(String dmUsername, int campaignID) {
+		ArrayList<ArrayList<String>> notes = new ArrayList<ArrayList<String>>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC read_campaign_notes @DM_Username = ?";
+			PreparedStatement statement = this.con.prepareStatement(sql);
+			if (campaignID < 0) {
+				statement = this.con.prepareStatement(sql);
+				statement.setString(1, dmUsername);
+			} else {
+				sql += ", @CampaignID = ?";
+				statement = this.con.prepareStatement(sql);
+				statement.setString(1, dmUsername);
+				statement.setInt(2, campaignID);
+			} 
+			set = statement.executeQuery();
+			while (set.next()) {
+				notes.add(new CampaignNotes(set.getInt("CampaignID"), set.getString("NoteName"), set.getString("Description")).getItems());
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Read Campaign Notes Function");
+			System.out.println("Check login information, access level, and existence of character");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
+		return notes;
 	}
 }
