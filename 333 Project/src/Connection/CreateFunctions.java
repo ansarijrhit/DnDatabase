@@ -59,7 +59,7 @@ public class CreateFunctions {
 	public boolean createCharacter(String dmUsername, String campaignID, String characterID, String characterName, String raceName) {
 		CallableStatement cs = null;
 		try {
-			cs = con.prepareCall("EXEC create_character @dm_username = ?, @campaign_id = ?, @id = ?"
+			cs = con.prepareCall("EXEC create_character @dm_username = ?, @campaign_id = ?, @id = ?, "
 					+ "@name = ?, @racename = ?");
 
 			
@@ -78,15 +78,21 @@ public class CreateFunctions {
 		return false;
 	}
 	
-	
-	//TODO: Fix, idk why it doesn't work
 	public boolean createMajorCharacter(String characterID, String characterClass, String level, String hitpoints, String alignment,
-			String background, String username, String name, String raceName, String campaignID) {
+			String background, String playerUsername, String name, String raceName, String dmUsername, String campaignID) {
 		CallableStatement cs = null;
 		try {
-			cs = con.prepareCall("EXEC create_major_character @id = ?, @class = ?, @level = ?, "
+			boolean campaign = false;
+			String call = "EXEC create_major_character @id = ?, @class = ?, @level = ?, "
 					+ "@hitpoints = ?, @alignment = ?, @background = ?, @username = ?, "
-					+ "@name = ?, @racename = ?, @campaign_id = ?");
+					+ "@name = ?, @racename = ?, @dm_username = ?, @campaign_id = ?";
+			
+			if(dmUsername != null && Integer.parseInt(campaignID) > 0) {
+				call += ", @dm_username = ?, @campaign_id = ?";
+				campaign = true;
+			}
+			
+			cs = con.prepareCall(call);
 
 			
 			cs.setInt(1, Integer.parseInt(characterID));
@@ -95,12 +101,83 @@ public class CreateFunctions {
 			cs.setInt(4, Integer.parseInt(hitpoints));
 			cs.setString(5, alignment);
 			cs.setString(6, background);
-			cs.setString(7, username);
+			cs.setString(7, playerUsername);
 			cs.setString(8, name);
 			cs.setString(9, raceName);
-			cs.setInt(10, Integer.parseInt(campaignID));
+			if(campaign) {
+				cs.setString(10, dmUsername);
+				cs.setInt(11, Integer.parseInt(campaignID));
+			}
 			
 			cs.execute();
+
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	public boolean createNotes(String dmUsername, String campaignID, String id, String name, String description) {
+		CallableStatement cs = null;
+		try {
+			cs = con.prepareCall("EXEC create_notes @dm_username = ?, @id = ?, @name = ?, @description = ?, @campaignid = ?");
+
+			
+			cs.setString(1, dmUsername);
+			cs.setInt(2, Integer.parseInt(id));
+			cs.setString(3, name);
+			cs.setString(4, description);
+			cs.setInt(5, Integer.parseInt(campaignID));
+			cs.execute();
+
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+
+	public boolean createNPC(String dmUsername, String locationID, String id, String name, String raceName, String occupation) {
+		CallableStatement cs = null;
+		try {
+			cs = con.prepareCall("EXEC create_npc @dm_username = ?, @locationid = ?, @id = ?, "
+					+ "@name = ?, @racename = ?, @occupation = ?");
+
+			
+			cs.setString(1, dmUsername);
+			cs.setInt(2, Integer.parseInt(locationID));
+			cs.setInt(3, Integer.parseInt(id));
+			cs.setString(4, name);
+			cs.setString(5, raceName);
+			cs.setString(6, occupation);
+			cs.execute();
+
+
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	public boolean createPlayer(String dmUsername, String campaignID, String playerUsername, String name, String password) {
+		CallableStatement cs = null;
+		try {
+			cs = con.prepareCall("EXEC create_player @dm_username = ?, @campaign_id = ?, @playerusername = ?, "
+					+ "@name = ?, @password = ?");
+
+			
+			cs.setString(1, dmUsername);
+			cs.setInt(2, Integer.parseInt(campaignID));
+			cs.setString(3, playerUsername);
+			cs.setString(4, name);
+			cs.setString(5, password);
+			cs.execute();
+
 
 			return true;
 		} catch (SQLException e) {
