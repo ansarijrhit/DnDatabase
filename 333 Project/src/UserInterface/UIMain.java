@@ -5,14 +5,19 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
+import ClassTypes.PlayerCharacter;
 import Connection.Backend;
 
 public class UIMain{
-	private static Backend backEnd;
-	private static String playerUsername;
+	private Backend backEnd;
+	private String playerUsername;
 	
 	public UIMain(Backend b) {
 	   backEnd = b;	
@@ -77,16 +82,16 @@ public class UIMain{
 
 	private void displayUserTabs(JFrame frame) {
 	   JTabbedPane createTabs = new JTabbedPane();
-       new CreateTabs(createTabs);
+       new CreateTabs(createTabs, this);
        
        JTabbedPane readTabs = new JTabbedPane();
-       new ReadTabs(readTabs);
+       new ReadTabs(readTabs, this);
        
        JTabbedPane updateTabs = new JTabbedPane();
        new UpdateTabs(updateTabs);
        
        JTabbedPane deleteTabs = new JTabbedPane();
-       new DeleteTabs(deleteTabs);
+       new DeleteTabs(deleteTabs, this);
        
        JTabbedPane CRUDTabs = new JTabbedPane();
        CRUDTabs.addTab("CREATE", createTabs);
@@ -95,67 +100,225 @@ public class UIMain{
        CRUDTabs.addTab("DELETE", deleteTabs);
        frame.add(CRUDTabs);
 	}
-     
-	static String[] getCharacterIdsForPlayer() {
-		// TODO: Call procedure
-		return new String[] {"", "2", "3", "5", "6"};
- 	}
 	
-	static String[] getCampaignIdsForPlayer() {
-		// TODO: Call procedure
-		return new String[] {"", "1", "2"};
- 	}
-	
-	static String[] getCampaignIdsForDM() {
-		// TODO: Call procedure
-		return new String[] {"", "1", "2", "4"};
- 	}
-	
-	static String[] getLocationIdsForDM() {
-		// TODO: Call procedure
-		return new String[] {"", "1", "3", "4", "21"};
- 	}
-	
-	static String[] getCampaignLocationViewHeaders(boolean showPCs) {
+	String[] getCampaignLocationViewHeaders(boolean showPCs) {
 		if (!showPCs) {
 			return new String[] {"Location Name", "Location Description"};
 		}
 		return new String[] {"Location Name", "Location Description", "NPC Name", "NPC Race", "NPC Occupation"};
  	}
 	
-	static String[] getPossibleAlignments() {
+	String[] getPossibleAlignments() {
 		return new String[] {"",
 							 "Lawful Good", "Lawful Neutral", "Lawful Evil",
 							 "Neutral Good", "True Neutral", "Neutral Evil",
 							 "Chaotic Good", "Chaotic Neutral", "Chaotic Evil"};
  	}
-	
-	static String[] getPossibleRaces() {
-		// TODO: Call procedure
-		return new String[] {"", "Half-Elf", "Human", "Orc", "Dwarf"};
+     
+	Object[] getCharacterIdsForPlayer() {
+		ArrayList<String> character = new ArrayList<String>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_CharacterIdsForPlayer @username = ?";
+			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
+			statement.setString(1, playerUsername);
+			set = statement.executeQuery();
+			while (set.next()) {
+				character.add(String.valueOf(set.getInt(1)));
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Get Character Ids For Player");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
+		character.add(0, "");
+		return character.toArray();
  	}
 	
-	static String[] getPossibleClasses() {
-		// TODO: Call procedure
-		return new String[] {"", "Wizard", "Bard"};
+	Object[] getCampaignIdsForPlayer() {
+		ArrayList<String> campaign = new ArrayList<String>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_CampaignIdsForPlayer @username = ?";
+			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
+			statement.setString(1, playerUsername);
+			set = statement.executeQuery();
+			while (set.next()) {
+				campaign.add(String.valueOf(set.getInt(1)));
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Get Campaign Ids For Player");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
+		campaign.add(0, "");
+		return campaign.toArray();
+ 	}
+	
+	Object[] getCampaignIdsForDM() {
+		ArrayList<String> campaign = new ArrayList<String>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_CampaignIdsForDM @username = ?";
+			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
+			statement.setString(1, playerUsername);
+			set = statement.executeQuery();
+			while (set.next()) {
+				campaign.add(String.valueOf(set.getInt(1)));
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Get Campaign Ids For DM");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
+		campaign.add(0, "");
+		return campaign.toArray();
+ 	}
+	
+	Object[] getLocationIdsForDM() {
+		ArrayList<String> location = new ArrayList<String>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_LocationIdsForDM @username = ?";
+			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
+			statement.setString(1, playerUsername);
+			set = statement.executeQuery();
+			while (set.next()) {
+				location.add(String.valueOf(set.getInt(1)));
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Get Location Ids For DM");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
+		location.add(0, "");
+		return location.toArray();
+ 	}
+	
+	Object[] getNPCIdsForDM() {
+		ArrayList<String> npc = new ArrayList<String>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_NPCIdsForDM @username = ?";
+			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
+			statement.setString(1, playerUsername);
+			set = statement.executeQuery();
+			while (set.next()) {
+				npc.add(String.valueOf(set.getInt(1)));
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Get NPC Ids For DM");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
+		npc.add(0, "");
+		return npc.toArray();
+	}
+
+	Object[] getNotesForDM() {
+		ArrayList<String> note = new ArrayList<String>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_NoteIdsForDM @username = ?";
+			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
+			statement.setString(1, playerUsername);
+			set = statement.executeQuery();
+			while (set.next()) {
+				note.add(String.valueOf(set.getInt(1)));
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Get Note Ids For DM");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
+		note.add(0, "");
+		return note.toArray();
+	}
+	
+	Object[] getPossibleRaces() {
+		ArrayList<String> races = new ArrayList<String>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_RaceNames";
+			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
+			set = statement.executeQuery();
+			while (set.next()) {
+				races.add(set.getString(1));
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Get Race Names");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
+		races.add(0, "");
+		return races.toArray();
+ 	}
+	
+	Object[] getPossibleClasses() {
+		ArrayList<String> classes = new ArrayList<String>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_ClassNames";
+			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
+			set = statement.executeQuery();
+			while (set.next()) {
+				classes.add(set.getString(1));
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Get Class Names");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
+		classes.add(0, "");
+		return classes.toArray();
  	}
 
-	public static String[] getNPCIdsForDM() {
-		// TODO: Call procedure
-		return new String[] {"", "8", "18", "72"};
-	}
-
-	public static String[] getNotesForDM() {
-		// TODO: Call procedure
-		return new String[] {"", "3", "15", "16"};
-	}
-
-	public static String getPlayerUsername() {
+	String getPlayerUsername() {
 		return playerUsername;
 	}
 
 
-	public static Backend getBackEnd() {
+	Backend getBackEnd() {
 		return backEnd;
 	}
 }

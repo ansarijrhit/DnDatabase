@@ -14,8 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 public class DeleteTabs {
-
-public DeleteTabs(JTabbedPane tabs) {
+	private UIMain UI;
+	
+	public DeleteTabs(JTabbedPane tabs, UIMain ui) {
+		this.UI = ui;
+		
 		// Delete Player
 		
 		JPanel location = new JPanel(new GridBagLayout());
@@ -47,7 +50,7 @@ public DeleteTabs(JTabbedPane tabs) {
 	private void initilizeMajorCharacterView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.repaint();
-		JComboBox<String> characterIds = new JComboBox<String>(UIMain.getCharacterIdsForPlayer());
+		JComboBox<Object> characterIds = new JComboBox<Object>(UI.getCharacterIdsForPlayer());
 
 		c.insets = new Insets(10,5,0,5);
 		c.gridx = 0;
@@ -82,7 +85,7 @@ public DeleteTabs(JTabbedPane tabs) {
 	private void initilizeCampaignView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.repaint();
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForDM());
+		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForDM());
 
 		c.insets = new Insets(10,5,0,5);
 		c.gridx = 0;
@@ -117,7 +120,7 @@ public DeleteTabs(JTabbedPane tabs) {
 	private void initilizeNPCView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.repaint();
-		JComboBox<String> npcs = new JComboBox<String>(UIMain.getNPCIdsForDM());
+		JComboBox<Object> npcs = new JComboBox<Object>(UI.getNPCIdsForDM());
 
 		c.insets = new Insets(10,5,0,5);
 		c.gridx = 0;
@@ -152,7 +155,7 @@ public DeleteTabs(JTabbedPane tabs) {
 	private void initilizeNoteView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.repaint();
-		JComboBox<String> notes = new JComboBox<String>(UIMain.getNotesForDM());
+		JComboBox<Object> notes = new JComboBox<Object>(UI.getNotesForDM());
 
 		c.insets = new Insets(10,5,0,5);
 		c.gridx = 0;
@@ -187,7 +190,7 @@ public DeleteTabs(JTabbedPane tabs) {
 	private void initilizeLocationView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.repaint();
-		JComboBox<String> locations = new JComboBox<String>(UIMain.getLocationIdsForDM());
+		JComboBox<Object> locations = new JComboBox<Object>(UI.getLocationIdsForDM());
 
 		c.insets = new Insets(10,5,0,5);
 		c.gridx = 0;

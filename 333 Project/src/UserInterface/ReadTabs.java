@@ -1,6 +1,5 @@
 package UserInterface;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,12 +16,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 
 public class ReadTabs {
+	private UIMain UI;
 
-	public ReadTabs(JTabbedPane tabs) {
+	public ReadTabs(JTabbedPane tabs, UIMain ui) {
+		this.UI = ui;
 		
 		JPanel character = new JPanel(new GridBagLayout());
 		initilizeCharacterView(character, new GridBagConstraints());
@@ -53,8 +52,8 @@ public class ReadTabs {
 	private void initilizeCharacterView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
-		JComboBox<String> characterIds = new JComboBox<String>(UIMain.getCharacterIdsForPlayer());
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForPlayer());
+		JComboBox<Object> characterIds = new JComboBox<Object>(UI.getCharacterIdsForPlayer());
+		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForPlayer());
 		c.insets = new Insets(0,0,0,5);
 		c.gridx = 0;
 		c.gridy = 0;
@@ -107,7 +106,7 @@ public class ReadTabs {
 	private void initilizeSpellsView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
-		JComboBox<String> characters = new JComboBox<String>(UIMain.getCharacterIdsForPlayer());
+		JComboBox<Object> characters = new JComboBox<Object>(UI.getCharacterIdsForPlayer());
 		JCheckBox checkBox = new JCheckBox();
 		c.insets = new Insets(0,5,0,5);
 		c.gridx = 0;
@@ -158,7 +157,7 @@ public class ReadTabs {
 	private void initilizeCampaignNotesView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForDM());
+		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForDM());
 		c.insets = new Insets(0,0,0,5);
 		c.gridx = 0;
 		c.gridy = 0;
@@ -206,7 +205,7 @@ public class ReadTabs {
 	private void initilizeCampaignCharacterView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForDM());
+		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForDM());
 		c.insets = new Insets(0,0,0,5);
 		c.gridx = 0;
 		c.gridy = 0;
@@ -252,8 +251,8 @@ public class ReadTabs {
 	private void initilizeCampaignLocationsView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForDM());
-		JComboBox<String> locationIds = new JComboBox<String>(UIMain.getLocationIdsForDM());
+		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForDM());
+		JComboBox<Object> locationIds = new JComboBox<Object>(UI.getLocationIdsForDM());
 		JCheckBox checkBox = new JCheckBox();
 		c.insets = new Insets(0,0,0,5);
 		c.gridx = 0;
@@ -285,7 +284,7 @@ public class ReadTabs {
 				c.gridy = 1;
 				c.gridwidth= 7;
 				c.insets = new Insets(10,0,0,0);
-				JTable results = new JTable(getCampaignLocationViewData(campId, locId, enablePCs), UIMain.getCampaignLocationViewHeaders(checkBox.isSelected()));
+				JTable results = new JTable(getCampaignLocationViewData(campId, locId, enablePCs), UI.getCampaignLocationViewHeaders(checkBox.isSelected()));
 				JScrollPane scroll = new JScrollPane(results);
 				Dimension d = results.getPreferredSize();
 				scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
@@ -300,7 +299,7 @@ public class ReadTabs {
 		c.gridy = 1;
 		c.gridwidth= 7;
 		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getCampaignLocationViewData("","",false), UIMain.getCampaignLocationViewHeaders(false));
+		JTable results = new JTable(getCampaignLocationViewData("","",false), UI.getCampaignLocationViewHeaders(false));
 		JScrollPane scroll = new JScrollPane(results);
 		Dimension d = results.getPreferredSize();
 		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
@@ -312,7 +311,7 @@ public class ReadTabs {
 		if (!campaign.isEmpty()) {
 			campId = Integer.parseInt(campaign);
 		}
-		ArrayList<ArrayList<String>> results = UIMain.getBackEnd().getReadFunctions().readCampaignNotes(UIMain.getPlayerUsername(), campId);
+		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions().readCampaignNotes(UI.getPlayerUsername(), campId);
 		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		return stringArray;
 	}
@@ -326,7 +325,7 @@ public class ReadTabs {
 		if (showAllPossible) {
 			showAll = 1;
 		}
-		ArrayList<ArrayList<String>> results = UIMain.getBackEnd().getReadFunctions().readCharacterSpells(UIMain.getPlayerUsername(), charId, showAll);
+		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions().readCharacterSpells(UI.getPlayerUsername(), charId, showAll);
 		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		return stringArray;
 	}
@@ -344,7 +343,7 @@ public class ReadTabs {
 		if (enableNPCs) {
 			viewNPCs = 1;
 		}
-		ArrayList<ArrayList<String>> results = UIMain.getBackEnd().getReadFunctions().readCampaignLocations(UIMain.getPlayerUsername(), campId, locId, viewNPCs);
+		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions().readCampaignLocations(UI.getPlayerUsername(), campId, locId, viewNPCs);
 		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		return stringArray;
 	}
@@ -358,7 +357,7 @@ public class ReadTabs {
 		if (!campaign.isEmpty()) {
 			campId = Integer.parseInt(campaign);
 		}
-		ArrayList<ArrayList<String>> results = UIMain.getBackEnd().getReadFunctions().readPlayerCharacterInformation(UIMain.getPlayerUsername(), charId, campId);
+		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions().readPlayerCharacterInformation(UI.getPlayerUsername(), charId, campId);
 		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		return stringArray;
 	}
@@ -368,7 +367,7 @@ public class ReadTabs {
 		if (!campaign.isEmpty()) {
 			campId = Integer.parseInt(campaign);
 		}
-		ArrayList<ArrayList<String>> results = UIMain.getBackEnd().getReadFunctions().readCampaignCharacterInformation(UIMain.getPlayerUsername(), campId);
+		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions().readCampaignCharacterInformation(UI.getPlayerUsername(), campId);
 		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		return stringArray;
 	}

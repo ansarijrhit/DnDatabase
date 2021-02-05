@@ -19,7 +19,9 @@ import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
 public class CreateTabs {
-	public CreateTabs(JTabbedPane tabs) {
+	private UIMain UI;
+	public CreateTabs(JTabbedPane tabs, UIMain ui) {
+		this.UI = ui;
 		// Create player?
 
 		JPanel majorCharacter = new JPanel(new GridBagLayout());
@@ -52,9 +54,9 @@ public class CreateTabs {
 		panel.removeAll();
 		panel.repaint();
 		JTextField name = new JTextField(30);
-		JComboBox<String> races = new JComboBox<String>(UIMain.getPossibleRaces());
+		JComboBox<Object> races = new JComboBox<Object>(UI.getPossibleRaces());
 		JTextField occupation = new JTextField(30);
-		JComboBox<String> locations = new JComboBox<String>(UIMain.getLocationIdsForDM());
+		JComboBox<Object> locations = new JComboBox<Object>(UI.getLocationIdsForDM());
 
 		c.insets = new Insets(10, 5, 0, 5);
 		c.gridx = 0;
@@ -96,7 +98,7 @@ public class CreateTabs {
 							+ cOccupation + "\n in Location " + cLocation;
 					int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Creation", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						boolean success = UIMain.getBackEnd().getCreateFunctions().createNPC(UIMain.getPlayerUsername(),
+						boolean success = UI.getBackEnd().getCreateFunctions().createNPC(UI.getPlayerUsername(),
 								cLocation, cName, cRace, cOccupation);
 						if (success) {
 							JOptionPane.showMessageDialog(panel, "NPC was added to the database.");
@@ -117,10 +119,10 @@ public class CreateTabs {
 	private void initilizeMajorCharacterView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.repaint();
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForPlayer());
+		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForPlayer());
 		JTextField name = new JTextField(30);
-		JComboBox<String> races = new JComboBox<String>(UIMain.getPossibleRaces());
-		JComboBox<String> classes = new JComboBox<String>(UIMain.getPossibleClasses());
+		JComboBox<Object> races = new JComboBox<Object>(UI.getPossibleRaces());
+		JComboBox<Object> classes = new JComboBox<Object>(UI.getPossibleClasses());
 
 		NumberFormat longFormat = NumberFormat.getIntegerInstance();
 		NumberFormatter levelFormat = new NumberFormatter(longFormat);
@@ -134,7 +136,7 @@ public class CreateTabs {
 		JFormattedTextField hitpoints = new JFormattedTextField(hitpointsFormat);
 		hitpoints.setColumns(30);
 
-		JComboBox<String> alignment = new JComboBox<String>(UIMain.getPossibleAlignments());
+		JComboBox<Object> alignment = new JComboBox<Object>(UI.getPossibleAlignments());
 		JTextArea background = new JTextArea();
 		background.setColumns(30);
 		background.setRows(5);
@@ -205,8 +207,8 @@ public class CreateTabs {
 							+ cBackground + "\n in Campaign " + cCampaignID;
 					int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Creation", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						boolean success = UIMain.getBackEnd().getCreateFunctions().createMajorCharacter(cClass, cLevel,
-								cHitpoints, cAlignment, cBackground, UIMain.getPlayerUsername(), cName, cRace, null,
+						boolean success = UI.getBackEnd().getCreateFunctions().createMajorCharacter(cClass, cLevel,
+								cHitpoints, cAlignment, cBackground, UI.getPlayerUsername(), cName, cRace, null,
 								cCampaignID);
 						if (success) {
 							JOptionPane.showMessageDialog(panel, "Major Character was added to the database.");
@@ -250,7 +252,7 @@ public class CreateTabs {
 					String confirmString = "Are you sure you want to create campaign:\n " + cName;
 					int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Creation", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						boolean success = UIMain.getBackEnd().getCreateFunctions().createCampaign(UIMain.getPlayerUsername(), cName);
+						boolean success = UI.getBackEnd().getCreateFunctions().createCampaign(UI.getPlayerUsername(), cName);
 						if (success) {
 							JOptionPane.showMessageDialog(panel, "Campaign was added to the database.");
 
@@ -275,7 +277,7 @@ public class CreateTabs {
 		JTextArea description = new JTextArea();
 		description.setColumns(30);
 		description.setRows(5);
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForDM());
+		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForDM());
 		c.insets = new Insets(10, 5, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
@@ -310,7 +312,7 @@ public class CreateTabs {
 							+ cDescription + "\n on " + cCampaignId + "?";
 					int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Creation", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						boolean success = UIMain.getBackEnd().getCreateFunctions().createNotes(UIMain.getPlayerUsername(), cCampaignId, cName, cDescription);
+						boolean success = UI.getBackEnd().getCreateFunctions().createNotes(UI.getPlayerUsername(), cCampaignId, cName, cDescription);
 						if (success) {
 							JOptionPane.showMessageDialog(panel, "Note was added to the database.");
 
@@ -335,7 +337,7 @@ public class CreateTabs {
 		JTextArea description = new JTextArea();
 		description.setColumns(30);
 		description.setRows(5);
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForDM());
+		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForDM());
 		c.insets = new Insets(10, 5, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
@@ -370,7 +372,7 @@ public class CreateTabs {
 							+ cDescription + "\n tied to " + cCampaignId + "?";
 					int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Creation", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						boolean success = UIMain.getBackEnd().getCreateFunctions().createLocation(UIMain.getPlayerUsername(), cName, cDescription, cCampaignId);
+						boolean success = UI.getBackEnd().getCreateFunctions().createLocation(UI.getPlayerUsername(), cName, cDescription, cCampaignId);
 						if (success) {
 							JOptionPane.showMessageDialog(panel, "Location was added to the database.");
 

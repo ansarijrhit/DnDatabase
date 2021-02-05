@@ -24,4 +24,8 @@ public class Backend {
 		return this.createFunctions;
 	}
 	
+	public Connection getConnection() {
+		return this.con;
+	}
+	
 }
