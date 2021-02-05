@@ -16,4 +16,8 @@ public class Backend {
 		return new ReadFunctions(this.con);
 	}
 	
+	public CreateFunctions createFunctions() {
+		return new CreateFunctions(this.con);
+	}
+	
 }
