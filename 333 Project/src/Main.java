@@ -38,6 +38,21 @@ public class Main {
 		ArrayList<ArrayList<String>> characterSpells = back.readFunctions().readCharacterSpells("quicks", 6);
 		System.out.println(characterSpells);
 		System.out.println();
+		
+		System.out.println("Getting Campaign Character Information");
+		ArrayList<ArrayList<String>> characters = back.readFunctions().readCampaignCharacterInformation("ansarij", -1);
+		System.out.println(characters);
+		System.out.println();
+		
+		System.out.println("Getting Campaign Notes");
+		ArrayList<ArrayList<String>> notes = back.readFunctions().readCampaignNotes("ansarij", -1);
+		System.out.println(notes);
+		System.out.println();
+		
+		System.out.println("Getting Campaign Locations");
+		ArrayList<ArrayList<String>> locations = back.readFunctions().readCampaignLocations("ansarij", -1, -1, 1);
+		System.out.println(locations);
+		System.out.println();
 //		for(int i = 0; i < character.size(); i++) {
 //			System.out.println(character.get(i));
 //		}
