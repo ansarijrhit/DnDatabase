@@ -168,7 +168,7 @@ public class CreateFunctions {
 	public boolean createCampaign(String dmUsername, String CampaignName) {
 		CallableStatement cs = null;
 		try {
-			String call = "EXEC create_campaign @dm_username = ?, " + "@name = ?";
+			String call = "EXEC create_campaign @dm_username = ?, " + "@description = ?";
 			
 			cs = con.prepareCall(call);
 	
