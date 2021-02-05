@@ -167,15 +167,27 @@ public class CreateFunctions {
 	public boolean createPlayer(String dmUsername, String campaignID, String playerUsername, String name, String password) {
 		CallableStatement cs = null;
 		try {
-			cs = con.prepareCall("EXEC create_player @dm_username = ?, @campaign_id = ?, @playerusername = ?, "
-					+ "@name = ?, @password = ?");
+			boolean campaign = false;
+			String call = "EXEC create_player @playerusername = ?, "
+					+ "@name = ?, @password = ?";
+			
+			if(dmUsername != null && Integer.parseInt(campaignID) > 0) {
+				call += ", @dm_username = ?, @campaign_id = ?"; 
+				campaign = true;
+			}
+			
+			cs = con.prepareCall(call);
 
 			
-			cs.setString(1, dmUsername);
-			cs.setInt(2, Integer.parseInt(campaignID));
-			cs.setString(3, playerUsername);
-			cs.setString(4, name);
-			cs.setString(5, password);
+			cs.setString(1, playerUsername);
+			cs.setString(2, name);
+			cs.setString(3, password);
+			
+			if(campaign) {
+				cs.setString(4, dmUsername);
+				cs.setInt(5, Integer.parseInt(campaignID));
+			}
+			
 			cs.execute();
 
 
