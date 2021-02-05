@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -132,7 +133,7 @@ public class ReadTabs {
 				c.gridy = 1;
 				c.gridwidth= 5;
 				c.insets = new Insets(10,0,0,0);
-				JTable results = new JTable(getSpellsViewData(charId, showAll), new String[] {"Class", "Race", "Spell Name", "Description", "Cast Level"});
+				JTable results = new JTable(getSpellsViewData(charId, showAll), new String[] {"ClassName", "Race", "Spell Name", "Description", "Cast Level"});
 				JScrollPane scroll = new JScrollPane(results);
 				Dimension d = results.getPreferredSize();
 				scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
@@ -147,7 +148,7 @@ public class ReadTabs {
 		c.gridy = 1;
 		c.gridwidth= 5;
 		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getSpellsViewData("", false), new String[] {"Class", "Race", "Spell Name", "Description", "Cast Level"});
+		JTable results = new JTable(getSpellsViewData("", false), new String[] {"ClassName", "Race", "Spell Name", "Description", "Cast Level"});
 		JScrollPane scroll = new JScrollPane(results);
 		Dimension d = results.getPreferredSize();
 		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
@@ -224,7 +225,7 @@ public class ReadTabs {
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.gridx = 0;
 				c.gridy = 1;
-				c.gridwidth= 3;
+				c.gridwidth= 5;
 				c.insets = new Insets(10,0,0,0);
 				JTable results = new JTable(getCampaignCharacterViewData(campId), new String[] {"Campaign ID", "Player Username", "Character Name", "Race", "Alignment", "Hitpoints", "Background"});
 				JScrollPane scroll = new JScrollPane(results);
@@ -277,11 +278,12 @@ public class ReadTabs {
 				String locId = (String) locationIds.getSelectedItem();
 				String campId = (String) campaignIds.getSelectedItem();
 				boolean enablePCs = checkBox.isSelected();
-				panel.remove(5);
+				System.out.println(enablePCs);
+				panel.remove(7);
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.gridx = 0;
 				c.gridy = 1;
-				c.gridwidth= 5;
+				c.gridwidth= 7;
 				c.insets = new Insets(10,0,0,0);
 				JTable results = new JTable(getCampaignLocationViewData(campId, locId, enablePCs), UIMain.getCampaignLocationViewHeaders(checkBox.isSelected()));
 				JScrollPane scroll = new JScrollPane(results);
@@ -298,7 +300,7 @@ public class ReadTabs {
 		c.gridy = 1;
 		c.gridwidth= 7;
 		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getCampaignLocationViewData("","",false), UIMain.getCampaignLocationViewHeaders(checkBox.isSelected()));
+		JTable results = new JTable(getCampaignLocationViewData("","",false), UIMain.getCampaignLocationViewHeaders(false));
 		JScrollPane scroll = new JScrollPane(results);
 		Dimension d = results.getPreferredSize();
 		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
@@ -310,8 +312,9 @@ public class ReadTabs {
 		if (!campaign.isEmpty()) {
 			campId = Integer.parseInt(campaign);
 		}
-		UIMain.getBackEnd().getReadFunctions();
-		return new String[][] {{"Campaign ID", "Name", "This is a descripiton field"}};
+		ArrayList<ArrayList<String>> results = UIMain.getBackEnd().getReadFunctions().readCampaignNotes(UIMain.getPlayerUsername(), campId);
+		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
+		return stringArray;
 	}
 
 	private String[][] getSpellsViewData(String character, boolean showAllPossible) {
@@ -319,11 +322,16 @@ public class ReadTabs {
 		if (!character.isEmpty()) {
 			charId = Integer.parseInt(character);
 		}
-		// TODO: call read spell function
-		return new String[][] {{"Name", "fact", "fact","fact","fact"}};
+		int showAll = 0;
+		if (showAllPossible) {
+			showAll = 1;
+		}
+		ArrayList<ArrayList<String>> results = UIMain.getBackEnd().getReadFunctions().readCharacterSpells(UIMain.getPlayerUsername(), charId, showAll);
+		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
+		return stringArray;
 	}
 	
-	private String[][] getCampaignLocationViewData(String campaign, String location, boolean enablePCs) {
+	private String[][] getCampaignLocationViewData(String campaign, String location, boolean enableNPCs) {
 		int campId = -1;
 		if (!campaign.isEmpty()) {
 			campId = Integer.parseInt(campaign);
@@ -332,8 +340,13 @@ public class ReadTabs {
 		if (!location.isEmpty()) {
 			locId = Integer.parseInt(location);
 		}
-		// TODO: call read campaign location data
-		return new String[][] {{"Name", "fact", "fact","fact","fact"}};
+		int viewNPCs = 0;
+		if (enableNPCs) {
+			viewNPCs = 1;
+		}
+		ArrayList<ArrayList<String>> results = UIMain.getBackEnd().getReadFunctions().readCampaignLocations(UIMain.getPlayerUsername(), campId, locId, viewNPCs);
+		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
+		return stringArray;
 	}
 
 	private String[][] getCharacterViewData(String character, String campaign) {
@@ -345,9 +358,9 @@ public class ReadTabs {
 		if (!campaign.isEmpty()) {
 			campId = Integer.parseInt(campaign);
 		}
-		// TODO: call read player character function
-//		return UIMain.backEnd.readPlayerCharacterInformation("","",charId, campId);
-		return new String[][] {{"Character Name", "Fact", "Fact", "fact", "fact", "fact"}};
+		ArrayList<ArrayList<String>> results = UIMain.getBackEnd().getReadFunctions().readPlayerCharacterInformation(UIMain.getPlayerUsername(), charId, campId);
+		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
+		return stringArray;
 	}
 	
 	private String[][] getCampaignCharacterViewData(String campaign) {
@@ -355,7 +368,8 @@ public class ReadTabs {
 		if (!campaign.isEmpty()) {
 			campId = Integer.parseInt(campaign);
 		}
-		// TODO: call read procedure
-		return new String[][] {{"Name", "fact", "fact","fact", "fact", "fact", "fact"}};
+		ArrayList<ArrayList<String>> results = UIMain.getBackEnd().getReadFunctions().readCampaignCharacterInformation(UIMain.getPlayerUsername(), campId);
+		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
+		return stringArray;
 	}
 }

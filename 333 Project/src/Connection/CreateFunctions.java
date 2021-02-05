@@ -25,7 +25,7 @@ public class CreateFunctions {
 	public boolean createLocation(String dmUsername, String locationName, String locationDescription, String campaignID) {
 		CallableStatement cs = null;
 		try {
-			cs = con.prepareCall("EXEC create_location @dm_username = ?, @locationid = ?,"
+			cs = con.prepareCall("EXEC create_location @dm_username = ?,"
 					+ "@name = ?, @description = ?, @campaignid = ?");
 
 //			cs.registerOutParameter(1, Types.INTEGER);
@@ -60,12 +60,11 @@ public class CreateFunctions {
 		CallableStatement cs = null;
 		try {
 			String call = "EXEC create_major_character @class = ?, @level = ?, "
-					+ "@hitpoints = ?, @alignment = ?, @background = ?, @username = ?, "
+					+ "@hitpoints = ?, @alignment = ?, @background = ?, @playerusername = ?, "
 					+ "@name = ?, @racename = ?, @campaign_id = ?";
 			
 			cs = con.prepareCall(call);
 
-			
 			cs.setString(1, characterClass);
 			cs.setInt(2, Integer.parseInt(level));
 			cs.setInt(3, Integer.parseInt(hitpoints));
@@ -80,6 +79,7 @@ public class CreateFunctions {
 
 			return true;
 		} catch (SQLException e) {
+			System.out.println("Issue with createMajorCharacter");
 			e.printStackTrace();
 		}
 		
@@ -168,7 +168,7 @@ public class CreateFunctions {
 	public boolean createCampaign(String dmUsername, String CampaignName) {
 		CallableStatement cs = null;
 		try {
-			String call = "EXEC create_campaign @dm_username = ?, " + "@name = ?";
+			String call = "EXEC create_campaign @dm_username = ?, " + "@description = ?";
 			
 			cs = con.prepareCall(call);
 	

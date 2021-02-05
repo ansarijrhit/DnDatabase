@@ -98,26 +98,26 @@ public class UIMain{
      
 	static String[] getCharacterIdsForPlayer() {
 		// TODO: Call procedure
-		return new String[] {"", "Character 1", "Character 2", "Character 3"};
+		return new String[] {"", "2", "3", "5", "6"};
  	}
 	
 	static String[] getCampaignIdsForPlayer() {
 		// TODO: Call procedure
-		return new String[] {"", "Campaign 1", "Campaign 2", "Campaign 3"};
+		return new String[] {"", "1", "2"};
  	}
 	
 	static String[] getCampaignIdsForDM() {
 		// TODO: Call procedure
-		return new String[] {"", "Campaign 1", "Campaign 2", "Campaign 3"};
+		return new String[] {"", "1", "2", "4"};
  	}
 	
 	static String[] getLocationIdsForDM() {
 		// TODO: Call procedure
-		return new String[] {"", "Location 1", "Location 2", "Location 3"};
+		return new String[] {"", "1", "3", "4", "21"};
  	}
 	
 	static String[] getCampaignLocationViewHeaders(boolean showPCs) {
-		if (showPCs) {
+		if (!showPCs) {
 			return new String[] {"Location Name", "Location Description"};
 		}
 		return new String[] {"Location Name", "Location Description", "NPC Name", "NPC Race", "NPC Occupation"};
@@ -137,17 +137,17 @@ public class UIMain{
 	
 	static String[] getPossibleClasses() {
 		// TODO: Call procedure
-		return new String[] {"", "Wizard", "Warrior", "Ranger", "Bard"};
+		return new String[] {"", "Wizard", "Bard"};
  	}
 
 	public static String[] getNPCIdsForDM() {
 		// TODO: Call procedure
-		return new String[] {"", "NPC 1", "NPC 2", "NPC 3"};
+		return new String[] {"", "8", "18", "72"};
 	}
 
 	public static String[] getNotesForDM() {
 		// TODO: Call procedure
-		return new String[] {"", "Note 1", "Note 2", "Note 3"};
+		return new String[] {"", "3", "15", "16"};
 	}
 
 	public static String getPlayerUsername() {

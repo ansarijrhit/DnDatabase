@@ -68,14 +68,15 @@ public class ReadFunctions{
 		return character;
 	}
 	
-	public ArrayList<ArrayList<String>> readCharacterSpells(String pusername, int id) {
+	public ArrayList<ArrayList<String>> readCharacterSpells(String pusername, int id, int showAllPossible) {
 		ArrayList<ArrayList<String>> spells = new ArrayList<ArrayList<String>>();
 		ResultSet set = null;
 		try {
-			String sql = "EXEC read_character_spells @username = ?, @characterid = ?";
+			String sql = "EXEC read_character_spells @username = ?, @characterid = ?, @showAll = ?";
 			PreparedStatement statement = this.con.prepareStatement(sql);
 			statement.setString(1, pusername);
 			statement.setInt(2, id);
+			statement.setInt(3, showAllPossible);
 			set = statement.executeQuery();
 			while (set.next()) {
 				spells.add(new CharacterSpells(set.getString("ClassName"), set.getString("RaceName"),

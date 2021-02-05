@@ -275,7 +275,7 @@ public class CreateTabs {
 		JTextArea description = new JTextArea();
 		description.setColumns(30);
 		description.setRows(5);
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForPlayer());
+		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForDM());
 		c.insets = new Insets(10, 5, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
@@ -335,7 +335,7 @@ public class CreateTabs {
 		JTextArea description = new JTextArea();
 		description.setColumns(30);
 		description.setRows(5);
-		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForPlayer());
+		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForDM());
 		c.insets = new Insets(10, 5, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
