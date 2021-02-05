@@ -1,19 +1,82 @@
 package UserInterface;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 
 import Connection.Backend;
 
 public class UIMain{
-	Backend backEnd;
+	private static Backend backEnd;
+	private static String playerUsername;
 	
 	public UIMain(Backend b) {
-	   this.backEnd = b;	
+	   backEnd = b;	
        JFrame frame = new JFrame("DnDatabase");
        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        frame.setSize(1000,600);
        
-       JTabbedPane createTabs = new JTabbedPane();
+       JPanel loginPanel = new JPanel(new GridBagLayout());
+       GridBagConstraints c = new GridBagConstraints();
+       c.insets = new Insets(5,5,5,5);
+       c.gridx = 0;
+       c.gridy = 0;
+       loginPanel.add(new JLabel("Username: "), c);
+       c.gridx = 1;
+       JTextField username = new JTextField(10);
+       loginPanel.add(username,c);
+       c.gridx = 0;
+       c.gridy = 1;
+       loginPanel.add(new JLabel("Password: "), c);
+       c.gridx = 1;
+       JTextField password = new JTextField(10);
+       loginPanel.add(password,c);
+       c.gridx = 0;
+       c.gridy = 2;
+       c.insets = new Insets(10,20,10,20);
+       JButton loginButton = new JButton("Login");
+       loginButton.addActionListener(new ActionListener() {
+    	   @Override
+    	   public void actionPerformed(ActionEvent e) {
+    		   playerUsername = username.getText();
+    		   String playerPassword = password.getText();
+    		   // TODO: Validate username and password
+    		   loginPanel.setVisible(false);
+    		   displayUserTabs(frame);
+    		   frame.revalidate();
+    		   frame.repaint();
+    	   }
+       });
+       loginPanel.add(loginButton,c);
+       
+       c.insets = new Insets(10,35,10,20);
+       c.gridx = 1;
+       JButton registerButton = new JButton("Register");
+       registerButton.addActionListener(new ActionListener() {
+    	   @Override
+    	   public void actionPerformed(ActionEvent e) {
+    		   playerUsername = username.getText();
+    		   String playerPassword = password.getText();
+    		   // TODO: Validate username and password
+    		   loginPanel.setVisible(false);
+    		   displayUserTabs(frame);
+    		   frame.revalidate();
+    		   frame.repaint();
+    	   }
+       });
+       loginPanel.add(registerButton,c);
+       
+       frame.add(loginPanel);
+       frame.setVisible(true);
+       
+     }
+
+	private void displayUserTabs(JFrame frame) {
+	   JTabbedPane createTabs = new JTabbedPane();
        new CreateTabs(createTabs);
        
        JTabbedPane readTabs = new JTabbedPane();
@@ -31,9 +94,7 @@ public class UIMain{
        CRUDTabs.addTab("UPDATE", updateTabs);
        CRUDTabs.addTab("DELETE", deleteTabs);
        frame.add(CRUDTabs);
-
-       frame.setVisible(true);
-     }
+	}
      
 	static String[] getCharacterIdsForPlayer() {
 		// TODO: Call procedure
@@ -56,11 +117,10 @@ public class UIMain{
  	}
 	
 	static String[] getCampaignLocationViewHeaders(boolean showPCs) {
-		// TODO: column names
 		if (showPCs) {
-			return new String[] {"LocationID", "LocationName", "Description", "NPCName", "NPC Job"};
+			return new String[] {"Location Name", "Location Description"};
 		}
-		return new String[] {"LocationID", "LocationName", "Description", "NPCName", "NPC Job"};
+		return new String[] {"Location Name", "Location Description", "NPC Name", "NPC Race", "NPC Occupation"};
  	}
 	
 	static String[] getPossibleAlignments() {
@@ -88,5 +148,14 @@ public class UIMain{
 	public static String[] getNotesForDM() {
 		// TODO: Call procedure
 		return new String[] {"", "Note 1", "Note 2", "Note 3"};
+	}
+
+	public static String getPlayerUsername() {
+		return playerUsername;
+	}
+
+
+	public static Backend getBackEnd() {
+		return backEnd;
 	}
 }

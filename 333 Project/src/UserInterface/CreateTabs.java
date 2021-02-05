@@ -21,27 +21,27 @@ import javax.swing.text.NumberFormatter;
 public class CreateTabs {
 	public CreateTabs(JTabbedPane tabs) {
 		// Create player?
-		
+
 		JPanel majorCharacter = new JPanel(new GridBagLayout());
 		initilizeMajorCharacterView(majorCharacter, new GridBagConstraints());
 		majorCharacter.setVisible(true);
 		tabs.addTab("Major Character", majorCharacter);
-		
+
 		JPanel npc = new JPanel(new GridBagLayout());
 		initilizeNPCView(npc, new GridBagConstraints());
 		npc.setVisible(true);
 		tabs.addTab("NPC", npc);
-		
+
 		JPanel location = new JPanel(new GridBagLayout());
 		initilizeLocationView(location, new GridBagConstraints());
 		location.setVisible(false);
 		tabs.addTab("Location", location);
-		
+
 		JPanel note = new JPanel(new GridBagLayout());
 		initilizeNoteView(note, new GridBagConstraints());
 		note.setVisible(false);
 		tabs.addTab("Note", note);
-		
+
 		JPanel campaign = new JPanel(new GridBagLayout());
 		initilizeCampaignView(campaign, new GridBagConstraints());
 		campaign.setVisible(false);
@@ -56,7 +56,7 @@ public class CreateTabs {
 		JTextField occupation = new JTextField(30);
 		JComboBox<String> locations = new JComboBox<String>(UIMain.getLocationIdsForDM());
 
-		c.insets = new Insets(10,5,0,5);
+		c.insets = new Insets(10, 5, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(new JLabel("Enter NPC Name: "), c);
@@ -81,7 +81,7 @@ public class CreateTabs {
 		c.gridy = 4;
 		c.gridwidth = 2;
 		JButton submit = new JButton("Submit");
-		submit.addActionListener(new ActionListener( ) {
+		submit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String cName = name.getText();
@@ -89,20 +89,26 @@ public class CreateTabs {
 				String cOccupation = occupation.getText();
 				String cLocation = (String) locations.getSelectedItem();
 				if (cName.isBlank() || cRace.isEmpty() || cOccupation.isBlank() || cLocation.isEmpty()) {
-					JOptionPane.showMessageDialog(panel,"Please fill out all fields.");
+					JOptionPane.showMessageDialog(panel, "Please fill out all fields.");
 				} else {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
-					String confirmString = "Are you sure you want to create NPC:\n" 
-							+ cName + ", " + cRace + ", " + cOccupation + "\n in Location " + cLocation;
+					String confirmString = "Are you sure you want to create NPC:\n" + cName + ", " + cRace + ", "
+							+ cOccupation + "\n in Location " + cLocation;
 					int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Creation", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// TODO: call create procedure
-						JOptionPane.showMessageDialog(panel,"NPC was added to the database.");
+						boolean success = UIMain.getBackEnd().getCreateFunctions().createNPC(UIMain.getPlayerUsername(),
+								cLocation, cName, cRace, cOccupation);
+						if (success) {
+							JOptionPane.showMessageDialog(panel, "NPC was added to the database.");
+
+						} else {
+							JOptionPane.showMessageDialog(panel, "Error: Unable to add NPC to the database.");
+						}
 					} else {
 						return;
 					}
-				}				
-				initilizeNPCView(panel, new GridBagConstraints());	
+				}
+				initilizeNPCView(panel, new GridBagConstraints());
 			}
 		});
 		panel.add(submit, c);
@@ -115,7 +121,7 @@ public class CreateTabs {
 		JTextField name = new JTextField(30);
 		JComboBox<String> races = new JComboBox<String>(UIMain.getPossibleRaces());
 		JComboBox<String> classes = new JComboBox<String>(UIMain.getPossibleClasses());
-		
+
 		NumberFormat longFormat = NumberFormat.getIntegerInstance();
 		NumberFormatter levelFormat = new NumberFormatter(longFormat);
 		levelFormat.setValueClass(Long.class); // ensures you will always get a long value
@@ -127,13 +133,13 @@ public class CreateTabs {
 		hitpointsFormat.setAllowsInvalid(false);
 		JFormattedTextField hitpoints = new JFormattedTextField(hitpointsFormat);
 		hitpoints.setColumns(30);
-		
+
 		JComboBox<String> alignment = new JComboBox<String>(UIMain.getPossibleAlignments());
 		JTextArea background = new JTextArea();
 		background.setColumns(30);
 		background.setRows(5);
 
-		c.insets = new Insets(10,5,0,5);
+		c.insets = new Insets(10, 5, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(new JLabel("Select Campaign to Join: "), c);
@@ -178,7 +184,7 @@ public class CreateTabs {
 		c.gridy = 8;
 		c.gridwidth = 2;
 		JButton submit = new JButton("Submit");
-		submit.addActionListener(new ActionListener( ) {
+		submit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String cName = name.getText();
@@ -189,22 +195,31 @@ public class CreateTabs {
 				String cAlignment = (String) alignment.getSelectedItem();
 				String cBackground = background.getText();
 				String cCampaignID = (String) campaignIds.getSelectedItem();
-				if (cCampaignID.isBlank() || cName.isBlank() || cRace.isEmpty() || cClass.isEmpty() || cLevel.isBlank() || cHitpoints.isBlank() || cAlignment.isEmpty() || cBackground.isBlank()) {
-					JOptionPane.showMessageDialog(panel,"Please fill out all fields.");
+				if (cCampaignID.isBlank() || cName.isBlank() || cRace.isEmpty() || cClass.isEmpty() || cLevel.isBlank()
+						|| cHitpoints.isBlank() || cAlignment.isEmpty() || cBackground.isBlank()) {
+					JOptionPane.showMessageDialog(panel, "Please fill out all fields.");
 				} else {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
-					String confirmString = "Are you sure you want to create Major Character:\n" 
-							+ cName + ", " + cRace + ", " + cClass + ", " + cLevel + ", " + cHitpoints + ", " + cAlignment + ",\n " + cBackground
-							+ "\n in Campaign " + cCampaignID;
+					String confirmString = "Are you sure you want to create Major Character:\n" + cName + ", " + cRace
+							+ ", " + cClass + ", " + cLevel + ", " + cHitpoints + ", " + cAlignment + ",\n "
+							+ cBackground + "\n in Campaign " + cCampaignID;
 					int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Creation", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// TODO: call create procedure
-						JOptionPane.showMessageDialog(panel,"Major Character was added to the database.");
+						boolean success = UIMain.getBackEnd().getCreateFunctions().createMajorCharacter(cClass, cLevel,
+								cHitpoints, cAlignment, cBackground, UIMain.getPlayerUsername(), cName, cRace, null,
+								cCampaignID);
+						if (success) {
+							JOptionPane.showMessageDialog(panel, "Major Character was added to the database.");
+
+						} else {
+							JOptionPane.showMessageDialog(panel,
+									"Error: Unable to add Major Character to the database.");
+						}
 					} else {
 						return;
 					}
-				}				
-				initilizeMajorCharacterView(panel, new GridBagConstraints());	
+				}
+				initilizeMajorCharacterView(panel, new GridBagConstraints());
 			}
 		});
 		panel.add(submit, c);
@@ -214,7 +229,7 @@ public class CreateTabs {
 		panel.removeAll();
 		panel.repaint();
 		JTextField name = new JTextField(30);
-		c.insets = new Insets(10,5,0,5);
+		c.insets = new Insets(10, 5, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(new JLabel("Enter Campaign Name: "), c);
@@ -224,24 +239,30 @@ public class CreateTabs {
 		c.gridy = 1;
 		c.gridwidth = 2;
 		JButton submit = new JButton("Submit");
-		submit.addActionListener(new ActionListener( ) {
+		submit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String cName = name.getText();
 				if (cName.isBlank()) {
-					JOptionPane.showMessageDialog(panel,"Please fill out all fields.");
+					JOptionPane.showMessageDialog(panel, "Please fill out all fields.");
 				} else {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
 					String confirmString = "Are you sure you want to create campaign:\n " + cName;
 					int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Creation", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// TODO: call create procedure
-						JOptionPane.showMessageDialog(panel,"Campaign was added to the database.");
+						boolean success = UIMain.getBackEnd().getCreateFunctions().createCampaign(UIMain.getPlayerUsername(), cName);
+						if (success) {
+							JOptionPane.showMessageDialog(panel, "Campaign was added to the database.");
+
+						} else {
+							JOptionPane.showMessageDialog(panel,
+									"Error: Unable to add Campaign to the database.");
+						}
 					} else {
 						return;
 					}
-				}				
-				initilizeCampaignView(panel, new GridBagConstraints());	
+				}
+				initilizeCampaignView(panel, new GridBagConstraints());
 			}
 		});
 		panel.add(submit, c);
@@ -255,7 +276,7 @@ public class CreateTabs {
 		description.setColumns(30);
 		description.setRows(5);
 		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForPlayer());
-		c.insets = new Insets(10,5,0,5);
+		c.insets = new Insets(10, 5, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(new JLabel("Enter Note Name: "), c);
@@ -275,27 +296,33 @@ public class CreateTabs {
 		c.gridy = 3;
 		c.gridwidth = 2;
 		JButton submit = new JButton("Submit");
-		submit.addActionListener(new ActionListener( ) {
+		submit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String cName = name.getText();
 				String cDescription = description.getText();
 				String cCampaignId = (String) campaignIds.getSelectedItem();
 				if (cName.isBlank() || cDescription.isBlank() || cCampaignId.isEmpty()) {
-					JOptionPane.showMessageDialog(panel,"Please fill out all fields.");
+					JOptionPane.showMessageDialog(panel, "Please fill out all fields.");
 				} else {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
-					String confirmString = "Are you sure you want to create the Note... \n " + cName + ": " + cDescription 
-							+ "\n on " + cCampaignId + "?";
+					String confirmString = "Are you sure you want to create the Note... \n " + cName + ": "
+							+ cDescription + "\n on " + cCampaignId + "?";
 					int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Creation", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// TODO: call create procedure
-						JOptionPane.showMessageDialog(panel,"Note was added to the database.");
+						boolean success = UIMain.getBackEnd().getCreateFunctions().createNotes(UIMain.getPlayerUsername(), cCampaignId, cName, cDescription);
+						if (success) {
+							JOptionPane.showMessageDialog(panel, "Note was added to the database.");
+
+						} else {
+							JOptionPane.showMessageDialog(panel,
+									"Error: Unable to add Note to the database.");
+						}
 					} else {
 						return;
 					}
-				}				
-				initilizeNoteView(panel, new GridBagConstraints());	
+				}
+				initilizeNoteView(panel, new GridBagConstraints());
 			}
 		});
 		panel.add(submit, c);
@@ -309,7 +336,7 @@ public class CreateTabs {
 		description.setColumns(30);
 		description.setRows(5);
 		JComboBox<String> campaignIds = new JComboBox<String>(UIMain.getCampaignIdsForPlayer());
-		c.insets = new Insets(10,5,0,5);
+		c.insets = new Insets(10, 5, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(new JLabel("Enter Location Name: "), c);
@@ -329,27 +356,33 @@ public class CreateTabs {
 		c.gridy = 3;
 		c.gridwidth = 2;
 		JButton submit = new JButton("Submit");
-		submit.addActionListener(new ActionListener( ) {
+		submit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String cName = name.getText();
 				String cDescription = description.getText();
 				String cCampaignId = (String) campaignIds.getSelectedItem();
 				if (cName.isBlank() || cDescription.isBlank() || cCampaignId.isEmpty()) {
-					JOptionPane.showMessageDialog(panel,"Please fill out all fields.");
+					JOptionPane.showMessageDialog(panel, "Please fill out all fields.");
 				} else {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
-					String confirmString = "Are you sure you want to create the location... \n " + cName + ": " + cDescription 
-							+ "\n tied to " + cCampaignId + "?";
+					String confirmString = "Are you sure you want to create the location... \n " + cName + ": "
+							+ cDescription + "\n tied to " + cCampaignId + "?";
 					int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Creation", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// TODO: call create procedure
-						JOptionPane.showMessageDialog(panel,"Location was added to the database.");
+						boolean success = UIMain.getBackEnd().getCreateFunctions().createLocation(UIMain.getPlayerUsername(), cName, cDescription, cCampaignId);
+						if (success) {
+							JOptionPane.showMessageDialog(panel, "Location was added to the database.");
+
+						} else {
+							JOptionPane.showMessageDialog(panel,
+									"Error: Unable to add Location to the database.");
+						}
 					} else {
 						return;
 					}
-				}				
-				initilizeLocationView(panel, new GridBagConstraints());	
+				}
+				initilizeLocationView(panel, new GridBagConstraints());
 			}
 		});
 		panel.add(submit, c);

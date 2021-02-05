@@ -72,17 +72,31 @@ public class ReadTabs {
 		search.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO: Update table to selected info
-				initilizeCharacterView(panel, new GridBagConstraints());	
+				String charId = (String) characterIds.getSelectedItem();
+				String campId = (String) campaignIds.getSelectedItem();
+				panel.remove(5);
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.gridx = 0;
+				c.gridy = 1;
+				c.gridwidth= 5;
+				c.insets = new Insets(10,0,0,0);
+				JTable results = new JTable(getCharacterViewData(charId, campId), new String[] {"Character Name", "Class", "Class Level", "Hitpoints", "Alignment", "Background"});
+				JScrollPane scroll = new JScrollPane(results);
+				Dimension d = results.getPreferredSize();
+				scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+				panel.add(scroll, c);
+				panel.revalidate();
+				panel.repaint();
 			}
 		});
 		panel.add(search, c);
+
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth= 5;
 		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getCharacterViewData(), new String[] {"Character Name", "Attribute 1", "Attribute 2", "Attribute 3"});
+		JTable results = new JTable(getCharacterViewData("",""), new String[] {"Character Name", "Class", "Class Level", "Hitpoints", "Alignment", "Background"});
 		JScrollPane scroll = new JScrollPane(results);
 		Dimension d = results.getPreferredSize();
 		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
@@ -110,8 +124,21 @@ public class ReadTabs {
 		search.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO: Update table to selected info
-				initilizeSpellsView(panel, new GridBagConstraints());	
+				String charId = (String) characters.getSelectedItem();
+				boolean showAll = checkBox.isSelected();
+				panel.remove(5);
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.gridx = 0;
+				c.gridy = 1;
+				c.gridwidth= 5;
+				c.insets = new Insets(10,0,0,0);
+				JTable results = new JTable(getSpellsViewData(charId, showAll), new String[] {"Class", "Race", "Spell Name", "Description", "Cast Level"});
+				JScrollPane scroll = new JScrollPane(results);
+				Dimension d = results.getPreferredSize();
+				scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+				panel.add(scroll, c);
+				panel.revalidate();
+				panel.repaint();
 			}
 		});
 		panel.add(search, c);
@@ -120,16 +147,7 @@ public class ReadTabs {
 		c.gridy = 1;
 		c.gridwidth= 5;
 		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getSpellsViewData(), new String[] {"Spell Name", "Description", "Cast Level", "Class", "Race"}) {
-			  @Override
-			    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-			      Component component = super.prepareRenderer(renderer, row, column);
-			      int rendererWidth = component.getPreferredSize().width;
-			      TableColumn tableColumn = getColumnModel().getColumn(column);
-			      tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
-			      return component;
-			    }
-			  };
+		JTable results = new JTable(getSpellsViewData("", false), new String[] {"Class", "Race", "Spell Name", "Description", "Cast Level"});
 		JScrollPane scroll = new JScrollPane(results);
 		Dimension d = results.getPreferredSize();
 		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
@@ -153,27 +171,29 @@ public class ReadTabs {
 		search.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO: Update table to selected info
-				initilizeCampaignNotesView(panel, new GridBagConstraints());	
+				String campId = (String) campaignIds.getSelectedItem();
+				panel.remove(3);
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.gridx = 0;
+				c.gridy = 1;
+				c.gridwidth= 3;
+				c.insets = new Insets(10,0,0,0);
+				JTable results = new JTable(getCampaignNotesData(campId), new String[] {"CampaignID", "Note Name", "Description"});
+				JScrollPane scroll = new JScrollPane(results);
+				Dimension d = results.getPreferredSize();
+				scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+				panel.add(scroll, c);
+				panel.revalidate();
+				panel.repaint();
 			}
 		});
 		panel.add(search, c);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.gridwidth = 10;
+		c.gridwidth = 3;
 		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getCampaignNotesData(), new String[] {"CampaignID", "Note Name", "Description"}){
-			  @Override
-			    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-			      Component component = super.prepareRenderer(renderer, row, column);
-			      int rendererWidth = component.getPreferredSize().width;
-			      TableColumn tableColumn = getColumnModel().getColumn(column);
-			      tableColumn.setPreferredWidth(Math.max(rendererWidth + getIntercellSpacing().width, tableColumn.getPreferredWidth()));
-			      return component;
-			    }
-			  };
-		results.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		JTable results = new JTable(getCampaignNotesData(""), new String[] {"CampaignID", "Note Name", "Description"});
 
 		JScrollPane scroll = new JScrollPane(results);
 		results.setPreferredScrollableViewportSize(scroll.getPreferredSize());
@@ -199,8 +219,20 @@ public class ReadTabs {
 		search.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO: Update table to selected info
-				initilizeCampaignCharacterView(panel, new GridBagConstraints());	
+				String campId = (String) campaignIds.getSelectedItem();
+				panel.remove(3);
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.gridx = 0;
+				c.gridy = 1;
+				c.gridwidth= 3;
+				c.insets = new Insets(10,0,0,0);
+				JTable results = new JTable(getCampaignCharacterViewData(campId), new String[] {"Campaign ID", "Player Username", "Character Name", "Race", "Alignment", "Hitpoints", "Background"});
+				JScrollPane scroll = new JScrollPane(results);
+				Dimension d = results.getPreferredSize();
+				scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+				panel.add(scroll, c);
+				panel.revalidate();
+				panel.repaint();
 			}
 		});
 		panel.add(search, c);
@@ -209,7 +241,7 @@ public class ReadTabs {
 		c.gridy = 1;
 		c.gridwidth= 5;
 		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getCampaignCharacterViewData(), new String[] {"Character Name", "Attribute 1", "Attribute 2", "Attribute 3"});
+		JTable results = new JTable(getCampaignCharacterViewData(""), new String[] {"Campaign ID", "Player Username", "Character Name", "Race", "Alignment", "Hitpoints", "Background"});
 		JScrollPane scroll = new JScrollPane(results);
 		Dimension d = results.getPreferredSize();
 		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
@@ -242,8 +274,22 @@ public class ReadTabs {
 		search.addActionListener(new ActionListener( ) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO: Update table to selected info
-				initilizeCampaignLocationsView(panel, new GridBagConstraints());	
+				String locId = (String) locationIds.getSelectedItem();
+				String campId = (String) campaignIds.getSelectedItem();
+				boolean enablePCs = checkBox.isSelected();
+				panel.remove(5);
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.gridx = 0;
+				c.gridy = 1;
+				c.gridwidth= 5;
+				c.insets = new Insets(10,0,0,0);
+				JTable results = new JTable(getCampaignLocationViewData(campId, locId, enablePCs), UIMain.getCampaignLocationViewHeaders(checkBox.isSelected()));
+				JScrollPane scroll = new JScrollPane(results);
+				Dimension d = results.getPreferredSize();
+				scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+				panel.add(scroll, c);
+				panel.revalidate();
+				panel.repaint();
 			}
 		});
 		panel.add(search, c);
@@ -252,35 +298,64 @@ public class ReadTabs {
 		c.gridy = 1;
 		c.gridwidth= 7;
 		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getCampaignLocationViewData(), UIMain.getCampaignLocationViewHeaders(checkBox.isCursorSet()));
+		JTable results = new JTable(getCampaignLocationViewData("","",false), UIMain.getCampaignLocationViewHeaders(checkBox.isSelected()));
 		JScrollPane scroll = new JScrollPane(results);
 		Dimension d = results.getPreferredSize();
 		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
 		panel.add(scroll, c);
 	}
 
-	private Object[][] getCampaignNotesData() {
-		// TODO: call read procedure
+	private String[][] getCampaignNotesData(String campaign) {
+		int campId = -1;
+		if (!campaign.isEmpty()) {
+			campId = Integer.parseInt(campaign);
+		}
+		UIMain.getBackEnd().getReadFunctions();
 		return new String[][] {{"Campaign ID", "Name", "This is a descripiton field"}};
 	}
 
-	private String[][] getSpellsViewData() {
-		// TODO: call read procedure
+	private String[][] getSpellsViewData(String character, boolean showAllPossible) {
+		int charId = -1;
+		if (!character.isEmpty()) {
+			charId = Integer.parseInt(character);
+		}
+		// TODO: call read spell function
 		return new String[][] {{"Name", "fact", "fact","fact","fact"}};
 	}
 	
-	private String[][] getCampaignLocationViewData() {
-		// TODO: call read procedure
+	private String[][] getCampaignLocationViewData(String campaign, String location, boolean enablePCs) {
+		int campId = -1;
+		if (!campaign.isEmpty()) {
+			campId = Integer.parseInt(campaign);
+		}
+		int locId = -1;
+		if (!location.isEmpty()) {
+			locId = Integer.parseInt(location);
+		}
+		// TODO: call read campaign location data
 		return new String[][] {{"Name", "fact", "fact","fact","fact"}};
 	}
 
-	private String[][] getCharacterViewData() {
-		// TODO: call read procedure
-		return new String[][] {{"Name", "fact", "fact","fact"}};
+	private String[][] getCharacterViewData(String character, String campaign) {
+		int charId = -1;
+		if (!character.isEmpty()) {
+			charId = Integer.parseInt(character);
+		}
+		int campId = -1;
+		if (!campaign.isEmpty()) {
+			campId = Integer.parseInt(campaign);
+		}
+		// TODO: call read player character function
+//		return UIMain.backEnd.readPlayerCharacterInformation("","",charId, campId);
+		return new String[][] {{"Character Name", "Fact", "Fact", "fact", "fact", "fact"}};
 	}
 	
-	private String[][] getCampaignCharacterViewData() {
+	private String[][] getCampaignCharacterViewData(String campaign) {
+		int campId = -1;
+		if (!campaign.isEmpty()) {
+			campId = Integer.parseInt(campaign);
+		}
 		// TODO: call read procedure
-		return new String[][] {{"Name", "fact", "fact","fact"}};
+		return new String[][] {{"Name", "fact", "fact","fact", "fact", "fact", "fact"}};
 	}
 }
