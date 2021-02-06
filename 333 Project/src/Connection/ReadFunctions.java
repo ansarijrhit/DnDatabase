@@ -134,45 +134,26 @@ public class ReadFunctions{
 		ArrayList<ArrayList<String>> locations = new ArrayList<ArrayList<String>>();
 		ResultSet set = null;
 		try {
-			String sql = "EXEC read_campaign_locations_npcs @DM_Username = ?";
+			String sql = "EXEC read_campaign_locations_npcs @DM_Username = ?, @viewNPCs = ?";
 			PreparedStatement statement = this.con.prepareStatement(sql);
-			if (campaignID < 0 && locationID < 0 && viewNPCs == 0) {
-				statement = this.con.prepareStatement(sql);
-				statement.setString(1, dmUsername);
-			} else if (campaignID < 0 && locationID < 0 && viewNPCs == 1) {
-				sql += ", @viewNPCs = ?";
+			if (campaignID < 0 && locationID < 0) {
 				statement = this.con.prepareStatement(sql);
 				statement.setString(1, dmUsername);
 				statement.setInt(2, viewNPCs);
-			} else if (campaignID < 0 && viewNPCs == 0) {
+			} else if (campaignID < 0) {
 				sql += ", @LocationID = ?";
-				statement = this.con.prepareStatement(sql);
-				statement.setString(1, dmUsername);
-				statement.setInt(2, locationID);
-			} else if (campaignID < 0 && viewNPCs == 1) {
-				sql += ", @viewNPCs = ?, @LocationID = ?";
 				statement = this.con.prepareStatement(sql);
 				statement.setString(1, dmUsername);
 				statement.setInt(2, viewNPCs);
 				statement.setInt(3, locationID);
-			} else if (locationID < 0 && viewNPCs == 0) {
+			} else if (locationID < 0) {
 				sql += ", @CampaignID = ?";
-				statement = this.con.prepareStatement(sql);
-				statement.setString(1, dmUsername);
-				statement.setInt(2, campaignID);
-			} else if (locationID < 0 && viewNPCs == 1) {
-				sql += ", @viewNPCs = ?, @CampaignID = ?";
 				statement = this.con.prepareStatement(sql);
 				statement.setString(1, dmUsername);
 				statement.setInt(2, viewNPCs);
 				statement.setInt(3, campaignID);
-			} else if (viewNPCs == 0) {
-				sql += ", @CampaignID = ?, @LocationID = ?";
-				statement = this.con.prepareStatement(sql);
-				statement.setString(1, dmUsername);
-				statement.setInt(2, campaignID);
 			} else {
-				sql += ", @viewNPCs = ?, @CampaignID = ?, @LocationID = ?";
+				sql += ", @CampaignID = ?, @LocationID = ?";
 				statement = this.con.prepareStatement(sql);
 				statement.setString(1, dmUsername);
 				statement.setInt(2, viewNPCs);
@@ -183,11 +164,11 @@ public class ReadFunctions{
 			
 			if (viewNPCs == 0) {
 				while (set.next()) {
-					locations.add(new CampaignLocation(set.getString("LocationName"), set.getString("Description")).getItems());
+					locations.add(new CampaignLocation(set.getInt("Locationid"), set.getString(2)).getItems());
 				}
 			} else {
 				while (set.next()) {
-					locations.add(new CampaignLocationWithNPCs(set.getString("LocationName"), set.getString("Description"), set.getString("NPCName"),
+					locations.add(new CampaignLocationWithNPCs(set.getInt("Locationid"), set.getString(2), set.getString("NPCName"),
 							set.getString("RaceName"), set.getString("Occupation")).getItems());
 				}
 			}
@@ -197,7 +178,7 @@ public class ReadFunctions{
 		} catch (SQLException e) {
 			System.out.println();
 			System.out.println("----------Error in fetching data-------------");
-			System.out.println("Read Campaign Character Function");
+			System.out.println("Read Campaign Location Function");
 			System.out.println("Check login information, access level, and existence of character");
 			System.out.println();
 			e.printStackTrace();

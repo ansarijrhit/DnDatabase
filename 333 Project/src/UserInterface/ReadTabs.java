@@ -17,36 +17,49 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
-public class ReadTabs {
+@SuppressWarnings("serial")
+public class ReadTabs extends Tabs {
 	private UIMain UI;
+	private boolean enablePlayer;
+	private boolean enableDM;
 
-	public ReadTabs(JTabbedPane tabs, UIMain ui) {
+	public ReadTabs(UIMain ui, boolean enablePlayer, boolean enableDM) {
 		this.UI = ui;
+		this.enablePlayer = enablePlayer;
+		this.enableDM = enableDM;
+		createTabs();
+	}
+	
+	protected void createTabs() {
+		if (enableDM) {
+			JPanel campaignCharacter = new JPanel(new GridBagLayout());
+			initilizeCampaignCharacterView(campaignCharacter, new GridBagConstraints());
+			campaignCharacter.setVisible(false);
+			this.addTab("Campaign Characters", campaignCharacter);
+			
+			JPanel campaignNotes = new JPanel(new GridBagLayout());
+			initilizeCampaignNotesView(campaignNotes, new GridBagConstraints());
+			campaignNotes.setVisible(true);
+			this.addTab("Campaign Notes", campaignNotes);
+			
+			JPanel campaignLocations = new JPanel(new GridBagLayout());
+			initilizeCampaignLocationsView(campaignLocations, new GridBagConstraints());
+			campaignCharacter.setVisible(true);
+			this.addTab("Campaign Locations/NPCs", campaignLocations);
+		}	
 		
-		JPanel character = new JPanel(new GridBagLayout());
-		initilizeCharacterView(character, new GridBagConstraints());
-		character.setVisible(true);
-		tabs.addTab("Character", character);
+		if (enablePlayer) {
+			JPanel character = new JPanel(new GridBagLayout());
+			initilizeCharacterView(character, new GridBagConstraints());
+			character.setVisible(true);
+			this.addTab("Character", character);
+			
+			JPanel spells = new JPanel(new GridBagLayout());
+			initilizeSpellsView(spells, new GridBagConstraints());
+			spells.setVisible(true);
+			this.addTab("Spells", spells);
+		}	
 		
-		JPanel spells = new JPanel(new GridBagLayout());
-		initilizeSpellsView(spells, new GridBagConstraints());
-		spells.setVisible(true);
-		tabs.addTab("Spells", spells);
-		
-		JPanel campaignNotes = new JPanel(new GridBagLayout());
-		initilizeCampaignNotesView(campaignNotes, new GridBagConstraints());
-		campaignNotes.setVisible(true);
-		tabs.addTab("Campaign Notes", campaignNotes);
-		
-		JPanel campaignCharacter = new JPanel(new GridBagLayout());
-		initilizeCampaignCharacterView(campaignCharacter, new GridBagConstraints());
-		campaignCharacter.setVisible(true);
-		tabs.addTab("Campaign Characters", campaignCharacter);
-		
-		JPanel campaignLocations = new JPanel(new GridBagLayout());
-		initilizeCampaignLocationsView(campaignLocations, new GridBagConstraints());
-		campaignCharacter.setVisible(true);
-		tabs.addTab("Campaign Locations/NPCs", campaignLocations);
 	}
 
 	private void initilizeCharacterView(JPanel panel, GridBagConstraints c) {
@@ -197,8 +210,8 @@ public class ReadTabs {
 
 		JScrollPane scroll = new JScrollPane(results);
 		results.setPreferredScrollableViewportSize(scroll.getPreferredSize());
-//		Dimension d = results.getPreferredSize();
-//		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+3)));
+		Dimension d = results.getPreferredSize();
+		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+3)));
 		panel.add(scroll, c);
 	}
 	
@@ -224,7 +237,7 @@ public class ReadTabs {
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.gridx = 0;
 				c.gridy = 1;
-				c.gridwidth= 5;
+				c.gridwidth= 3;
 				c.insets = new Insets(10,0,0,0);
 				JTable results = new JTable(getCampaignCharacterViewData(campId), new String[] {"Campaign ID", "Player Username", "Character Name", "Race", "Alignment", "Hitpoints", "Background"});
 				JScrollPane scroll = new JScrollPane(results);
@@ -239,7 +252,7 @@ public class ReadTabs {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.gridwidth= 5;
+		c.gridwidth= 3;
 		c.insets = new Insets(10,0,0,0);
 		JTable results = new JTable(getCampaignCharacterViewData(""), new String[] {"Campaign ID", "Player Username", "Character Name", "Race", "Alignment", "Hitpoints", "Background"});
 		JScrollPane scroll = new JScrollPane(results);
@@ -251,6 +264,7 @@ public class ReadTabs {
 	private void initilizeCampaignLocationsView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
+		panel.repaint();
 		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForDM());
 		JComboBox<Object> locationIds = new JComboBox<Object>(UI.getLocationIdsForDM());
 		JCheckBox checkBox = new JCheckBox();
@@ -277,7 +291,6 @@ public class ReadTabs {
 				String locId = (String) locationIds.getSelectedItem();
 				String campId = (String) campaignIds.getSelectedItem();
 				boolean enablePCs = checkBox.isSelected();
-				System.out.println(enablePCs);
 				panel.remove(7);
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.gridx = 0;
@@ -371,4 +384,5 @@ public class ReadTabs {
 		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		return stringArray;
 	}
+
 }

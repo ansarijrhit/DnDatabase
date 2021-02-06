@@ -6,8 +6,8 @@ public class CampaignLocation {
 
 	private String locationName, description = null;
 	
-	public CampaignLocation(String locationName, String description) {
-		this.locationName = locationName;
+	public CampaignLocation(int locationid, String description) {
+		this.locationName = Integer.toString(locationid);
 		this.description = description;
 	}
 	

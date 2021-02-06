@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import ClassTypes.PlayerCharacter;
 import Connection.Backend;
@@ -51,7 +53,7 @@ public class UIMain{
     		   String playerPassword = password.getText();
     		   // TODO: Validate username and password
     		   loginPanel.setVisible(false);
-    		   displayUserTabs(frame);
+    		   displayUserTabs(frame, backEnd.enablePlayerView(playerUsername), backEnd.enableDMView(playerUsername));
     		   frame.revalidate();
     		   frame.repaint();
     	   }
@@ -68,7 +70,7 @@ public class UIMain{
     		   String playerPassword = password.getText();
     		   // TODO: Validate username and password
     		   loginPanel.setVisible(false);
-    		   displayUserTabs(frame);
+    		   displayUserTabs(frame, backEnd.enablePlayerView(playerUsername), backEnd.enableDMView(playerUsername));
     		   frame.revalidate();
     		   frame.repaint();
     	   }
@@ -80,25 +82,37 @@ public class UIMain{
        
      }
 
-	private void displayUserTabs(JFrame frame) {
-	   JTabbedPane createTabs = new JTabbedPane();
-       new CreateTabs(createTabs, this);
+	private void displayUserTabs(JFrame frame, boolean enablePlayer, boolean enableDM) {
+
+	   Tabs createTabs = new CreateTabs(this, enablePlayer, enableDM);
        
-       JTabbedPane readTabs = new JTabbedPane();
-       new ReadTabs(readTabs, this);
+       Tabs readTabs = new ReadTabs(this, enablePlayer, enableDM);
        
-       JTabbedPane updateTabs = new JTabbedPane();
-       new UpdateTabs(updateTabs);
+//       Tabs updateTabs = new UpdateTabs(this, enablePlayer, enableDM);
        
-       JTabbedPane deleteTabs = new JTabbedPane();
-       new DeleteTabs(deleteTabs, this);
+       Tabs deleteTabs = new DeleteTabs(this, enablePlayer, enableDM);
        
        JTabbedPane CRUDTabs = new JTabbedPane();
        CRUDTabs.addTab("CREATE", createTabs);
        CRUDTabs.addTab("READ", readTabs);
-       CRUDTabs.addTab("UPDATE", updateTabs);
+//       CRUDTabs.addTab("UPDATE", updateTabs);
        CRUDTabs.addTab("DELETE", deleteTabs);
        frame.add(CRUDTabs);
+       CRUDTabs.addChangeListener(new ChangeListener() {
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			int index = ((JTabbedPane) e.getSource()).getSelectedIndex();
+			if (index == 0) {
+				createTabs.reInitilize();
+			} else if (index == 1) {
+				readTabs.reInitilize();
+			} else {
+				deleteTabs.reInitilize();
+			}
+		}
+    	   
+       });
 	}
 	
 	String[] getCampaignLocationViewHeaders(boolean showPCs) {
@@ -119,7 +133,7 @@ public class UIMain{
 		ArrayList<String> character = new ArrayList<String>();
 		ResultSet set = null;
 		try {
-			String sql = "EXEC get_CharacterIdsForPlayer @username = ?";
+			String sql = "EXEC get_CharacterIdsForPlayer @Username = ?";
 			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
 			statement.setString(1, playerUsername);
 			set = statement.executeQuery();
@@ -144,7 +158,7 @@ public class UIMain{
 		ArrayList<String> campaign = new ArrayList<String>();
 		ResultSet set = null;
 		try {
-			String sql = "EXEC get_CampaignIdsForPlayer @username = ?";
+			String sql = "EXEC get_CampaignIdsForPlayer @Username = ?";
 			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
 			statement.setString(1, playerUsername);
 			set = statement.executeQuery();
@@ -182,6 +196,54 @@ public class UIMain{
 			System.out.println();
 			System.out.println("----------Error in fetching data-------------");
 			System.out.println("Get Campaign Ids For DM");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
+		campaign.add(0, "");
+		return campaign.toArray();
+ 	}
+	public Object[] getCharacterIdsForUser() {
+		ArrayList<String> campaign = new ArrayList<String>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_CharacterIdsForUser @Username = ?";
+			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
+			statement.setString(1, playerUsername);
+			set = statement.executeQuery();
+			while (set.next()) {
+				campaign.add(String.valueOf(set.getInt(1)));
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Get Campaign Ids For DM");
+			System.out.println();
+			e.printStackTrace();
+			
+		}
+		campaign.add(0, "");
+		return campaign.toArray();
+	}
+	
+	Object[] getAllCampaignIds() {
+		ArrayList<String> campaign = new ArrayList<String>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_AllCampaignIds";
+			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
+			set = statement.executeQuery();
+			while (set.next()) {
+				campaign.add(String.valueOf(set.getInt(1)));
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Get All Campaign Ids");
 			System.out.println();
 			e.printStackTrace();
 			

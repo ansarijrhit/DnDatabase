@@ -13,44 +13,53 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-public class DeleteTabs {
+public class DeleteTabs extends Tabs {
 	private UIMain UI;
+	private boolean enablePlayer;
+	private boolean enableDM;
 	
-	public DeleteTabs(JTabbedPane tabs, UIMain ui) {
+	public DeleteTabs(UIMain ui, boolean enablePlayer, boolean enableDM) {
 		this.UI = ui;
+		this.enablePlayer = enablePlayer;
+		this.enableDM = enableDM;
+		createTabs();
 		
 		// Delete Player
-		
-		JPanel location = new JPanel(new GridBagLayout());
-		initilizeLocationView(location, new GridBagConstraints());
-		location.setVisible(false);
-		tabs.addTab("Location", location);
+	}
+	
+	protected void createTabs() {
+		if (enableDM) {
+			JPanel location = new JPanel(new GridBagLayout());
+			initilizeLocationView(location, new GridBagConstraints());
+			location.setVisible(false);
+			this.addTab("Location", location);
+			
+			JPanel note = new JPanel(new GridBagLayout());
+			initilizeNoteView(note, new GridBagConstraints());
+			note.setVisible(false);
+			this.addTab("Note", note);
+			
+			JPanel campaign = new JPanel(new GridBagLayout());
+			initilizeCampaignView(campaign, new GridBagConstraints());
+			campaign.setVisible(false);
+			this.addTab("Campaign", campaign);
+			
+			JPanel npc = new JPanel(new GridBagLayout());
+			initilizeNPCView(npc, new GridBagConstraints());
+			npc.setVisible(false);
+			this.addTab("NPC", npc);
+		}
 		
 		JPanel majorCharacter = new JPanel(new GridBagLayout());
 		initilizeMajorCharacterView(majorCharacter, new GridBagConstraints());
 		majorCharacter.setVisible(false);
-		tabs.addTab("Major Character", majorCharacter);
-		
-		JPanel note = new JPanel(new GridBagLayout());
-		initilizeNoteView(note, new GridBagConstraints());
-		note.setVisible(false);
-		tabs.addTab("Note", note);
-		
-		JPanel npc = new JPanel(new GridBagLayout());
-		initilizeNPCView(npc, new GridBagConstraints());
-		npc.setVisible(false);
-		tabs.addTab("NPC", npc);
-		
-		JPanel campaign = new JPanel(new GridBagLayout());
-		initilizeCampaignView(campaign, new GridBagConstraints());
-		campaign.setVisible(false);
-		tabs.addTab("Campaign", campaign);
+		this.addTab("Major Character", majorCharacter);
 	}
 
 	private void initilizeMajorCharacterView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.repaint();
-		JComboBox<Object> characterIds = new JComboBox<Object>(UI.getCharacterIdsForPlayer());
+		JComboBox<Object> characterIds = new JComboBox<Object>(UI.getCharacterIdsForUser());
 
 		c.insets = new Insets(10,5,0,5);
 		c.gridx = 0;
@@ -72,8 +81,15 @@ public class DeleteTabs {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
 					int result = JOptionPane.showConfirmDialog(panel, "Are you sure you want to delete: " + toDelete, "Confirm Deletion", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// TODO: Call deletion method
-						JOptionPane.showMessageDialog(panel, toDelete + " was removed from database.");
+						boolean success = UI.getBackEnd().getDeleteFunctions().deleteMajorCharacter(UI.getPlayerUsername(), Integer.parseInt(toDelete));
+						if (success) {
+							JOptionPane.showMessageDialog(panel, "Major Character was removed from the database.");
+
+						} else {
+							JOptionPane.showMessageDialog(panel, "Error: Unable to remove MajorCharacter from the database.");
+						}
+					} else {
+						return;
 					}
 				}
 				initilizeMajorCharacterView(panel, new GridBagConstraints());	
@@ -107,11 +123,18 @@ public class DeleteTabs {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
 					int result = JOptionPane.showConfirmDialog(panel, "Are you sure you want to delete: " + toDelete, "Confirm Deletion", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// TODO: Call deletion method
-						JOptionPane.showMessageDialog(panel, toDelete + " was removed from database.");
+						boolean success = UI.getBackEnd().getDeleteFunctions().deleteCampagin(UI.getPlayerUsername(), Integer.parseInt(toDelete));
+						if (success) {
+							JOptionPane.showMessageDialog(panel, "Campaign was removed from the database.");
+
+						} else {
+							JOptionPane.showMessageDialog(panel, "Error: Unable to remove Campaign from the database.");
+						}
+					} else {
+						return;
 					}
 				}
-				initilizeMajorCharacterView(panel, new GridBagConstraints());	
+				initilizeCampaignView(panel, new GridBagConstraints());	
 			}
 		});
 		panel.add(delete, c);
@@ -142,11 +165,18 @@ public class DeleteTabs {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
 					int result = JOptionPane.showConfirmDialog(panel, "Are you sure you want to delete: " + toDelete, "Confirm Deletion", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// TODO: Call deletion method
-						JOptionPane.showMessageDialog(panel, toDelete + " was removed from database.");
+						boolean success = UI.getBackEnd().getDeleteFunctions().deleteNPC(UI.getPlayerUsername(), Integer.parseInt(toDelete));
+						if (success) {
+							JOptionPane.showMessageDialog(panel, "NPC was removed from the database.");
+
+						} else {
+							JOptionPane.showMessageDialog(panel, "Error: Unable to remove NPC from the database.");
+						}
+					} else {
+						return;
 					}
 				}
-				initilizeMajorCharacterView(panel, new GridBagConstraints());		
+				initilizeNPCView(panel, new GridBagConstraints());		
 			}
 		});
 		panel.add(delete, c);
@@ -177,11 +207,18 @@ public class DeleteTabs {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
 					int result = JOptionPane.showConfirmDialog(panel, "Are you sure you want to delete: " + toDelete, "Confirm Deletion", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// TODO: Call deletion method
-						JOptionPane.showMessageDialog(panel, toDelete + " was removed from database.");
+						boolean success = UI.getBackEnd().getDeleteFunctions().deleteNote(UI.getPlayerUsername(), Integer.parseInt(toDelete));
+						if (success) {
+							JOptionPane.showMessageDialog(panel, "Note was removed from the database.");
+
+						} else {
+							JOptionPane.showMessageDialog(panel, "Error: Unable to remove Note from the database.");
+						}
+					} else {
+						return;
 					}
 				}
-				initilizeMajorCharacterView(panel, new GridBagConstraints());
+				initilizeNoteView(panel, new GridBagConstraints());
 			}
 		});
 		panel.add(delete, c);		
@@ -212,11 +249,18 @@ public class DeleteTabs {
 					int optionType = JOptionPane.OK_CANCEL_OPTION;
 					int result = JOptionPane.showConfirmDialog(panel, "Are you sure you want to delete: " + toDelete, "Confirm Deletion", optionType);
 					if (result == JOptionPane.OK_OPTION) {
-						// TODO: Call deletion method
-						JOptionPane.showMessageDialog(panel, toDelete + " was removed from database.");
+						boolean success = UI.getBackEnd().getDeleteFunctions().deleteLocation(UI.getPlayerUsername(), Integer.parseInt(toDelete));
+						if (success) {
+							JOptionPane.showMessageDialog(panel, "Location was removed from the database.");
+
+						} else {
+							JOptionPane.showMessageDialog(panel, "Error: Unable to remove Location from the database.");
+						}
+					} else {
+						return;
 					}
 				}
-				initilizeMajorCharacterView(panel, new GridBagConstraints());	
+				initilizeLocationView(panel, new GridBagConstraints());	
 			}
 		});
 		panel.add(delete, c);	

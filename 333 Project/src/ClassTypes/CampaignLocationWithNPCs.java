@@ -6,8 +6,8 @@ public class CampaignLocationWithNPCs {
 
 	private String locationName, description, npcName, raceName, occupation = null;
 	
-	public CampaignLocationWithNPCs(String locationName, String description, String npcName, String raceName, String occupation) {
-		this.locationName = locationName;
+	public CampaignLocationWithNPCs(int locId, String description, String npcName, String raceName, String occupation) {
+		this.locationName = Integer.toString(locId);
 		this.description = description;
 		this.npcName = npcName;
 		this.raceName = raceName;
