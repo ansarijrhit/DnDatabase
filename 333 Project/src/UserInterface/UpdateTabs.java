@@ -14,34 +14,64 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class UpdateTabs {
+public class UpdateTabs extends Tabs {
+	private UIMain UI;
+	private boolean enablePlayer;
+	private boolean enableDM;
 
-	public UpdateTabs(JTabbedPane tabs) {
-		// TODO: Player Password????
+	public UpdateTabs(UIMain ui, boolean enablePlayer, boolean enableDM) {
+		this.UI = ui;
+		this.enablePlayer = enablePlayer;
+		this.enableDM = enableDM;
+		createTabs();
+	}
+
+	@Override
+	protected void createTabs() {
+		if (enablePlayer) {
+			JPanel majorCharacterPlayer = new JPanel(new GridBagLayout());
+			initilizeMajorCharacterPlayerView(majorCharacterPlayer, new GridBagConstraints());
+			majorCharacterPlayer.setVisible(false);
+			this.addTab("Major Character - PC", majorCharacterPlayer);
+		}
 		
-		JPanel location = new JPanel(new GridBagLayout());
-		initilizeLocationView(location, new GridBagConstraints());
-		location.setVisible(false);
-		tabs.addTab("Location", location);
+		if (enableDM) {
+			JPanel majorCharacterNPC = new JPanel(new GridBagLayout());
+			initilizeMajorCharacterNPCView(majorCharacterNPC, new GridBagConstraints());
+			majorCharacterNPC.setVisible(false);
+			this.addTab("Major Character - NPC", majorCharacterNPC);
+			
+			JPanel location = new JPanel(new GridBagLayout());
+			initilizeLocationView(location, new GridBagConstraints());
+			location.setVisible(false);
+			this.addTab("Location", location);
+			
+			JPanel note = new JPanel(new GridBagLayout());
+			initilizeNoteView(note, new GridBagConstraints());
+			note.setVisible(false);
+			this.addTab("Note", note);
+
+			JPanel npc = new JPanel(new GridBagLayout());
+			initilizeNPCView(npc, new GridBagConstraints());
+			npc.setVisible(false);
+			this.addTab("NPC", npc);
+		}
 		
-		JPanel majorCharacter = new JPanel(new GridBagLayout());
-		initilizeMajorCharacterView(majorCharacter, new GridBagConstraints());
-		majorCharacter.setVisible(false);
-		tabs.addTab("Major Character", majorCharacter);
-		
+
+
+
 		JPanel note = new JPanel(new GridBagLayout());
 		initilizeNoteView(note, new GridBagConstraints());
 		note.setVisible(false);
-		tabs.addTab("Note", note);
-		
+		this.addTab("Note", note);
+
 		JPanel npc = new JPanel(new GridBagLayout());
 		initilizeNPCView(npc, new GridBagConstraints());
 		npc.setVisible(false);
-		tabs.addTab("NPC", npc);
-
+		this.addTab("NPC", npc);
 	}
 
-	private void initilizeNPCView(JPanel npc, GridBagConstraints gridBagConstraints) {
+	private void initilizeNPCView(JPanel panel, GridBagConstraints c) {
 		// TODO Auto-generated method stub
 		// location tied-to, occupation
 	}
@@ -51,14 +81,21 @@ public class UpdateTabs {
 		// Description
 	}
 
-	private void initilizeMajorCharacterView(JPanel majorCharacter, GridBagConstraints gridBagConstraints) {
+	private void initilizeMajorCharacterPlayerView(JPanel panel, GridBagConstraints c) {
 		// TODO Auto-generated method stub
 		// hitpoints, levelUp, alignment
-		
+
+	}
+	
+	private void initilizeMajorCharacterNPCView(JPanel panel, GridBagConstraints c) {
+		// TODO Auto-generated method stub
+		// hitpoints, levelUp, alignment
+
 	}
 
-	private void initilizeLocationView(JPanel location, GridBagConstraints gridBagConstraints) {
+	private void initilizeLocationView(JPanel panel, GridBagConstraints c) {
 		// TODO Auto-generated method stub
 		// Name description campaign
 	}
+
 }

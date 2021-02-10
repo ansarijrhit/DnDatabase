@@ -86,7 +86,7 @@ public class UIMain {
 
 		Tabs createTabs = new CreateTabs(this, enablePlayer, enableDM);
 		Tabs readTabs = new ReadTabs(this, enablePlayer, enableDM);
-//       Tabs updateTabs = new UpdateTabs(this, enablePlayer, enableDM);
+        Tabs updateTabs = new UpdateTabs(this, enablePlayer, enableDM);
 		Tabs deleteTabs = new DeleteTabs(this, enablePlayer, enableDM);
 		Tabs accountTabs = new AccountTabs(this);
 

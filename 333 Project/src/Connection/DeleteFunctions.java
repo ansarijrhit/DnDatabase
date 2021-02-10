@@ -132,7 +132,7 @@ public class DeleteFunctions {
 		return false;
 	}
 	
-	public boolean deleltePlayer(String username) {
+	public boolean deletePlayer(String username) {
 		// Username
 		CallableStatement cs = null;
 		try {

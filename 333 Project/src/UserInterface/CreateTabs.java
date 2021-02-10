@@ -29,8 +29,6 @@ public class CreateTabs extends Tabs {
 		this.enablePlayer = enablePlayer;
 		this.enableDM = enableDM;
 		createTabs();
-		// Create player?
-
 	}
 	
 	@Override

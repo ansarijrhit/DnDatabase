@@ -50,7 +50,7 @@ public class AccountTabs extends Tabs {
 				String confirmString = "Are you sure you want to delete your account and all information tied to it?";
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Deletion", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					boolean success = ui.getBackEnd().getDeleteFunctions().deleltePlayer(ui.getPlayerUsername());
+					boolean success = ui.getBackEnd().getDeleteFunctions().deletePlayer(ui.getPlayerUsername());
 					if (success) {
 						result = JOptionPane.showConfirmDialog(panel, "Press OKAY to exit", "Account was Deleted", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
 						if (result == JOptionPane.OK_OPTION) {
@@ -78,7 +78,7 @@ public class AccountTabs extends Tabs {
 		JTextField newPass = new JTextField(30);
 		panel.add(newPass, c);
 		c.gridx = 2;
-		JButton updateButt = new JButton("Delete My Account");
+		JButton updateButt = new JButton("Update Password");
 		updateButt.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
