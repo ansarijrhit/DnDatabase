@@ -13,11 +13,10 @@ import ClassTypes.CampaignNotes;
 import ClassTypes.CharacterSpells;
 import ClassTypes.PlayerCharacter;
 
-public class ReadFunctions{
+public class ReadFunctions {
 
-	
 	private Connection con = null;
-	
+
 	public ReadFunctions(Connection con) {
 		this.con = con;
 	}
@@ -51,8 +50,8 @@ public class ReadFunctions{
 			set = statement.executeQuery();
 			while (set.next()) {
 				character.add(new PlayerCharacter(set.getString("CharName"), set.getString("Class_ClassName"),
-						set.getInt("HasClass_Level"), set.getInt("Hitpoints"), set.getString("Alignment"), 
-						set.getString("BackGround")).getItems());
+						set.getInt("Character_CharacterID"), set.getInt("HasClass_Level"), set.getInt("Hitpoints"),
+						set.getString("Alignment"), set.getString("BackGround")).getItems());
 			}
 			set.close();
 			statement.close();
@@ -63,11 +62,11 @@ public class ReadFunctions{
 			System.out.println("Check login information, access level, and existence of character");
 			System.out.println();
 			e.printStackTrace();
-			
+
 		}
 		return character;
 	}
-	
+
 	public ArrayList<ArrayList<String>> readCharacterSpells(String pusername, int id, int showAllPossible) {
 		ArrayList<ArrayList<String>> spells = new ArrayList<ArrayList<String>>();
 		ResultSet set = null;
@@ -91,11 +90,11 @@ public class ReadFunctions{
 			System.out.println("Check login information, access level, and existence of character");
 			System.out.println();
 			e.printStackTrace();
-			
+
 		}
 		return spells;
 	}
-	
+
 	public ArrayList<ArrayList<String>> readCampaignCharacterInformation(String dmUsername, int campaignID) {
 		ArrayList<ArrayList<String>> character = new ArrayList<ArrayList<String>>();
 		ResultSet set = null;
@@ -110,11 +109,12 @@ public class ReadFunctions{
 				statement = this.con.prepareStatement(sql);
 				statement.setString(1, dmUsername);
 				statement.setInt(2, campaignID);
-			} 
+			}
 			set = statement.executeQuery();
 			while (set.next()) {
-				character.add(new CampaignCharacter(set.getInt("CampaignID"), set.getString("PlayerUsername"), set.getString("CharacterName"), 
-						set.getString("RaceName"), set.getString("Alignment"), set.getInt("Hitpoints"), set.getString("BackGround")).getItems());
+				character.add(new CampaignCharacter(set.getInt("CampaignID"), set.getString("PlayerUsername"),
+						set.getInt("CharacterID"), set.getString("CharacterName"), set.getString("RaceName"),
+						set.getString("Alignment"), set.getInt("Hitpoints"), set.getString("BackGround")).getItems());
 			}
 			set.close();
 			statement.close();
@@ -125,12 +125,13 @@ public class ReadFunctions{
 			System.out.println("Check login information, access level, and existence of character");
 			System.out.println();
 			e.printStackTrace();
-			
+
 		}
 		return character;
 	}
-	
-	public ArrayList<ArrayList<String>> readCampaignLocations(String dmUsername, int campaignID, int locationID, int viewNPCs) {
+
+	public ArrayList<ArrayList<String>> readCampaignLocations(String dmUsername, int campaignID, int locationID,
+			int viewNPCs) {
 		ArrayList<ArrayList<String>> locations = new ArrayList<ArrayList<String>>();
 		ResultSet set = null;
 		try {
@@ -161,18 +162,20 @@ public class ReadFunctions{
 				statement.setInt(4, locationID);
 			}
 			set = statement.executeQuery();
-			
+
 			if (viewNPCs == 0) {
 				while (set.next()) {
-					locations.add(new CampaignLocation(set.getInt("Locationid"), set.getString(2)).getItems());
+					locations.add(new CampaignLocation(set.getInt("Locationid"), set.getString("LocationName"),
+							set.getString(2)).getItems());
 				}
 			} else {
 				while (set.next()) {
-					locations.add(new CampaignLocationWithNPCs(set.getInt("Locationid"), set.getString(2), set.getString("NPCName"),
-							set.getString("RaceName"), set.getString("Occupation")).getItems());
+					locations.add(new CampaignLocationWithNPCs(set.getInt("Locationid"), set.getString("LocationName"),
+							set.getString(2), set.getInt("NPCID"), set.getString("NPCName"), set.getString("RaceName"),
+							set.getString("Occupation")).getItems());
 				}
 			}
-			
+
 			set.close();
 			statement.close();
 		} catch (SQLException e) {
@@ -182,11 +185,11 @@ public class ReadFunctions{
 			System.out.println("Check login information, access level, and existence of character");
 			System.out.println();
 			e.printStackTrace();
-			
+
 		}
 		return locations;
 	}
-	
+
 	public ArrayList<ArrayList<String>> readCampaignNotes(String dmUsername, int campaignID) {
 		ArrayList<ArrayList<String>> notes = new ArrayList<ArrayList<String>>();
 		ResultSet set = null;
@@ -201,10 +204,11 @@ public class ReadFunctions{
 				statement = this.con.prepareStatement(sql);
 				statement.setString(1, dmUsername);
 				statement.setInt(2, campaignID);
-			} 
+			}
 			set = statement.executeQuery();
 			while (set.next()) {
-				notes.add(new CampaignNotes(set.getInt("CampaignID"), set.getString("NoteName"), set.getString("Description")).getItems());
+				notes.add(new CampaignNotes(set.getInt("CampaignID"), set.getInt("NotesID"), set.getString("NoteName"),
+						set.getString("Description")).getItems());
 			}
 			set.close();
 			statement.close();
@@ -215,7 +219,7 @@ public class ReadFunctions{
 			System.out.println("Check login information, access level, and existence of character");
 			System.out.println();
 			e.printStackTrace();
-			
+
 		}
 		return notes;
 	}

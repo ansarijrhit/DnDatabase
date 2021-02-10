@@ -29,37 +29,37 @@ public class ReadTabs extends Tabs {
 		this.enableDM = enableDM;
 		createTabs();
 	}
-	
+
 	protected void createTabs() {
 		if (enableDM) {
 			JPanel campaignCharacter = new JPanel(new GridBagLayout());
 			initilizeCampaignCharacterView(campaignCharacter, new GridBagConstraints());
 			campaignCharacter.setVisible(false);
 			this.addTab("Campaign Characters", campaignCharacter);
-			
+
 			JPanel campaignNotes = new JPanel(new GridBagLayout());
 			initilizeCampaignNotesView(campaignNotes, new GridBagConstraints());
 			campaignNotes.setVisible(true);
 			this.addTab("Campaign Notes", campaignNotes);
-			
+
 			JPanel campaignLocations = new JPanel(new GridBagLayout());
 			initilizeCampaignLocationsView(campaignLocations, new GridBagConstraints());
 			campaignCharacter.setVisible(true);
 			this.addTab("Campaign Locations/NPCs", campaignLocations);
-		}	
-		
+		}
+
 		if (enablePlayer) {
 			JPanel character = new JPanel(new GridBagLayout());
 			initilizeCharacterView(character, new GridBagConstraints());
 			character.setVisible(true);
 			this.addTab("Character", character);
-			
+
 			JPanel spells = new JPanel(new GridBagLayout());
 			initilizeSpellsView(spells, new GridBagConstraints());
 			spells.setVisible(true);
 			this.addTab("Spells", spells);
-		}	
-		
+		}
+
 	}
 
 	private void initilizeCharacterView(JPanel panel, GridBagConstraints c) {
@@ -67,22 +67,22 @@ public class ReadTabs extends Tabs {
 		panel.revalidate();
 		JComboBox<Object> characterIds = new JComboBox<Object>(UI.getCharacterIdsForPlayer());
 		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForPlayer());
-		c.insets = new Insets(0,0,0,5);
+		c.insets = new Insets(0, 0, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(new JLabel("Filter by CharacterID: "), c);
 		c.gridx = 1;
 		panel.add(characterIds, c);
-		c.insets = new Insets(0,10,0,5);
+		c.insets = new Insets(0, 10, 0, 5);
 		c.gridx = 2;
 		panel.add(new JLabel("Filter by CampaignID: "), c);
 		c.gridx = 3;
-		c.insets = new Insets(0,5,0,5);
+		c.insets = new Insets(0, 5, 0, 5);
 		panel.add(campaignIds, c);
-		c.gridx = 4;
-		c.insets = new Insets(0,15,0,0);
+		c.gridx = 5;
+		c.insets = new Insets(0, 95, 0, 0);
 		JButton search = new JButton("Search");
-		search.addActionListener(new ActionListener( ) {
+		search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String charId = (String) characterIds.getSelectedItem();
@@ -91,12 +91,14 @@ public class ReadTabs extends Tabs {
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.gridx = 0;
 				c.gridy = 1;
-				c.gridwidth= 5;
-				c.insets = new Insets(10,0,0,0);
-				JTable results = new JTable(getCharacterViewData(charId, campId), new String[] {"Character Name", "Class", "Class Level", "Hitpoints", "Alignment", "Background"});
+				c.gridwidth = 6;
+				c.insets = new Insets(10, 0, 0, 0);
+				JTable results = new JTable(getCharacterViewData(charId, campId), new String[] { "Character Name",
+						"Character ID", "Class", "Class Level", "Hitpoints", "Alignment", "Background" });
 				JScrollPane scroll = new JScrollPane(results);
 				Dimension d = results.getPreferredSize();
-				scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+				scroll.setPreferredSize(
+						new Dimension(d.width, (results.getRowHeight()) * Math.min(25, results.getRowCount() + 2)));
 				panel.add(scroll, c);
 				panel.revalidate();
 				panel.repaint();
@@ -107,21 +109,23 @@ public class ReadTabs extends Tabs {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.gridwidth= 5;
-		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getCharacterViewData("",""), new String[] {"Character Name", "Class", "Class Level", "Hitpoints", "Alignment", "Background"});
+		c.gridwidth = 6;
+		c.insets = new Insets(10, 0, 0, 0);
+		JTable results = new JTable(getCharacterViewData("", ""), new String[] { "Character Name", "Character ID",
+				"Class", "Class Level", "Hitpoints", "Alignment", "Background" });
 		JScrollPane scroll = new JScrollPane(results);
 		Dimension d = results.getPreferredSize();
-		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+		scroll.setPreferredSize(
+				new Dimension(d.width, (results.getRowHeight()) * Math.min(25, results.getRowCount() + 2)));
 		panel.add(scroll, c);
 	}
-	
+
 	private void initilizeSpellsView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
 		JComboBox<Object> characters = new JComboBox<Object>(UI.getCharacterIdsForPlayer());
 		JCheckBox checkBox = new JCheckBox();
-		c.insets = new Insets(0,5,0,5);
+		c.insets = new Insets(0, 5, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(new JLabel("Select a Character: "));
@@ -131,10 +135,10 @@ public class ReadTabs extends Tabs {
 		panel.add(new JLabel("Filter to currently available spells"), c);
 		c.gridx = 3;
 		panel.add(checkBox, c);
-		c.insets = new Insets(0,25,0,0);
+		c.insets = new Insets(0, 25, 0, 0);
 		c.gridx = 4;
 		JButton search = new JButton("Search");
-		search.addActionListener(new ActionListener( ) {
+		search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String charId = (String) characters.getSelectedItem();
@@ -143,12 +147,14 @@ public class ReadTabs extends Tabs {
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.gridx = 0;
 				c.gridy = 1;
-				c.gridwidth= 5;
-				c.insets = new Insets(10,0,0,0);
-				JTable results = new JTable(getSpellsViewData(charId, showAll), new String[] {"ClassName", "Race", "Spell Name", "Description", "Cast Level"});
+				c.gridwidth = 5;
+				c.insets = new Insets(10, 0, 0, 0);
+				JTable results = new JTable(getSpellsViewData(charId, showAll),
+						new String[] { "ClassName", "Race", "Spell Name", "Description", "Cast Level" });
 				JScrollPane scroll = new JScrollPane(results);
 				Dimension d = results.getPreferredSize();
-				scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+				scroll.setPreferredSize(
+						new Dimension(d.width, (results.getRowHeight()) * Math.min(25, results.getRowCount() + 2)));
 				panel.add(scroll, c);
 				panel.revalidate();
 				panel.repaint();
@@ -158,30 +164,32 @@ public class ReadTabs extends Tabs {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.gridwidth= 5;
-		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getSpellsViewData("", false), new String[] {"ClassName", "Race", "Spell Name", "Description", "Cast Level"});
+		c.gridwidth = 5;
+		c.insets = new Insets(10, 0, 0, 0);
+		JTable results = new JTable(getSpellsViewData("", false),
+				new String[] { "ClassName", "Race", "Spell Name", "Description", "Cast Level" });
 		JScrollPane scroll = new JScrollPane(results);
 		Dimension d = results.getPreferredSize();
-		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
-		panel.add(scroll, c);	
+		scroll.setPreferredSize(
+				new Dimension(d.width, (results.getRowHeight()) * Math.min(25, results.getRowCount() + 2)));
+		panel.add(scroll, c);
 	}
-	
+
 	private void initilizeCampaignNotesView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
 		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForDM());
-		c.insets = new Insets(0,0,0,5);
+		c.insets = new Insets(0, 0, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(new JLabel("Filter by CampaignID: "), c);
 		c.gridx = 1;
-		c.insets = new Insets(0,5,0,5);
+		c.insets = new Insets(0, 5, 0, 5);
 		panel.add(campaignIds, c);
 		c.gridx = 2;
-		c.insets = new Insets(0,15,0,0);
+		c.insets = new Insets(0, 15, 0, 0);
 		JButton search = new JButton("Search");
-		search.addActionListener(new ActionListener( ) {
+		search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String campId = (String) campaignIds.getSelectedItem();
@@ -189,12 +197,14 @@ public class ReadTabs extends Tabs {
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.gridx = 0;
 				c.gridy = 1;
-				c.gridwidth= 3;
-				c.insets = new Insets(10,0,0,0);
-				JTable results = new JTable(getCampaignNotesData(campId), new String[] {"CampaignID", "Note Name", "Description"});
+				c.gridwidth = 3;
+				c.insets = new Insets(10, 0, 0, 0);
+				JTable results = new JTable(getCampaignNotesData(campId),
+						new String[] { "CampaignID", "Note ID", "Note Name", "Description" });
 				JScrollPane scroll = new JScrollPane(results);
 				Dimension d = results.getPreferredSize();
-				scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+				scroll.setPreferredSize(
+						new Dimension(d.width, (results.getRowHeight()) * Math.min(25, results.getRowCount() + 2)));
 				panel.add(scroll, c);
 				panel.revalidate();
 				panel.repaint();
@@ -205,31 +215,33 @@ public class ReadTabs extends Tabs {
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 3;
-		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getCampaignNotesData(""), new String[] {"CampaignID", "Note Name", "Description"});
+		c.insets = new Insets(10, 0, 0, 0);
+		JTable results = new JTable(getCampaignNotesData(""),
+				new String[] { "CampaignID", "Note ID", "Note Name", "Description" });
 
 		JScrollPane scroll = new JScrollPane(results);
 		results.setPreferredScrollableViewportSize(scroll.getPreferredSize());
 		Dimension d = results.getPreferredSize();
-		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+3)));
+		scroll.setPreferredSize(
+				new Dimension(d.width, (results.getRowHeight()) * Math.min(25, results.getRowCount() + 3)));
 		panel.add(scroll, c);
 	}
-	
+
 	private void initilizeCampaignCharacterView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
 		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForDM());
-		c.insets = new Insets(0,0,0,5);
+		c.insets = new Insets(0, 0, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(new JLabel("Filter by CampaignID: "), c);
 		c.gridx = 1;
-		c.insets = new Insets(0,5,0,5);
+		c.insets = new Insets(0, 5, 0, 5);
 		panel.add(campaignIds, c);
-		c.gridx = 2;
-		c.insets = new Insets(0,15,0,0);
+		c.gridx = 5;
+		c.insets = new Insets(0, 395, 0, 0);
 		JButton search = new JButton("Search");
-		search.addActionListener(new ActionListener( ) {
+		search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String campId = (String) campaignIds.getSelectedItem();
@@ -237,30 +249,34 @@ public class ReadTabs extends Tabs {
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.gridx = 0;
 				c.gridy = 1;
-				c.gridwidth= 3;
-				c.insets = new Insets(10,0,0,0);
-				JTable results = new JTable(getCampaignCharacterViewData(campId), new String[] {"Campaign ID", "Player Username", "Character Name", "Race", "Alignment", "Hitpoints", "Background"});
+				c.gridwidth = 6;
+				c.insets = new Insets(10, 0, 0, 0);
+				JTable results = new JTable(getCampaignCharacterViewData(campId),
+						new String[] { "Campaign ID", "Player Username", "Character ID", "Character Name", "Race",
+								"Alignment", "Hitpoints", "Background" });
 				JScrollPane scroll = new JScrollPane(results);
 				Dimension d = results.getPreferredSize();
-				scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+				scroll.setPreferredSize(
+						new Dimension(d.width, (results.getRowHeight()) * Math.min(25, results.getRowCount() + 2)));
 				panel.add(scroll, c);
 				panel.revalidate();
-				panel.repaint();
 			}
 		});
 		panel.add(search, c);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.gridwidth= 3;
-		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getCampaignCharacterViewData(""), new String[] {"Campaign ID", "Player Username", "Character Name", "Race", "Alignment", "Hitpoints", "Background"});
+		c.gridwidth = 6;
+		c.insets = new Insets(10, 0, 0, 0);
+		JTable results = new JTable(getCampaignCharacterViewData(""), new String[] { "Campaign ID", "Player Username",
+				"Character ID", "Character Name", "Race", "Alignment", "Hitpoints", "Background" });
 		JScrollPane scroll = new JScrollPane(results);
 		Dimension d = results.getPreferredSize();
-		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+		scroll.setPreferredSize(
+				new Dimension(d.width, (results.getRowHeight()) * Math.min(25, results.getRowCount() + 2)));
 		panel.add(scroll, c);
 	}
-	
+
 	private void initilizeCampaignLocationsView(JPanel panel, GridBagConstraints c) {
 		panel.removeAll();
 		panel.revalidate();
@@ -268,12 +284,12 @@ public class ReadTabs extends Tabs {
 		JComboBox<Object> campaignIds = new JComboBox<Object>(UI.getCampaignIdsForDM());
 		JComboBox<Object> locationIds = new JComboBox<Object>(UI.getLocationIdsForDM());
 		JCheckBox checkBox = new JCheckBox();
-		c.insets = new Insets(0,0,0,5);
+		c.insets = new Insets(0, 0, 0, 5);
 		c.gridx = 0;
 		c.gridy = 0;
 		panel.add(new JLabel("Filter by CampaignID: "), c);
 		c.gridx = 1;
-		c.insets = new Insets(0,5,0,5);
+		c.insets = new Insets(0, 5, 0, 5);
 		panel.add(campaignIds, c);
 		c.gridx = 2;
 		panel.add(new JLabel("Filter by LocationID: "), c);
@@ -285,7 +301,7 @@ public class ReadTabs extends Tabs {
 		panel.add(checkBox, c);
 		c.gridx = 6;
 		JButton search = new JButton("Search");
-		search.addActionListener(new ActionListener( ) {
+		search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String locId = (String) locationIds.getSelectedItem();
@@ -295,12 +311,14 @@ public class ReadTabs extends Tabs {
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.gridx = 0;
 				c.gridy = 1;
-				c.gridwidth= 7;
-				c.insets = new Insets(10,0,0,0);
-				JTable results = new JTable(getCampaignLocationViewData(campId, locId, enablePCs), UI.getCampaignLocationViewHeaders(checkBox.isSelected()));
+				c.gridwidth = 7;
+				c.insets = new Insets(10, 0, 0, 0);
+				JTable results = new JTable(getCampaignLocationViewData(campId, locId, enablePCs),
+						UI.getCampaignLocationViewHeaders(checkBox.isSelected()));
 				JScrollPane scroll = new JScrollPane(results);
 				Dimension d = results.getPreferredSize();
-				scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+				scroll.setPreferredSize(
+						new Dimension(d.width, (results.getRowHeight()) * Math.min(25, results.getRowCount() + 2)));
 				panel.add(scroll, c);
 				panel.revalidate();
 				panel.repaint();
@@ -310,12 +328,14 @@ public class ReadTabs extends Tabs {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
-		c.gridwidth= 7;
-		c.insets = new Insets(10,0,0,0);
-		JTable results = new JTable(getCampaignLocationViewData("","",false), UI.getCampaignLocationViewHeaders(false));
+		c.gridwidth = 7;
+		c.insets = new Insets(10, 0, 0, 0);
+		JTable results = new JTable(getCampaignLocationViewData("", "", false),
+				UI.getCampaignLocationViewHeaders(false));
 		JScrollPane scroll = new JScrollPane(results);
 		Dimension d = results.getPreferredSize();
-		scroll.setPreferredSize(new Dimension(d.width, (results.getRowHeight())*Math.min(25, results.getRowCount()+2)));
+		scroll.setPreferredSize(
+				new Dimension(d.width, (results.getRowHeight()) * Math.min(25, results.getRowCount() + 2)));
 		panel.add(scroll, c);
 	}
 
@@ -324,7 +344,8 @@ public class ReadTabs extends Tabs {
 		if (!campaign.isEmpty()) {
 			campId = Integer.parseInt(campaign);
 		}
-		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions().readCampaignNotes(UI.getPlayerUsername(), campId);
+		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions()
+				.readCampaignNotes(UI.getPlayerUsername(), campId);
 		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		return stringArray;
 	}
@@ -338,11 +359,12 @@ public class ReadTabs extends Tabs {
 		if (showAllPossible) {
 			showAll = 1;
 		}
-		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions().readCharacterSpells(UI.getPlayerUsername(), charId, showAll);
+		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions()
+				.readCharacterSpells(UI.getPlayerUsername(), charId, showAll);
 		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		return stringArray;
 	}
-	
+
 	private String[][] getCampaignLocationViewData(String campaign, String location, boolean enableNPCs) {
 		int campId = -1;
 		if (!campaign.isEmpty()) {
@@ -356,7 +378,8 @@ public class ReadTabs extends Tabs {
 		if (enableNPCs) {
 			viewNPCs = 1;
 		}
-		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions().readCampaignLocations(UI.getPlayerUsername(), campId, locId, viewNPCs);
+		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions()
+				.readCampaignLocations(UI.getPlayerUsername(), campId, locId, viewNPCs);
 		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		return stringArray;
 	}
@@ -370,17 +393,19 @@ public class ReadTabs extends Tabs {
 		if (!campaign.isEmpty()) {
 			campId = Integer.parseInt(campaign);
 		}
-		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions().readPlayerCharacterInformation(UI.getPlayerUsername(), charId, campId);
+		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions()
+				.readPlayerCharacterInformation(UI.getPlayerUsername(), charId, campId);
 		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		return stringArray;
 	}
-	
+
 	private String[][] getCampaignCharacterViewData(String campaign) {
 		int campId = -1;
 		if (!campaign.isEmpty()) {
 			campId = Integer.parseInt(campaign);
 		}
-		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions().readCampaignCharacterInformation(UI.getPlayerUsername(), campId);
+		ArrayList<ArrayList<String>> results = UI.getBackEnd().getReadFunctions()
+				.readCampaignCharacterInformation(UI.getPlayerUsername(), campId);
 		String[][] stringArray = results.stream().map(u -> u.toArray(new String[0])).toArray(String[][]::new);
 		return stringArray;
 	}
