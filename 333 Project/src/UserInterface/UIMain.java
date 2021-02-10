@@ -85,18 +85,17 @@ public class UIMain {
 	private void displayUserTabs(JFrame frame, boolean enablePlayer, boolean enableDM) {
 
 		Tabs createTabs = new CreateTabs(this, enablePlayer, enableDM);
-
 		Tabs readTabs = new ReadTabs(this, enablePlayer, enableDM);
-
 //       Tabs updateTabs = new UpdateTabs(this, enablePlayer, enableDM);
-
 		Tabs deleteTabs = new DeleteTabs(this, enablePlayer, enableDM);
+		Tabs accountTabs = new AccountTabs(this);
 
 		JTabbedPane CRUDTabs = new JTabbedPane();
 		CRUDTabs.addTab("CREATE", createTabs);
 		CRUDTabs.addTab("READ", readTabs);
 //       CRUDTabs.addTab("UPDATE", updateTabs);
 		CRUDTabs.addTab("DELETE", deleteTabs);
+		CRUDTabs.addTab("ACCOUNT", accountTabs);
 		frame.add(CRUDTabs);
 		CRUDTabs.addChangeListener(new ChangeListener() {
 
@@ -107,8 +106,10 @@ public class UIMain {
 					createTabs.reInitilize();
 				} else if (index == 1) {
 					readTabs.reInitilize();
-				} else {
+				} else if (index == 2) {
 					deleteTabs.reInitilize();
+				} else {
+					accountTabs.reInitilize();
 				}
 			}
 
