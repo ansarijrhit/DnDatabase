@@ -136,7 +136,7 @@ public class DeleteFunctions {
 		// Username
 		CallableStatement cs = null;
 		try {
-			cs = con.prepareCall("EXEC delete_player @username");
+			cs = con.prepareCall("EXEC delete_player @username = ?");
 
 //			cs.registerOutParameter(1, Types.INTEGER);
 			
