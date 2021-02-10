@@ -32,18 +32,18 @@ public class UIMain {
 		c.insets = new Insets(5, 5, 5, 5);
 		c.gridx = 0;
 		c.gridy = 0;
-		loginPanel.add(new JLabel("Username: "), c);
+		loginPanel.add(new JLabel("Login Username: "), c);
 		c.gridx = 1;
 		JTextField username = new JTextField(10);
 		loginPanel.add(username, c);
 		c.gridx = 0;
 		c.gridy = 1;
-		loginPanel.add(new JLabel("Password: "), c);
+		loginPanel.add(new JLabel("Login Password: "), c);
 		c.gridx = 1;
 		JTextField password = new JTextField(10);
 		loginPanel.add(password, c);
-		c.gridx = 0;
-		c.gridy = 2;
+		c.gridx = 1;
+		c.gridy = 3;
 		c.insets = new Insets(10, 20, 10, 20);
 		JButton loginButton = new JButton("Login");
 		loginButton.addActionListener(new ActionListener() {
@@ -51,28 +51,74 @@ public class UIMain {
 			public void actionPerformed(ActionEvent e) {
 				playerUsername = username.getText();
 				String playerPassword = password.getText();
-				// TODO: Validate username and password
-				loginPanel.setVisible(false);
-				displayUserTabs(frame, backEnd.enablePlayerView(playerUsername), backEnd.enableDMView(playerUsername));
-				frame.revalidate();
-				frame.repaint();
+				if (playerUsername.isBlank() || playerPassword.isBlank()) {
+					JOptionPane.showMessageDialog(loginPanel, "Please fill in all of the registration fields");
+				} else {
+					// TODO: Validate username and password
+					// boolean success =
+					// backEnd.getCreateFunctions().validatePlayerPass(playerUsername,
+					// playerPassword);
+					if (true) {
+						loginPanel.setVisible(false);
+						displayUserTabs(frame, backEnd.enablePlayerView(playerUsername),
+								backEnd.enableDMView(playerUsername));
+						frame.revalidate();
+						frame.repaint();
+					} else {
+						JOptionPane.showMessageDialog(loginPanel,
+								"Error: Unable to complete Registration. Please try again.");
+					}
+				}
 			}
 		});
 		loginPanel.add(loginButton, c);
 
+		c.insets = new Insets(5, 5, 5, 5);
+		c.gridx = 2;
+		c.gridy = 0;
+		loginPanel.add(new JLabel("Register Username: "), c);
+		c.gridx = 3;
+		JTextField Rusername = new JTextField(10);
+		loginPanel.add(Rusername, c);
+		c.gridx = 2;
+		c.gridy = 1;
+		loginPanel.add(new JLabel("Register Password: "), c);
+		c.gridx = 3;
+		JTextField Rpassword = new JTextField(10);
+		loginPanel.add(Rpassword, c);
+		c.gridx = 2;
+		c.gridy = 2;
+		loginPanel.add(new JLabel("Register Name: "), c);
+		c.gridx = 3;
+		JTextField Rname = new JTextField(10);
+		loginPanel.add(Rname, c);
+		c.gridx = 3;
+		c.gridy = 3;
 		c.insets = new Insets(10, 35, 10, 20);
-		c.gridx = 1;
 		JButton registerButton = new JButton("Register");
 		registerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				playerUsername = username.getText();
-				String playerPassword = password.getText();
-				// TODO: Validate username and password
-				loginPanel.setVisible(false);
-				displayUserTabs(frame, backEnd.enablePlayerView(playerUsername), backEnd.enableDMView(playerUsername));
-				frame.revalidate();
-				frame.repaint();
+				playerUsername = Rusername.getText();
+				String playerPassword = Rpassword.getText();
+				String playerName = Rname.getText();
+				if (playerUsername.isBlank() || playerPassword.isBlank() || playerName.isBlank()) {
+					JOptionPane.showMessageDialog(loginPanel, "Please fill in all of the registration fields");
+				} else {
+					boolean success = backEnd.getCreateFunctions().createPlayer(playerUsername, playerName,
+							playerPassword);
+					if (success) {
+						JOptionPane.showMessageDialog(loginPanel, "Registration Complete.");
+						loginPanel.setVisible(false);
+						displayUserTabs(frame, backEnd.enablePlayerView(playerUsername),
+								backEnd.enableDMView(playerUsername));
+						frame.revalidate();
+						frame.repaint();
+					} else {
+						JOptionPane.showMessageDialog(loginPanel,
+								"Error: Unable to complete Registration. Please try a different username.");
+					}
+				}
 			}
 		});
 		loginPanel.add(registerButton, c);
@@ -86,14 +132,14 @@ public class UIMain {
 
 		Tabs createTabs = new CreateTabs(this, enablePlayer, enableDM);
 		Tabs readTabs = new ReadTabs(this, enablePlayer, enableDM);
-        Tabs updateTabs = new UpdateTabs(this, enablePlayer, enableDM);
+		Tabs updateTabs = new UpdateTabs(this, enablePlayer, enableDM);
 		Tabs deleteTabs = new DeleteTabs(this, enablePlayer, enableDM);
 		Tabs accountTabs = new AccountTabs(this);
 
 		JTabbedPane CRUDTabs = new JTabbedPane();
 		CRUDTabs.addTab("CREATE", createTabs);
 		CRUDTabs.addTab("READ", readTabs);
-//       CRUDTabs.addTab("UPDATE", updateTabs);
+		CRUDTabs.addTab("UPDATE", updateTabs);
 		CRUDTabs.addTab("DELETE", deleteTabs);
 		CRUDTabs.addTab("ACCOUNT", accountTabs);
 		frame.add(CRUDTabs);
@@ -107,6 +153,8 @@ public class UIMain {
 				} else if (index == 1) {
 					readTabs.reInitilize();
 				} else if (index == 2) {
+					updateTabs.reInitilize();
+				} else if (index == 3) {
 					deleteTabs.reInitilize();
 				} else {
 					accountTabs.reInitilize();
@@ -227,6 +275,31 @@ public class UIMain {
 		}
 		campaign.add(0, "");
 		return campaign.toArray();
+	}
+
+	public Object[] getAllCharacterIds() {
+		ArrayList<String> characters = new ArrayList<String>();
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_AllCharacterIds @Username = ?";
+			PreparedStatement statement = backEnd.getConnection().prepareStatement(sql);
+			statement.setString(1, playerUsername);
+			set = statement.executeQuery();
+			while (set.next()) {
+				characters.add(String.valueOf(set.getInt(1)));
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Get all character Ids");
+			System.out.println();
+			e.printStackTrace();
+
+		}
+		characters.add(0, "");
+		return characters.toArray();
 	}
 
 	Object[] getAllCampaignIds() {

@@ -16,32 +16,32 @@ public class Backend {
 	private CreateFunctions createFunctions;
 //	private UpdateFunctions updateFunctions;
 	private DeleteFunctions deleteFunctions;
-	
+
 	public Backend(DatabaseConnectionService dbService) {
 		this.dbService = dbService;
 		this.con = this.dbService.getConnection();
-		this.readFunctions =  new ReadFunctions(this.con);
+		this.readFunctions = new ReadFunctions(this.con);
 		this.createFunctions = new CreateFunctions(this.con);
 //		this.updateFunctions = new UpdateFunctions(this.con);
 		this.deleteFunctions = new DeleteFunctions(this.con);
 	}
-	
+
 	public ReadFunctions getReadFunctions() {
 		return this.readFunctions;
 	}
-	
+
 	public CreateFunctions getCreateFunctions() {
 		return this.createFunctions;
 	}
-	
+
 //	public UpdateFunctions getUpdateFunctions() {
 //		return this.updateFunctions;
 //	}
-	
+
 	public DeleteFunctions getDeleteFunctions() {
 		return this.deleteFunctions;
 	}
-	
+
 	public Connection getConnection() {
 		return this.con;
 	}
@@ -50,7 +50,7 @@ public class Backend {
 		CallableStatement cs = null;
 		try {
 			cs = con.prepareCall("SELECT dbo.enablePlayerView(?)");
-			
+
 			cs.setString(1, playerUsername);
 			ResultSet returnSet = cs.executeQuery();
 
@@ -59,8 +59,8 @@ public class Backend {
 				returnValue = returnSet.getInt(1);
 			}
 			returnSet.close();
-						
-			if(returnValue == 1) {
+
+			if (returnValue == 1) {
 				return true;
 			}
 			return false;
@@ -70,16 +70,16 @@ public class Backend {
 			System.out.println("Enable Player View");
 			System.out.println();
 			e.printStackTrace();
-			
+
 		}
 		return false;
 	}
-	
+
 	public boolean enableDMView(String playerUsername) {
 		CallableStatement cs = null;
 		try {
 			cs = con.prepareCall("SELECT dbo.enableDMView(?)");
-			
+
 			cs.setString(1, playerUsername);
 			ResultSet returnSet = cs.executeQuery();
 
@@ -88,8 +88,8 @@ public class Backend {
 				returnValue = returnSet.getInt(1);
 			}
 			returnSet.close();
-						
-			if(returnValue == 1) {
+
+			if (returnValue == 1) {
 				return true;
 			}
 			return false;
@@ -99,9 +99,9 @@ public class Backend {
 			System.out.println("Enable DM View");
 			System.out.println();
 			e.printStackTrace();
-			
+
 		}
 		return false;
 	}
-	
+
 }
