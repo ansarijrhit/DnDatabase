@@ -16,6 +16,7 @@ import javax.swing.event.ChangeListener;
 
 import ClassTypes.PlayerCharacter;
 import Connection.Backend;
+import Connection.UserService;
 
 public class UIMain {
 	private Backend backEnd;
@@ -55,10 +56,12 @@ public class UIMain {
 					JOptionPane.showMessageDialog(loginPanel, "Please fill in all of the registration fields");
 				} else {
 					// TODO: Validate username and password
+					UserService us = new UserService(b.getConnection());
+					boolean success = us.login(playerUsername, playerPassword);
 					// boolean success =
 					// backEnd.getCreateFunctions().validatePlayerPass(playerUsername,
 					// playerPassword);
-					if (true) {
+					if (success) {
 						loginPanel.setVisible(false);
 						displayUserTabs(frame, backEnd.enablePlayerView(playerUsername),
 								backEnd.enableDMView(playerUsername));
@@ -105,8 +108,10 @@ public class UIMain {
 				if (playerUsername.isBlank() || playerPassword.isBlank() || playerName.isBlank()) {
 					JOptionPane.showMessageDialog(loginPanel, "Please fill in all of the registration fields");
 				} else {
-					boolean success = backEnd.getCreateFunctions().createPlayer(playerUsername, playerName,
-							playerPassword);
+//					boolean success = backEnd.getCreateFunctions().createPlayer(playerUsername, playerName,
+//							playerPassword);
+					UserService us = new UserService(b.getConnection());
+					boolean success = us.register(playerUsername, playerName, playerPassword);
 					if (success) {
 						JOptionPane.showMessageDialog(loginPanel, "Registration Complete.");
 						loginPanel.setVisible(false);

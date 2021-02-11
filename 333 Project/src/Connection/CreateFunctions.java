@@ -24,27 +24,14 @@ public class CreateFunctions {
 			String campaignID) {
 		CallableStatement cs = null;
 		try {
-			cs = con.prepareCall(
-					"EXEC create_location @dm_username = ?," + "@name = ?, @description = ?, @campaignid = ?");
-
-//			cs.registerOutParameter(1, Types.INTEGER);
+			cs = con.prepareCall("EXEC create_location @dm_username = ?," + "@name = ?, @description = ?, @campaignid = ?");
 
 			cs.setString(1, dmUsername);
 			cs.setString(2, locationName);
 			cs.setString(3, locationDescription);
 			cs.setInt(4, Integer.parseInt(campaignID));
 			cs.execute();
-
-//			int returnValue = cs.getInt(1);
-
-//			while (rs.next()) {
-//				character.add(new PlayerCharacter(rs.getString("CharName"), rs.getString("Class_ClassName"), 
-//						Integer.parseInt(rs.getString("HasClass_Level")), Integer.parseInt(rs.getString("Hitpoints")), 
-//						rs.getString("Alignment"), rs.getString("Background")).getItems());
-//			}
-//			if(returnValue == 1) {
-//				JOptionPane.showMessageDialog(null, "ERROR: This is not your campaign");
-//			}
+			
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
