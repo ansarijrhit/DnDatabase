@@ -96,9 +96,8 @@ public class UpdateTabs extends Tabs {
 						+ "to location " + location;
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					// boolean success =
-					// UI.getBackEnd().getUpdateFunctions().updateNPCLocation(Integer.getInteger(charUpdate), Integer.getInteger(location));
-					if (true) {
+					 boolean success = UI.getBackEnd().getUpdateFunctions().updateNPCLocation(npc, location);
+					if (success) {
 						JOptionPane.showMessageDialog(panel, "NPC's location was updated.");
 					} else {
 						JOptionPane.showMessageDialog(panel,
@@ -137,9 +136,8 @@ public class UpdateTabs extends Tabs {
 						+ "occupation to " + newOcc;
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					// boolean success =
-					// UI.getBackEnd().getUpdateFunctions().updateNPCOccupation(Integer.getInteger(charUpdate), newOcc);
-					if (true) {
+					boolean success = UI.getBackEnd().getUpdateFunctions().updateNPCOccupation(npc, newOcc);
+					if (success) {
 						JOptionPane.showMessageDialog(panel, "NPC's occupation was updated.");
 					} else {
 						JOptionPane.showMessageDialog(panel,
@@ -180,7 +178,7 @@ public class UpdateTabs extends Tabs {
 				String confirmString = "Are you sure you want to update Note:" + cNoteId;
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					//updateNoteView(panel, new GridBagConstraints(), cNoteId, UI.getNote());
+					updateNoteView(panel, new GridBagConstraints(), cNoteId, UI.getNote());
 				} 
 				return;
 			}
@@ -217,9 +215,8 @@ public class UpdateTabs extends Tabs {
 				String confirmString = "Are you sure you want to update Note:" + noteId;
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					// boolean success =
-					// UI.getBackEnd().getUpdateFunctions().updateNote(noteId, newNote, UI.getPlayerUsername());
-					if (true) {
+					 boolean success = UI.getBackEnd().getUpdateFunctions().updateNotes(UI.getPlayerUsername(), noteId, noteData);
+					if (success) {
 						JOptionPane.showMessageDialog(panel, "Note was updated.");
 						initilizeNoteView(panel, new GridBagConstraints());
 					} else {
@@ -281,10 +278,8 @@ public class UpdateTabs extends Tabs {
 						+ "on Class " + newClass + "'s level?";
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					// boolean success =
-					// UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(Integer.getInteger(charUpdate),
-					// newClass, null, null, UI.getPlayerUsername());
-					if (true) {
+					boolean success = UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(charUpdate, newClass, null, null, UI.getPlayerUsername());
+					if (success) {
 						JOptionPane.showMessageDialog(panel, "Major Character's Class level was updated.");
 					} else {
 						JOptionPane.showMessageDialog(panel,
@@ -323,10 +318,8 @@ public class UpdateTabs extends Tabs {
 						+ "to have " + newAlignment + " alignment?";
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					// boolean success =
-					// UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(Integer.getInteger(charUpdate),
-					// null, newAlignment, null, UI.getPlayerUsername());
-					if (true) {
+					 boolean success = UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(charUpdate, null, newAlignment, null, UI.getPlayerUsername());
+					if (success) {
 						JOptionPane.showMessageDialog(panel, "Major Character's Alignment was updated.");
 					} else {
 						JOptionPane.showMessageDialog(panel,
@@ -365,10 +358,8 @@ public class UpdateTabs extends Tabs {
 						+ "on have " + newHitpoints + " hitpoints?";
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					// boolean success =
-					// UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(Integer.getInteger(charUpdate),
-					// null, null, Integer.getInteger(newHitpoints), UI.getPlayerUsername());
-					if (true) {
+					 boolean success = UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(charUpdate, null, null, newHitpoints, UI.getPlayerUsername());
+					if (success) {
 						JOptionPane.showMessageDialog(panel, "Major Character's hitpoint amount was updated.");
 					} else {
 						JOptionPane.showMessageDialog(panel,
@@ -415,7 +406,7 @@ public class UpdateTabs extends Tabs {
 				String confirmString = "Are you sure you want to update Location:" + cLocId;
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					//updateLocationDescriptionView(panel, new GridBagConstraints(), locId, UI.getNote());
+					updateLocationDescriptionView(panel, new GridBagConstraints(), cLocId, UI.getNote());
 				} 
 				return;
 			}
@@ -449,10 +440,8 @@ public class UpdateTabs extends Tabs {
 						+ "to Campaign " + campId + "?";
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					// boolean success =
-					// UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(Integer.getInteger(charUpdate),
-					// null, null, Integer.getInteger(newHitpoints), UI.getPlayerUsername());
-					if (true) {
+					boolean success = UI.getBackEnd().getUpdateFunctions().updateLocation(UI.getPlayerUsername(), locId, "", campId);
+					if (success) {
 						JOptionPane.showMessageDialog(panel, "Location was added to campaign.");
 					} else {
 						JOptionPane.showMessageDialog(panel,
@@ -496,9 +485,8 @@ public class UpdateTabs extends Tabs {
 				String confirmString = "Are you sure you want to update Location:" + locId;
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					// boolean success =
-					// UI.getBackEnd().getUpdateFunctions().updateLocationDescription(locId, newDescription, UI.getPlayerUsername());
-					if (true) {
+					boolean success = UI.getBackEnd().getUpdateFunctions().updateLocation(UI.getPlayerUsername(), locId, newDescription, "");
+					if (success) {
 						JOptionPane.showMessageDialog(panel, "Location was updated.");
 						initilizeLocationView(panel, new GridBagConstraints());
 					} else {

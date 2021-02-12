@@ -461,4 +461,8 @@ public class UIMain {
 	Backend getBackEnd() {
 		return backEnd;
 	}
+
+	public String getNote() {
+		return "Need to implement this method";
+	}
 }
