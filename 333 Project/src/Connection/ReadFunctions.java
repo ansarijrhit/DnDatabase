@@ -228,8 +228,9 @@ public class ReadFunctions {
 		String res = "Error: Notes could not be retrieved";
 		ResultSet set = null;
 		try {
-			String sql = "EXEC get_notes_description @note_id = ?";
+			String sql = "EXEC get_notes_description @id = ?";
 			PreparedStatement statement = this.con.prepareStatement(sql);
+			statement.setInt(1, id);
 			
 			set = statement.executeQuery();
 			while (set.next()) {
@@ -253,8 +254,9 @@ public class ReadFunctions {
 		String res = "Error: Location could not be retrieved";
 		ResultSet set = null;
 		try {
-			String sql = "EXEC get_location_description @location_id = ?";
+			String sql = "EXEC get_location_description @id = ?";
 			PreparedStatement statement = this.con.prepareStatement(sql);
+			statement.setInt(1, id);
 			
 			set = statement.executeQuery();
 			while (set.next()) {

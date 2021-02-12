@@ -178,7 +178,7 @@ public class UpdateTabs extends Tabs {
 				String confirmString = "Are you sure you want to update Note:" + cNoteId;
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					updateNoteView(panel, new GridBagConstraints(), cNoteId, UI.getNote());
+					updateNoteView(panel, new GridBagConstraints(), cNoteId, UI.getNote(cNoteId));
 				} 
 				return;
 			}
