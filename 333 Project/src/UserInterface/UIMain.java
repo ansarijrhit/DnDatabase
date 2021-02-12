@@ -463,11 +463,11 @@ public class UIMain {
 		return backEnd;
 	}
 
-	public String getNote() {
-		return "Need to implement this method";
+	public String getNote(String noteID) {
+		return backEnd.getReadFunctions().getNoteDescription(Integer.parseInt(noteID));
 	}
 
 	public String getLocationDesription(String cLocId) {
-		return "Need to implement this method";
+		return backEnd.getReadFunctions().getLocationDescription(Integer.parseInt(cLocId));
 	}
 }
