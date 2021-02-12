@@ -42,7 +42,7 @@ public class UserService {
 			login.setString(1, username);
 			login.setString(2, newHash);
 			login.setBytes(3, newSalt);
-			login.executeQuery();
+			login.execute();
 			JOptionPane.showMessageDialog(null, "Password changed.");
 			return true;
 		} catch (SQLException e) {

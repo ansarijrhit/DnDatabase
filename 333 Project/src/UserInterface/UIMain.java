@@ -466,4 +466,8 @@ public class UIMain {
 	public String getNote() {
 		return "Need to implement this method";
 	}
+
+	public String getLocationDesription(String cLocId) {
+		return "Need to implement this method";
+	}
 }

@@ -166,7 +166,7 @@ public class ReadFunctions {
 			if (viewNPCs == 0) {
 				while (set.next()) {
 					locations.add(new CampaignLocation(set.getInt("Locationid"), set.getString("LocationName"),
-							set.getString(2)).getItems());
+							set.getString(3)).getItems());
 				}
 			} else {
 				while (set.next()) {

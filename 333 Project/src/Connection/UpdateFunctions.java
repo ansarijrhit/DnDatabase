@@ -64,28 +64,23 @@ public class UpdateFunctions {
 		return false;
 	}
 	
-	public boolean updateLocation(String id, String name, String description	) {
+	public boolean updateLocation(String id, String description, String campID) {
 		CallableStatement cs = null;
 		try {
-			cs = con.prepareCall(
-					"EXEC update_location @id = ?, @name = ?, @description = ?");;
+			if (campID == null) {
+				cs = con.prepareCall(
+						"EXEC update_location @locId = ?, @description = ?");;
 
-			cs.setInt(1, Integer.parseInt(id));
-			cs.setString(2, name);
-			cs.setString(3, description);
-//			String sql = "EXEC update_location @dm_username = ?, @id = ?";
-//			if (description.isEmpty()) {
-//				sql += ", @campId = ?";
-//				cs = con.prepareCall(sql);
-//				cs.setInt(1, Integer.parseInt(id));
-//				cs.setInt(3, Integer.parseInt(campaignID));
-//			} else {
-//				sql += ", @description = ?";
-//				cs = con.prepareCall(sql);
-//				cs.setInt(1, Integer.parseInt(id));
-//				cs.setString(2, name);
-//				cs.setString(3, description);
-//			}
+				cs.setInt(1, Integer.parseInt(id));
+				cs.setString(2, description);
+			} else {
+				cs = con.prepareCall(
+						"EXEC update_location @locId = ?, @campId = ?");;
+
+				cs.setInt(1, Integer.parseInt(id));
+				cs.setString(2, campID);
+			}
+
 			
 			cs.execute();
 

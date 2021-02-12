@@ -215,7 +215,7 @@ public class UpdateTabs extends Tabs {
 				String confirmString = "Are you sure you want to update Note:" + noteId;
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					 boolean success = UI.getBackEnd().getUpdateFunctions().updateNotes(noteId, noteData);
+					 boolean success = UI.getBackEnd().getUpdateFunctions().updateNotes(noteId, newNote);
 					if (success) {
 						JOptionPane.showMessageDialog(panel, "Note was updated.");
 						initilizeNoteView(panel, new GridBagConstraints());
@@ -391,6 +391,7 @@ public class UpdateTabs extends Tabs {
 		c.gridx = 0;
 		c.gridy = 1;
 		panel.add(new JLabel("Would you like to update location description: "), c);
+		c.gridx = 1;
 		c.gridx = 2;
 		JButton updateDescrption = new JButton("Update Description");
 		updateDescrption.addActionListener(new ActionListener() {
@@ -399,14 +400,14 @@ public class UpdateTabs extends Tabs {
 			public void actionPerformed(ActionEvent e) {
 				String cLocId = (String) locIds.getSelectedItem();
 				if (cLocId.isEmpty()) {
-					JOptionPane.showMessageDialog(panel, "Please select a Note to update.");
+					JOptionPane.showMessageDialog(panel, "Please select a location to update.");
 					return;
 				}
 				int optionType = JOptionPane.OK_CANCEL_OPTION;
 				String confirmString = "Are you sure you want to update Location:" + cLocId;
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					updateLocationDescriptionView(panel, new GridBagConstraints(), cLocId, UI.getNote());
+					updateLocationDescriptionView(panel, new GridBagConstraints(), cLocId, UI.getLocationDesription(cLocId));
 				} 
 				return;
 			}
@@ -440,7 +441,7 @@ public class UpdateTabs extends Tabs {
 						+ "to Campaign " + campId + "?";
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					boolean success = UI.getBackEnd().getUpdateFunctions().updateLocation(locId, "", campId);
+					boolean success = UI.getBackEnd().getUpdateFunctions().updateLocation(locId, null, campId);
 					if (success) {
 						JOptionPane.showMessageDialog(panel, "Location was added to campaign.");
 					} else {
@@ -450,7 +451,7 @@ public class UpdateTabs extends Tabs {
 				} else {
 					return;
 				}
-				initilizeMajorCharacterView(panel, new GridBagConstraints());
+				initilizeLocationView(panel, new GridBagConstraints());
 			}
 			
 		});
@@ -485,7 +486,7 @@ public class UpdateTabs extends Tabs {
 				String confirmString = "Are you sure you want to update Location:" + locId;
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					boolean success = UI.getBackEnd().getUpdateFunctions().updateLocation(locId, newDescription, "");
+					boolean success = UI.getBackEnd().getUpdateFunctions().updateLocation(locId, newDescription, null);
 					if (success) {
 						JOptionPane.showMessageDialog(panel, "Location was updated.");
 						initilizeLocationView(panel, new GridBagConstraints());

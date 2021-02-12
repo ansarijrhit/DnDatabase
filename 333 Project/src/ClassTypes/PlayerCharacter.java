@@ -7,7 +7,7 @@ public class PlayerCharacter {
 	private String charName, class_ClassName, alignment, charID, background = null;
 	private int hasClass_Level, hitpoints = 0;
 
-	public PlayerCharacter(String charName, String class_ClassName, int hasClass_Level, int hitpoints, int charID,
+	public PlayerCharacter(String charName, String class_ClassName, int charID, int hasClass_Level, int hitpoints,
 			String alignment, String background) {
 		this.charName = charName;
 		this.charID = Integer.toString(charID);
