@@ -11,15 +11,14 @@ public class UpdateFunctions {
 		this.con = con;
 	}
 
-	public boolean updateNPCLocation(String campaignID, String npcID, String locationID) {
+	public boolean updateNPCLocation(String npcID, String locationID) {
 		CallableStatement cs = null;
 		try {
 			cs = con.prepareCall(
-					"EXEC update_npc_location @CampaignID = ?, @NPC_ID = ?, @LocationID = ?");;
+					"EXEC update_npc_location @NPC_ID = ?, @LocationID = ?");;
 
-			cs.setInt(1, Integer.parseInt(campaignID));
-			cs.setInt(2, Integer.parseInt(npcID));
-			cs.setInt(3, Integer.parseInt(locationID));
+			cs.setInt(1, Integer.parseInt(npcID));
+			cs.setInt(2, Integer.parseInt(locationID));
 			cs.execute();
 
 			return true;
@@ -48,15 +47,13 @@ public class UpdateFunctions {
 		return false;
 	}
 
-	public boolean updateNotes(String dmUsername, String id, String campaignID, String description) {
+	public boolean updateNotes(String id, String description) {
 		CallableStatement cs = null;
 		try {
-			cs = con.prepareCall("EXEC update_notes @dm_username = ?, @id = ?, @description = ?, @campaignid = ?");
+			cs = con.prepareCall("EXEC update_notes @id = ?, @description = ?");
 
-			cs.setString(1, dmUsername);
-			cs.setInt(2, Integer.parseInt(id));
-			cs.setString(3, description);
-			cs.setInt(4, Integer.parseInt(campaignID));
+			cs.setInt(1, Integer.parseInt(id));
+			cs.setString(2, description);
 			cs.execute();
 
 			return true;
@@ -67,7 +64,7 @@ public class UpdateFunctions {
 		return false;
 	}
 	
-	public boolean updateLocation(String id, String name, String description) {
+	public boolean updateLocation(String id, String name, String description	) {
 		CallableStatement cs = null;
 		try {
 			cs = con.prepareCall(
@@ -76,6 +73,20 @@ public class UpdateFunctions {
 			cs.setInt(1, Integer.parseInt(id));
 			cs.setString(2, name);
 			cs.setString(3, description);
+//			String sql = "EXEC update_location @dm_username = ?, @id = ?";
+//			if (description.isEmpty()) {
+//				sql += ", @campId = ?";
+//				cs = con.prepareCall(sql);
+//				cs.setInt(1, Integer.parseInt(id));
+//				cs.setInt(3, Integer.parseInt(campaignID));
+//			} else {
+//				sql += ", @description = ?";
+//				cs = con.prepareCall(sql);
+//				cs.setInt(1, Integer.parseInt(id));
+//				cs.setString(2, name);
+//				cs.setString(3, description);
+//			}
+			
 			cs.execute();
 
 			return true;
@@ -86,7 +97,7 @@ public class UpdateFunctions {
 		return false;
 	}
 
-	public boolean updateMajorCharacter(String id, String newClass, String alignment, String hitpoints, String username, String campaignID) {
+	public boolean updateMajorCharacter(String id, String newClass, String alignment, String hitpoints, String username) {
 		CallableStatement cs = null;
 		try {
 			String call = "EXEC update_major_character_best @id = ?, @username = ?";
@@ -107,9 +118,6 @@ public class UpdateFunctions {
 			if(hitpoints != null) {
 				call += ", @hitpoints = ?";
 			}
-			if(campaignID != null) {
-				call += ", @campaign_id = ?";
-			}
 
 			cs = con.prepareCall(call);
 
@@ -124,9 +132,6 @@ public class UpdateFunctions {
 			}
 			if(hitpoints != null) {
 				cs.setInt(hpIndex, Integer.parseInt(hitpoints));
-			}
-			if(campaignID != null) {
-				cs.setInt(cIDIndex, Integer.parseInt(campaignID));
 			}
 
 			cs.execute();

@@ -58,11 +58,178 @@ public class UpdateTabs extends Tabs {
 	private void initilizeNPCView(JPanel panel, GridBagConstraints c) {
 		// TODO Auto-generated method stub
 		// location tied-to, occupation
+		panel.removeAll();
+		panel.repaint();
+		JComboBox<Object> npcIds = new JComboBox<Object>(UI.getNPCIdsForDM());
+		JComboBox<Object> locations = new JComboBox<Object>(UI.getLocationIdsForDM());
+		JTextField occupation = new JTextField(10);
+		
+		c.insets = new Insets(10, 5, 0, 5);
+		c.gridx = 0;
+		c.gridy = 0;
+		panel.add(new JLabel("Select an NPC to update: "), c);
+		c.gridx = 1;
+		panel.add(npcIds, c);
+		
+		c.gridx = 0;
+		c.gridy = 1;
+		panel.add(new JLabel("Select a location to move the NPC to: "), c);
+		c.gridx = 1;
+		panel.add(locations, c);
+		c.gridx = 2;
+		JButton changeLocation = new JButton("Change Location");
+		changeLocation.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String npc = (String) npcIds.getSelectedItem();
+				String location = (String) locations.getSelectedItem();
+				if (location.isEmpty()) {
+					JOptionPane.showMessageDialog(panel, "Please select a location.");
+					return;
+				} else if (npc.isEmpty()) {
+					JOptionPane.showMessageDialog(panel, "Please select a NPC to update.");
+					return;
+				}
+				int optionType = JOptionPane.OK_CANCEL_OPTION;
+				String confirmString = "Are you sure you want to move NPC :" + npc + "\n "
+						+ "to location " + location;
+				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
+				if (result == JOptionPane.OK_OPTION) {
+					 boolean success = UI.getBackEnd().getUpdateFunctions().updateNPCLocation(npc, location);
+					if (success) {
+						JOptionPane.showMessageDialog(panel, "NPC's location was updated.");
+					} else {
+						JOptionPane.showMessageDialog(panel,
+								"Error: Unable to update NPC's location.");
+					}
+				} else {
+					return;
+				}
+				initilizeNPCView(panel, new GridBagConstraints());
+			}
+		});
+		panel.add(changeLocation, c);
+		
+		c.gridx = 0;
+		c.gridy = 2;
+		panel.add(new JLabel("Enter the NPC's new Occupation: "), c);
+		c.gridx = 1;
+		panel.add(occupation, c);
+		c.gridx = 2;
+		JButton changeOccupation = new JButton("Change Occupation");
+		changeOccupation.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String npc = (String) npcIds.getSelectedItem();
+				String newOcc = (String) occupation.getText();
+				if (newOcc.isBlank()) {
+					JOptionPane.showMessageDialog(panel, "Please enter an occupation.");
+					return;
+				} else if (npc.isEmpty()) {
+					JOptionPane.showMessageDialog(panel, "Please select a NPC to update.");
+					return;
+				}
+				int optionType = JOptionPane.OK_CANCEL_OPTION;
+				String confirmString = "Are you sure you want to change NPC :" + npc + "'s \n "
+						+ "occupation to " + newOcc;
+				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
+				if (result == JOptionPane.OK_OPTION) {
+					boolean success = UI.getBackEnd().getUpdateFunctions().updateNPCOccupation(npc, newOcc);
+					if (success) {
+						JOptionPane.showMessageDialog(panel, "NPC's occupation was updated.");
+					} else {
+						JOptionPane.showMessageDialog(panel,
+								"Error: Unable to update NPC's occupation.");
+					}
+				} else {
+					return;
+				}
+				initilizeNPCView(panel, new GridBagConstraints());				
+			}
+		});
+		panel.add(changeOccupation, c);
 	}
 
 	private void initilizeNoteView(JPanel panel, GridBagConstraints c) {
-		// TODO Auto-generated method stub
-		// Description
+		panel.removeAll();
+		panel.repaint();
+		
+		c.insets = new Insets(10, 25, 10, 25);
+		c.gridx = 0;
+		c.gridy = 0;
+		panel.add(new JLabel("Select a note to update: "), c);
+		c.gridx = 1;
+		JComboBox<Object> noteIds = new JComboBox<Object>(UI.getNotesForDM());
+		panel.add(noteIds);
+		c.gridx = 3;
+		JButton getData = new JButton("Get Current Note");
+		getData.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String cNoteId = (String) noteIds.getSelectedItem();
+				if (cNoteId.isEmpty()) {
+					JOptionPane.showMessageDialog(panel, "Please select a Note to update.");
+					return;
+				}
+				int optionType = JOptionPane.OK_CANCEL_OPTION;
+				String confirmString = "Are you sure you want to update Note:" + cNoteId;
+				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
+				if (result == JOptionPane.OK_OPTION) {
+					updateNoteView(panel, new GridBagConstraints(), cNoteId, UI.getNote());
+				} 
+				return;
+			}
+			
+		});
+		panel.add(getData, c);
+	}
+	
+	private void updateNoteView(JPanel panel, GridBagConstraints c, String noteId, String noteData) {
+		panel.removeAll();
+		panel.repaint();
+		
+		c.insets = new Insets(10, 25, 0, 25);
+		c.gridx = 0;
+		c.gridy = 0;
+		panel.add(new JLabel("Edit Note: "), c);
+		c.gridx = 1;
+		JTextArea note = new JTextArea(noteData);
+		note.setColumns(30);
+		note.setRows(5);
+		panel.add(note);
+		c.gridx = 2;
+		JButton update = new JButton("Update Note");
+		update.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String newNote = note.getText();
+				if (newNote.isEmpty()) {
+					JOptionPane.showMessageDialog(panel, "Please enter text to the note field.");
+					return;
+				}
+				int optionType = JOptionPane.OK_CANCEL_OPTION;
+				String confirmString = "Are you sure you want to update Note:" + noteId;
+				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
+				if (result == JOptionPane.OK_OPTION) {
+					 boolean success = UI.getBackEnd().getUpdateFunctions().updateNotes(noteId, noteData);
+					if (success) {
+						JOptionPane.showMessageDialog(panel, "Note was updated.");
+						initilizeNoteView(panel, new GridBagConstraints());
+					} else {
+						JOptionPane.showMessageDialog(panel,
+								"Error: Unable to update note.");
+					}
+				} else {
+					return;
+				}
+			}
+			
+		});
+		panel.add(update, c);
 	}
 
 	private void initilizeMajorCharacterView(JPanel panel, GridBagConstraints c) {
@@ -111,10 +278,8 @@ public class UpdateTabs extends Tabs {
 						+ "on Class " + newClass + "'s level?";
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					// boolean success =
-					// UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(Integer.getInteger(charUpdate),
-					// newClass, null, null, UI.getPlayerUsername());
-					if (true) {
+					boolean success = UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(charUpdate, newClass, null, null, UI.getPlayerUsername());
+					if (success) {
 						JOptionPane.showMessageDialog(panel, "Major Character's Class level was updated.");
 					} else {
 						JOptionPane.showMessageDialog(panel,
@@ -153,10 +318,8 @@ public class UpdateTabs extends Tabs {
 						+ "to have " + newAlignment + " alignment?";
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					// boolean success =
-					// UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(Integer.getInteger(charUpdate),
-					// null, newAlignment, null, UI.getPlayerUsername());
-					if (true) {
+					 boolean success = UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(charUpdate, null, newAlignment, null, UI.getPlayerUsername());
+					if (success) {
 						JOptionPane.showMessageDialog(panel, "Major Character's Alignment was updated.");
 					} else {
 						JOptionPane.showMessageDialog(panel,
@@ -195,10 +358,8 @@ public class UpdateTabs extends Tabs {
 						+ "on have " + newHitpoints + " hitpoints?";
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-					// boolean success =
-					// UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(Integer.getInteger(charUpdate),
-					// null, null, Integer.getInteger(newHitpoints), UI.getPlayerUsername());
-					if (true) {
+					 boolean success = UI.getBackEnd().getUpdateFunctions().updateMajorCharacter(charUpdate, null, null, newHitpoints, UI.getPlayerUsername());
+					if (success) {
 						JOptionPane.showMessageDialog(panel, "Major Character's hitpoint amount was updated.");
 					} else {
 						JOptionPane.showMessageDialog(panel,
@@ -214,8 +375,131 @@ public class UpdateTabs extends Tabs {
 	}
 
 	private void initilizeLocationView(JPanel panel, GridBagConstraints c) {
-		// TODO Auto-generated method stub
-		// Name description campaign
+		panel.removeAll();
+		panel.repaint();
+		JComboBox<Object> locIds = new JComboBox<Object>(UI.getLocationIdsForDM());
+		JComboBox<Object> campIds = new JComboBox<Object>(UI.getCampaignIdsForDM());
+		
+		c.insets = new Insets(10, 5, 0, 5);
+		c.gridx = 0;
+		c.gridy = 0;
+		panel.add(new JLabel("Select Location to update: "), c);
+		c.gridx = 1;
+		panel.add(locIds, c);
+		
+		c.insets = new Insets(10, 5, 0, 5);
+		c.gridx = 0;
+		c.gridy = 1;
+		panel.add(new JLabel("Would you like to update location description: "), c);
+		c.gridx = 2;
+		JButton updateDescrption = new JButton("Update Description");
+		updateDescrption.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String cLocId = (String) locIds.getSelectedItem();
+				if (cLocId.isEmpty()) {
+					JOptionPane.showMessageDialog(panel, "Please select a Note to update.");
+					return;
+				}
+				int optionType = JOptionPane.OK_CANCEL_OPTION;
+				String confirmString = "Are you sure you want to update Location:" + cLocId;
+				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
+				if (result == JOptionPane.OK_OPTION) {
+					updateLocationDescriptionView(panel, new GridBagConstraints(), cLocId, UI.getNote());
+				} 
+				return;
+			}
+			
+		});
+		panel.add(updateDescrption, c);
+		
+		c.insets = new Insets(10, 5, 0, 5);
+		c.gridx = 0;
+		c.gridy = 2;
+		panel.add(new JLabel("Select campaign to add location to: "), c);
+		c.gridx = 1;
+		panel.add(campIds, c);
+		c.gridx = 2;
+		JButton addTo = new JButton("Add to Campaign");
+		addTo.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String locId = (String) locIds.getSelectedItem();
+				String campId = (String) campIds.getSelectedItem();
+				if (campId.isEmpty()) {
+					JOptionPane.showMessageDialog(panel, "Please select a campaign.");
+					return;
+				} else if (locId.isEmpty()) {
+					JOptionPane.showMessageDialog(panel, "Please select a Location.");
+					return;
+				}
+				int optionType = JOptionPane.OK_CANCEL_OPTION;
+				String confirmString = "Are you sure you want to add Location:" + locId + "\n "
+						+ "to Campaign " + campId + "?";
+				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
+				if (result == JOptionPane.OK_OPTION) {
+					boolean success = UI.getBackEnd().getUpdateFunctions().updateLocation(locId, "", campId);
+					if (success) {
+						JOptionPane.showMessageDialog(panel, "Location was added to campaign.");
+					} else {
+						JOptionPane.showMessageDialog(panel,
+								"Error: Unable to add location to campaign.");
+					}
+				} else {
+					return;
+				}
+				initilizeMajorCharacterView(panel, new GridBagConstraints());
+			}
+			
+		});
+		panel.add(addTo, c);
+	}
+	
+	private void updateLocationDescriptionView(JPanel panel, GridBagConstraints c, String locId, String locData) {
+		panel.removeAll();
+		panel.repaint();
+		
+		c.insets = new Insets(10, 25, 0, 25);
+		c.gridx = 0;
+		c.gridy = 0;
+		panel.add(new JLabel("Edit Description: "), c);
+		c.gridx = 1;
+		JTextArea note = new JTextArea(locData);
+		note.setColumns(30);
+		note.setRows(5);
+		panel.add(note);
+		c.gridx = 2;
+		JButton update = new JButton("Update Description");
+		update.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String newDescription = note.getText();
+				if (newDescription.isEmpty()) {
+					JOptionPane.showMessageDialog(panel, "Please enter text to the note field.");
+					return;
+				}
+				int optionType = JOptionPane.OK_CANCEL_OPTION;
+				String confirmString = "Are you sure you want to update Location:" + locId;
+				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Update", optionType);
+				if (result == JOptionPane.OK_OPTION) {
+					boolean success = UI.getBackEnd().getUpdateFunctions().updateLocation(locId, newDescription, "");
+					if (success) {
+						JOptionPane.showMessageDialog(panel, "Location was updated.");
+						initilizeLocationView(panel, new GridBagConstraints());
+					} else {
+						JOptionPane.showMessageDialog(panel,
+								"Error: Unable to update location.");
+					}
+				} else {
+					return;
+				}
+			}
+			
+		});
+		panel.add(update, c);
 	}
 
 }

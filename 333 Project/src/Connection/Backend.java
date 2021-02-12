@@ -14,7 +14,7 @@ public class Backend {
 	private Connection con;
 	private ReadFunctions readFunctions;
 	private CreateFunctions createFunctions;
-//	private UpdateFunctions updateFunctions;
+	private UpdateFunctions updateFunctions;
 	private DeleteFunctions deleteFunctions;
 
 	public Backend(DatabaseConnectionService dbService) {
@@ -22,7 +22,7 @@ public class Backend {
 		this.con = this.dbService.getConnection();
 		this.readFunctions = new ReadFunctions(this.con);
 		this.createFunctions = new CreateFunctions(this.con);
-//		this.updateFunctions = new UpdateFunctions(this.con);
+		this.updateFunctions = new UpdateFunctions(this.con);
 		this.deleteFunctions = new DeleteFunctions(this.con);
 	}
 
@@ -34,9 +34,9 @@ public class Backend {
 		return this.createFunctions;
 	}
 
-//	public UpdateFunctions getUpdateFunctions() {
-//		return this.updateFunctions;
-//	}
+	public UpdateFunctions getUpdateFunctions() {
+		return this.updateFunctions;
+	}
 
 	public DeleteFunctions getDeleteFunctions() {
 		return this.deleteFunctions;

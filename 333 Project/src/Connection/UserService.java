@@ -74,6 +74,7 @@ public class UserService {
 			System.out.println(returnValue);
 			if (returnValue != 0) {
 				JOptionPane.showMessageDialog(null, "Registration failed.");
+				return false;
 			}
 			return true;
 		} catch (SQLException e) {
