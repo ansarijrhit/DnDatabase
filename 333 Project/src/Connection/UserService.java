@@ -33,6 +33,23 @@ public class UserService {
 		return true;
 	}
 
+	public boolean updatePassword(String username, String newPassword) {
+		byte[] newSalt = getNewSalt();
+		String newHash = hashPassword(newSalt, newPassword);
+		try  {
+			String query = "EXEC update_player_password @Username = ?, @NewHash = ?, @NewSalt = ?";
+			PreparedStatement login = con.prepareStatement(query);
+			login.setString(1, username);
+			login.setString(2, newHash);
+			login.setBytes(3, newSalt);
+			JOptionPane.showMessageDialog(null, "Password changed.");
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public boolean login(String username, String password) {
 		byte[] salt = {};
 		String hash = "";

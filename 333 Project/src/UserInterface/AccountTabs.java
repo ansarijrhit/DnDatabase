@@ -13,12 +13,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import Connection.UserService;
+
 public class AccountTabs extends Tabs {
 
 	UIMain ui;
+	UserService us;
 	
-	public AccountTabs(UIMain ui) {
+	public AccountTabs(UIMain ui, UserService us) {
 		this.ui = ui;
+		this.us = us;
 	}
 	@Override
 	protected void createTabs() {
@@ -91,8 +95,8 @@ public class AccountTabs extends Tabs {
 				String confirmString = "Are you sure you want to change your password?";
 				int result = JOptionPane.showConfirmDialog(panel, confirmString, "Confirm Deletion", optionType);
 				if (result == JOptionPane.OK_OPTION) {
-//					boolean success = ui.getBackEnd().getUpdateFunctions().updatePassword(ui.getPlayerUsername(), pass);
-					if (true) {
+					boolean success = us.updatePassword(ui.getPlayerUsername(), pass);
+					if (success) {
 						JOptionPane.showMessageDialog(panel, "Account password updated");
 					} else {
 						JOptionPane.showMessageDialog(panel, "Error: Unable to update password updated");

@@ -21,6 +21,7 @@ import Connection.UserService;
 public class UIMain {
 	private Backend backEnd;
 	private String playerUsername;
+	private UserService us;
 
 	public UIMain(Backend b) {
 		backEnd = b;
@@ -56,7 +57,7 @@ public class UIMain {
 					JOptionPane.showMessageDialog(loginPanel, "Please fill in all of the registration fields");
 				} else {
 					// TODO: Validate username and password
-					UserService us = new UserService(b.getConnection());
+					us = new UserService(b.getConnection());
 					boolean success = us.login(playerUsername, playerPassword);
 					// boolean success =
 					// backEnd.getCreateFunctions().validatePlayerPass(playerUsername,
@@ -139,7 +140,7 @@ public class UIMain {
 		Tabs readTabs = new ReadTabs(this, enablePlayer, enableDM);
 		Tabs updateTabs = new UpdateTabs(this, enablePlayer, enableDM);
 		Tabs deleteTabs = new DeleteTabs(this, enablePlayer, enableDM);
-		Tabs accountTabs = new AccountTabs(this);
+		Tabs accountTabs = new AccountTabs(this, us);
 
 		JTabbedPane CRUDTabs = new JTabbedPane();
 		CRUDTabs.addTab("CREATE", createTabs);
