@@ -223,4 +223,55 @@ public class ReadFunctions {
 		}
 		return notes;
 	}
+	
+	public String getNoteDescription(int id) {
+		String res = "Error: Notes could not be retrieved";
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_notes_description @note_id = ?";
+			PreparedStatement statement = this.con.prepareStatement(sql);
+			
+			set = statement.executeQuery();
+			while (set.next()) {
+				res = set.getString("Description");
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Read Campaign Notes Function");
+			System.out.println("Check login information, access level, and existence of character");
+			System.out.println();
+			e.printStackTrace();
+
+		}
+		return res;
+	}
+	
+	public String getLocationDescription(int id) {
+		String res = "Error: Location could not be retrieved";
+		ResultSet set = null;
+		try {
+			String sql = "EXEC get_location_description @location_id = ?";
+			PreparedStatement statement = this.con.prepareStatement(sql);
+			
+			set = statement.executeQuery();
+			while (set.next()) {
+				res = set.getString("Description");
+			}
+			set.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println();
+			System.out.println("----------Error in fetching data-------------");
+			System.out.println("Read Campaign Notes Function");
+			System.out.println("Check login information, access level, and existence of character");
+			System.out.println();
+			e.printStackTrace();
+
+		}
+		return res;
+	}
 }
+
