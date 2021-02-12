@@ -67,17 +67,15 @@ public class UpdateFunctions {
 		return false;
 	}
 	
-	public boolean updateLocation(String dmUsername, String id, String name, String description, String campaignID) {
+	public boolean updateLocation(String id, String name, String description) {
 		CallableStatement cs = null;
 		try {
 			cs = con.prepareCall(
-					"EXEC update_location @dm_username = ?, @id = ?, @name = ?, @description = ?, @campaignid = ?");;
+					"EXEC update_location @id = ?, @name = ?, @description = ?");;
 
-			cs.setString(1, dmUsername);
-			cs.setInt(2, Integer.parseInt(id));
-			cs.setString(3, name);
-			cs.setString(4, description);
-			cs.setInt(5, Integer.parseInt(campaignID));
+			cs.setInt(1, Integer.parseInt(id));
+			cs.setString(2, name);
+			cs.setString(3, description);
 			cs.execute();
 
 			return true;
