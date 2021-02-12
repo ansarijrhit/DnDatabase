@@ -171,7 +171,7 @@ public class ReadFunctions {
 			} else {
 				while (set.next()) {
 					locations.add(new CampaignLocationWithNPCs(set.getInt("Locationid"), set.getString("LocationName"),
-							set.getString(2), set.getInt("NPCID"), set.getString("NPCName"), set.getString("RaceName"),
+							set.getString(3), set.getInt("NPCID"), set.getString("NPCName"), set.getString("RaceName"),
 							set.getString("Occupation")).getItems());
 				}
 			}
