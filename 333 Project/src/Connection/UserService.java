@@ -55,7 +55,7 @@ public class UserService {
 		byte[] salt = {};
 		String hash = "";
 		try  {
-			String query = "SELECT PasswordSalt, PasswordHash \nFROM Player\nWHERE Username = ?";
+			String query = "EXEC Login_user @username = ?";
 			PreparedStatement login = con.prepareStatement(query);
 			login.setString(1, username);
 			ResultSet rs = login.executeQuery();
