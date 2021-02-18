@@ -346,6 +346,79 @@ public class DataImport {
 		
 	}
 
+	public void importRaceCanCast(String filePath) {
+		int batchSize = 20;
+		try {
+			long start = System.currentTimeMillis();
+
+			FileInputStream inputStream = new FileInputStream(filePath);
+
+			Workbook workbook = new XSSFWorkbook(inputStream);
+
+			Sheet firstSheet = workbook.getSheetAt(0);
+			Iterator<Row> rowIterator = firstSheet.iterator();
+
+			con.setAutoCommit(false);
+
+			String sql = "INSERT INTO RaceCanCastTemp (RaceName, SpellName) VALUES (?, ?)";
+			PreparedStatement statement = con.prepareStatement(sql);
+
+			int count = 0;
+
+			rowIterator.next(); // skip the header row
+
+			while (rowIterator.hasNext()) {
+				Row nextRow = rowIterator.next();
+				Iterator<Cell> cellIterator = nextRow.cellIterator();
+
+				while (cellIterator.hasNext()) {
+					Cell nextCell = cellIterator.next();
+		
+					int columnIndex = nextCell.getColumnIndex();
+
+					switch (columnIndex) {
+					case 0:
+						String raceName = nextCell.getStringCellValue();
+//						System.out.print(className + "\n");
+						statement.setString(1, raceName);
+						break;
+					case 1:
+						String spellName = nextCell.getStringCellValue();
+						statement.setString(2, spellName);
+					}
+						
+
+				}
+
+				statement.addBatch();
+
+				if (count % batchSize == 0) {
+					statement.executeBatch();
+				}
+
+			}
+
+			workbook.close();
+
+			// execute the remaining queries
+//			statement.executeBatch();
+
+			con.commit();
+//			con.close();
+
+			long end = System.currentTimeMillis();
+			System.out.printf("Import done in %d ms\n", (end - start));
+
+		} catch (IOException ex1) {
+			System.out.println("Error reading file");
+			ex1.printStackTrace();
+		} catch (SQLException ex2) {
+			System.out.println("Database error");
+			ex2.printStackTrace();
+		}
+		
+	}
+	
 	// 5th
 	public void importCampaign(String filePath) {
 		int batchSize = 20;
