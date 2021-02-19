@@ -43,7 +43,8 @@ public class UIMain {
 		c.gridy = 1;
 		loginPanel.add(new JLabel("Login Password: "), c);
 		c.gridx = 1;
-		JTextField password = new JTextField(10);
+//		JTextField password = new JTextField(10);
+		JPasswordField password = new JPasswordField(10);
 		loginPanel.add(password, c);
 		c.gridx = 1;
 		c.gridy = 3;
@@ -53,7 +54,7 @@ public class UIMain {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				playerUsername = username.getText();
-				String playerPassword = password.getText();
+				String playerPassword = String.valueOf(password.getPassword());//password.getText();
 				if (playerUsername.isBlank() || playerPassword.isBlank()) {
 					JOptionPane.showMessageDialog(loginPanel, "Please fill in all of the registration fields");
 				} else {
@@ -89,7 +90,8 @@ public class UIMain {
 		c.gridy = 1;
 		loginPanel.add(new JLabel("Register Password: "), c);
 		c.gridx = 3;
-		JTextField Rpassword = new JTextField(10);
+//		JTextField Rpassword = new JTextField(10);
+		JPasswordField Rpassword = new JPasswordField(10);
 		loginPanel.add(Rpassword, c);
 		c.gridx = 2;
 		c.gridy = 2;
@@ -105,7 +107,7 @@ public class UIMain {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				playerUsername = Rusername.getText();
-				String playerPassword = Rpassword.getText();
+				String playerPassword = String.valueOf(Rpassword.getPassword());//Rpassword.getText();
 				String playerName = Rname.getText();
 				if (playerUsername.isBlank() || playerPassword.isBlank() || playerName.isBlank()) {
 					JOptionPane.showMessageDialog(loginPanel, "Please fill in all of the registration fields");
