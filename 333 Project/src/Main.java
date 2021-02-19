@@ -1,6 +1,8 @@
 
 import Connection.Backend;
+import Connection.DataImport;
 import Connection.DatabaseConnectionService;
+import Connection.UserService;
 import UserInterface.UIMain;
 
 public class Main {
@@ -11,7 +13,17 @@ public class Main {
 		db.connect("DnDatabaseUser30", "KatiJordanOlivia30");
 		
 		Backend back = new Backend(db);
-		UIMain ui = new UIMain(back);
+		UserService us = new UserService(back.getConnection());
+		UIMain ui = new UIMain(back, us);
+		
+//		DataImport importer = new DataImport(back.getConnection(), us);
+		
+//		importer.importSpells("Spreadsheets\\5eSpells.xlsx");
+//		for(int i = 0; i < 8; i++) {
+//			importer.importClassCanCast("Spreadsheets\\5eClassSpells.xlsx", i);
+//		}
+//		importer.importRaceCanCast("SpreadSheets\\5eRaceSpells.xlsx");
+//		importer.importCampaign("Spreadsheets\\Sample Campaign.xlsx", "Please work");
 	}
 	
 }

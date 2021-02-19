@@ -23,8 +23,9 @@ public class UIMain {
 	private String playerUsername;
 	private UserService us;
 
-	public UIMain(Backend b) {
+	public UIMain(Backend b, UserService us) {
 		backEnd = b;
+		this.us = us;
 		JFrame frame = new JFrame("DnDatabase");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1000, 600);
@@ -57,7 +58,7 @@ public class UIMain {
 					JOptionPane.showMessageDialog(loginPanel, "Please fill in all of the registration fields");
 				} else {
 					// TODO: Validate username and password
-					us = new UserService(b.getConnection());
+//					us = new UserService(b.getConnection());
 					boolean success = us.login(playerUsername, playerPassword);
 					// boolean success =
 					// backEnd.getCreateFunctions().validatePlayerPass(playerUsername,
@@ -111,7 +112,7 @@ public class UIMain {
 				} else {
 //					boolean success = backEnd.getCreateFunctions().createPlayer(playerUsername, playerName,
 //							playerPassword);
-					UserService us = new UserService(b.getConnection());
+//					UserService us = new UserService(b.getConnection());
 					boolean success = us.register(playerUsername, playerName, playerPassword);
 					if (success) {
 						JOptionPane.showMessageDialog(loginPanel, "Registration Complete.");

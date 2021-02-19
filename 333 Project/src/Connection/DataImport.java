@@ -17,7 +17,7 @@ public class DataImport {
 		this.us = us;
 	}
 
-	// 1st
+	// 1st, works
 	public void importSpells(String filePath) {
 
 		int batchSize = 20;
@@ -100,7 +100,7 @@ public class DataImport {
 
 	}
 
-	// 2nd
+	// 2nd, works
 	public void importRaces(String filePath) {
 		int batchSize = 20;
 		try {
@@ -243,7 +243,7 @@ public class DataImport {
 		}
 	}
 
-	// 4th
+	// 4th, works
 	public void importClassCanCast(String filePath, int i) {
 		int batchSize = 20;
 		try {
@@ -274,36 +274,36 @@ public class DataImport {
 
 					switch (i) {
 					case 0:
-//						System.out.print("0 " + i + " ");
-						statement.setString(1, "Bard");
+						System.out.print("Bard ");
+//						statement.setString(1, "Bard");
 						break;
 					case 1:
-//						System.out.print("1 " + i + " ");
-						statement.setString(1, "Cleric");
+						System.out.print("Cleric ");
+//						statement.setString(1, "Cleric");
 						break;
 					case 2:
-//						System.out.print("2 " + i + " ");
-						statement.setString(1, "Druid");
+						System.out.print("Druid ");
+//						statement.setString(1, "Druid");
 						break;
 					case 3:
-//						System.out.print("3 " + i + " ");
-						statement.setString(1, "Paladin");
+						System.out.print("Paladin ");
+//						statement.setString(1, "Paladin");
 						break;
 					case 4:
-//						System.out.print("4 " + i + " ");
-						statement.setString(1, "Ranger");
+						System.out.print("Ranger ");
+//						statement.setString(1, "Ranger");
 						break;
 					case 5:
-//						System.out.print(i + " ");
-						statement.setString(1, "Sorcerer");
+						System.out.print("Sorcerer ");
+//						statement.setString(1, "Sorcerer");
 						break;
 					case 6:
-//						System.out.print(i + " ");
-						statement.setString(1, "Warlock");
+						System.out.print("Warlock ");
+//						statement.setString(1, "Warlock");
 						break;
 					case 7:
-//						System.out.print(i + " ");
-						statement.setString(1, "Wizard");
+						System.out.print("Wizard ");
+//						statement.setString(1, "Wizard");
 						break;
 					}
 
@@ -311,9 +311,9 @@ public class DataImport {
 
 					switch (columnIndex) {
 					case 0:
-						String className = nextCell.getStringCellValue();
-//						System.out.print(className + "\n");
-						statement.setString(2, className);
+						String spellName = nextCell.getStringCellValue();
+//						System.out.print(spellName + "\n");
+						statement.setString(2, spellName);
 						break;
 					}
 
@@ -348,7 +348,7 @@ public class DataImport {
 
 	}
 
-	//5th
+	// 5th
 	public void importRaceCanCast(String filePath) {
 		int batchSize = 20;
 		try {
@@ -382,11 +382,12 @@ public class DataImport {
 					switch (columnIndex) {
 					case 0:
 						String raceName = nextCell.getStringCellValue();
-//						System.out.print(className + "\n");
+//						System.out.print(raceName + " ");
 						statement.setString(1, raceName);
 						break;
 					case 1:
 						String spellName = nextCell.getStringCellValue();
+//						System.out.print(spellName + "\n");
 						statement.setString(2, spellName);
 					}
 
@@ -452,6 +453,8 @@ public class DataImport {
 			String sql = "EXEC create_campaign @name = ?, @dm_username = ?";
 			CallableStatement statement = con.prepareCall(sql);
 
+			statement.setString(1, name);
+			
 			rowIterator.next(); // skip the header row
 
 			Row nextRow = rowIterator.next();
@@ -466,26 +469,32 @@ public class DataImport {
 			switch (columnIndex) {
 			case 0:
 				dmUsername = nextCell.getStringCellValue();
+				System.out.println("dmUsername: " + dmUsername);
 				statement.setString(2, dmUsername);
 
-				statement.addBatch();
-
 			}
+			statement.execute();
 
-			CallableStatement cs = con.prepareCall("{? = (SELECT dbo.getMostRecentCampaignID(?))}");
+			CallableStatement cs = con.prepareCall("{ ? = call mostRecentCampaignID(?)}");
 			cs.setString(2, dmUsername);
 			cs.registerOutParameter(1, Types.INTEGER);
+			cs.execute();
 			campaignID = cs.getInt(1);
 			
+			System.out.println("campaignID: " + campaignID);
+			
+			System.out.println("Importing Locations");
 			importLocations(locationSheet, dmUsername, campaignID);
+			System.out.println("Importing Major Characters");
 			importMajorCharacters(majorCharacterSheet, dmUsername, campaignID);
-			importNPCs(NPCSheet, dmUsername);
+			System.out.println("Importing NPCs");
+			importNPCs(NPCSheet, dmUsername, campaignID);
+			System.out.println("Importing Notes");
 			importNotes(notesSheet, dmUsername, campaignID);
 			
 			workbook.close();
 
 			// execute the remaining queries
-			statement.executeBatch();
 
 			con.commit();
 //			con.close();
@@ -522,10 +531,9 @@ public class DataImport {
 				Row nextRow = rowIterator.next();
 				Iterator<Cell> cellIterator = nextRow.cellIterator();
 				
-				CallableStatement cs = con.prepareCall("{? = (SELECT dbo.playerExists(?))}");
+				CallableStatement cs = con.prepareCall("{? = call doesPlayerExist(?)}");
 				
 				cs.registerOutParameter(1, Types.INTEGER);
-				int returnValue = cs.getInt(1);
 				boolean exists = false;
 				String username = "";
 				String name = "";
@@ -540,6 +548,7 @@ public class DataImport {
 						username = nextCell.getStringCellValue();
 						cs.setString(2, username);
 						cs.execute();
+						int returnValue = cs.getInt(1);
 						if(returnValue == 0) {
 							exists = true;
 						}
@@ -554,7 +563,6 @@ public class DataImport {
 							us.register(username, name, password);
 						}
 					}
-					cs.execute();
 
 				}
 
@@ -603,6 +611,7 @@ public class DataImport {
 			while (rowIterator.hasNext()) {
 				Row nextRow = rowIterator.next();
 				Iterator<Cell> cellIterator = nextRow.cellIterator();
+				boolean doIt = false;
 
 				while (cellIterator.hasNext()) {
 					Cell nextCell = cellIterator.next();
@@ -612,7 +621,10 @@ public class DataImport {
 					switch (columnIndex) {
 					case 0:
 						String name = nextCell.getStringCellValue();
-						call.setString(2, name);
+						if(!name.isEmpty()) {
+							call.setString(2, name);
+							doIt = true;
+						}
 						break;
 					case 1:
 						String description = nextCell.getStringCellValue();
@@ -620,9 +632,9 @@ public class DataImport {
 					}
 
 				}
-
-				call.addBatch();
-
+				if(doIt) {
+					call.addBatch();
+				}
 				if (count % batchSize == 0) {
 					call.executeBatch();
 				}
@@ -654,7 +666,7 @@ public class DataImport {
 
 			con.setAutoCommit(false);
 
-			String sql = "EXEC create_major_character @name = ?, @racename = ?, @hitpoints = ?, @alignment = ?, @background = ?, @class = ?, @level = ?, @campaign_id = ?";
+			
 			
 
 			int count = 0;
@@ -665,6 +677,8 @@ public class DataImport {
 				Row nextRow = rowIterator.next();
 				Iterator<Cell> cellIterator = nextRow.cellIterator();
 				
+				String sql = "EXEC create_major_character @name = ?, @racename = ?, @hitpoints = ?, @alignment = ?, @background = ?, @class = ?, @level = ?, @campaign_id = ?";
+				
 				String name = "";
 				String raceName = "";
 				int hitpoints = 0;
@@ -673,6 +687,7 @@ public class DataImport {
 				String username = "";
 				String pClass = "";
 				int level = 0;
+				boolean fail = false;
 				while (cellIterator.hasNext()) {
 					Cell nextCell = cellIterator.next();
 
@@ -681,10 +696,16 @@ public class DataImport {
 					switch (columnIndex) {
 					case 0:
 						name = nextCell.getStringCellValue();
+//						System.out.println(name.isBlank());
+						if(name.isBlank() || name.equals("")) {
+							System.out.println("failure");
+							fail = true;
+						}
 //						statement.setString(1, name);
 						break;
 					case 1:
 						raceName = nextCell.getStringCellValue();
+//						System.out.println("Racename: " + raceName + " aaa");
 //						statement.setString(2, raceName);
 						break;
 					case 2:
@@ -696,17 +717,20 @@ public class DataImport {
 //						statement.setString(4, alignment);
 						break;
 					case 4:
+//						System.out.println(4);
 						background = nextCell.getStringCellValue();
 //						statement.setString(5, background);
 						break;
 					case 5:
 						username = nextCell.getStringCellValue();
-						if(username.isBlank()) {
+//						System.out.print(5 + " dmUsername ");
+						if(username.equals("abcdefghijklmnopqrstuvwxyz")) {
 							sql += ", @dm_username = ?";
 							username = dmUsername;
 						}
 						else {
 							sql += ", @playerusername = ?";
+//							System.out.print(5 + " playerUsername ");
 						}
 						break;
 					case 6:
@@ -716,6 +740,10 @@ public class DataImport {
 						level = (int) nextCell.getNumericCellValue();
 					}
 				}
+				if(fail) {
+					break;
+				}
+//				System.out.println(sql);
 				
 				CallableStatement statement = con.prepareCall(sql);
 				statement.setString(1, name);
@@ -725,7 +753,8 @@ public class DataImport {
 				statement.setString(5, background);
 				statement.setString(6, pClass);
 				statement.setInt(7, level);
-				statement.setString(8, username);
+				statement.setInt(8, campaignID);
+				statement.setString(9, username);
 				
 				statement.execute();
 //				statement.addBatch();
@@ -751,7 +780,7 @@ public class DataImport {
 		}
 	}
 
-	public void importNPCs(Sheet sheet, String dmUsername) {
+	public void importNPCs(Sheet sheet, String dmUsername, int campaignID) {
 		int batchSize = 20;
 		try {
 			long start = System.currentTimeMillis();
@@ -770,6 +799,8 @@ public class DataImport {
 
 			rowIterator.next(); // skip the header row
 
+
+			
 			while (rowIterator.hasNext()) {
 				Row nextRow = rowIterator.next();
 				Iterator<Cell> cellIterator = nextRow.cellIterator();
@@ -794,7 +825,15 @@ public class DataImport {
 						break;
 					case 3:
 						String locationName = nextCell.getStringCellValue();
-//						statement.setInt(2, locationID);
+						
+						CallableStatement cs = con.prepareCall("{ ? = call get_LocationId(?, ?)}");
+//						System.out.println("? = call get_LocationID(" + locationName + " " + campaignID + ")");
+						cs.setString(2, locationName);
+						cs.setInt(3, campaignID);
+						cs.registerOutParameter(1, Types.INTEGER);
+						cs.execute();
+//						campaignID = cs.getInt(1);
+						statement.setInt(2, cs.getInt(1));
 						
 					}
 
