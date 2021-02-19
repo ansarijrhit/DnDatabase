@@ -7,7 +7,7 @@ import Connection.UserService;
 
 public class ImportAll {
 	public static void main(String[] args) {
-		DatabaseConnectionService db = new DatabaseConnectionService("titan.csse.rose-hulman.edu", "DnDatabase_test30");
+		DatabaseConnectionService db = new DatabaseConnectionService("titan.csse.rose-hulman.edu", "DnDatabase30");
 		db.connect("DnDatabaseUser30", "KatiJordanOlivia30");
 		
 		Backend back = new Backend(db);
