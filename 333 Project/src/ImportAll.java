@@ -22,6 +22,6 @@ public class ImportAll {
 		}
 		importer.importRaces("Spreadsheets\\5eRaces.xlsx");
 		importer.importRaceCanCast("Spreadsheets\\5eRaceSpells.xlsx");
-		importer.importCampaign("Spreadsheets\\Sample Campaign.xlsx", "Please work");
+		importer.importCampaign("Spreadsheets\\Sample Campaign.xlsx", "Imported Campaign");
 	}
 }

@@ -56,7 +56,7 @@ public class CreateFunctions {
 				cs = con.prepareCall(call);
 				cs.setString(9, dmUsername);
 			}
-			System.out.println(call);
+//			System.out.println(call);
 			cs.setString(1, characterClass);
 			cs.setInt(2, Integer.parseInt(level));
 			cs.setInt(3, Integer.parseInt(hitpoints));
