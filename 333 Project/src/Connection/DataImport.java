@@ -274,36 +274,36 @@ public class DataImport {
 
 					switch (i) {
 					case 0:
-						System.out.print("Bard ");
-//						statement.setString(1, "Bard");
+//						System.out.print("Bard ");
+						statement.setString(1, "Bard");
 						break;
 					case 1:
-						System.out.print("Cleric ");
-//						statement.setString(1, "Cleric");
+//						System.out.print("Cleric ");
+						statement.setString(1, "Cleric");
 						break;
 					case 2:
-						System.out.print("Druid ");
-//						statement.setString(1, "Druid");
+//						System.out.print("Druid ");
+						statement.setString(1, "Druid");
 						break;
 					case 3:
-						System.out.print("Paladin ");
-//						statement.setString(1, "Paladin");
+//						System.out.print("Paladin ");
+						statement.setString(1, "Paladin");
 						break;
 					case 4:
-						System.out.print("Ranger ");
-//						statement.setString(1, "Ranger");
+//						System.out.print("Ranger ");
+						statement.setString(1, "Ranger");
 						break;
 					case 5:
-						System.out.print("Sorcerer ");
-//						statement.setString(1, "Sorcerer");
+//						System.out.print("Sorcerer ");
+						statement.setString(1, "Sorcerer");
 						break;
 					case 6:
-						System.out.print("Warlock ");
-//						statement.setString(1, "Warlock");
+//						System.out.print("Warlock ");
+						statement.setString(1, "Warlock");
 						break;
 					case 7:
-						System.out.print("Wizard ");
-//						statement.setString(1, "Wizard");
+//						System.out.print("Wizard ");
+						statement.setString(1, "Wizard");
 						break;
 					}
 
@@ -469,7 +469,7 @@ public class DataImport {
 			switch (columnIndex) {
 			case 0:
 				dmUsername = nextCell.getStringCellValue();
-				System.out.println("dmUsername: " + dmUsername);
+//				System.out.println("dmUsername: " + dmUsername);
 				statement.setString(2, dmUsername);
 
 			}
@@ -481,7 +481,7 @@ public class DataImport {
 			cs.execute();
 			campaignID = cs.getInt(1);
 			
-			System.out.println("campaignID: " + campaignID);
+//			System.out.println("campaignID: " + campaignID);
 			
 			System.out.println("Importing Locations");
 			importLocations(locationSheet, dmUsername, campaignID);
@@ -746,6 +746,7 @@ public class DataImport {
 //				System.out.println(sql);
 				
 				CallableStatement statement = con.prepareCall(sql);
+//				System.out.println("Name: " + name);
 				statement.setString(1, name);
 				statement.setString(2, raceName);
 				statement.setInt(3, hitpoints);
